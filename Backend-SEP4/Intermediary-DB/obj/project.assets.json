@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net7.0": {}
+    "net7.0": {
+      "TCPListener/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/TCPListener.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TCPListener.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "TCPListener/1.0.0": {
+      "type": "project",
+      "path": "../TCPListener/TCPListener.csproj",
+      "msbuildProject": "../TCPListener/TCPListener.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net7.0": []
+    "net7.0": [
+      "TCPListener >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\tothl\\.nuget\\packages\\": {}
@@ -31,7 +50,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\TCPListener\\TCPListener.csproj": {
+              "projectPath": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\TCPListener\\TCPListener.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

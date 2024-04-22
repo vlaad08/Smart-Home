@@ -1,0 +1,14 @@
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\bin\Debug\net7.0\TCPListenerDemo.exe
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\bin\Debug\net7.0\TCPListenerDemo.deps.json
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\bin\Debug\net7.0\TCPListenerDemo.runtimeconfig.json
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\bin\Debug\net7.0\TCPListenerDemo.dll
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\bin\Debug\net7.0\TCPListenerDemo.pdb
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\obj\Debug\net7.0\TCPListenerDemo.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\obj\Debug\net7.0\TCPListenerDemo.AssemblyInfoInputs.cache
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\obj\Debug\net7.0\TCPListenerDemo.AssemblyInfo.cs
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\obj\Debug\net7.0\TCPListenerDemo.csproj.CoreCompileInputs.cache
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\obj\Debug\net7.0\TCPListenerDemo.dll
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\obj\Debug\net7.0\refint\TCPListenerDemo.dll
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\obj\Debug\net7.0\TCPListenerDemo.pdb
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\obj\Debug\net7.0\TCPListenerDemo.genruntimeconfig.cache
+C:\Users\tothl\RiderProjects\Backend-SEP4\TCPListenerDemo\obj\Debug\net7.0\ref\TCPListenerDemo.dll

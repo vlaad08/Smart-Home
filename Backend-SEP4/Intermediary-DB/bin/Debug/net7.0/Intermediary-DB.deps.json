@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "Intermediary-DB/1.0.0": {
+        "dependencies": {
+          "TCPListener": "1.0.0"
+        },
+        "runtime": {
+          "Intermediary-DB.dll": {}
+        }
+      },
+      "TCPListener/1.0.0": {
+        "runtime": {
+          "TCPListener.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Intermediary-DB/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "TCPListener/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
