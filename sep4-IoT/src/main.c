@@ -20,14 +20,6 @@ void func(){
         }
 }
 
-void increaseNumber(i){
-    if (i > 16)
-    {
-        /
-    }
-    
-}
-
 int main(){
     pc_comm_init(9600,NULL);
     wifi_init();
