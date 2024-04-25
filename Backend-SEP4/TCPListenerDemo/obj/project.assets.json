@@ -8,19 +8,19 @@
     "net7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\tothl\\.nuget\\packages\\": {}
+    "C:\\Users\\Dominika\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\TCPListenerDemo\\TCPListenerDemo.csproj",
+      "projectUniqueName": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\TCPListenerDemo\\TCPListenerDemo.csproj",
       "projectName": "TCPListenerDemo",
-      "projectPath": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\TCPListenerDemo\\TCPListenerDemo.csproj",
-      "packagesPath": "C:\\Users\\tothl\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\TCPListenerDemo\\obj\\",
+      "projectPath": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\TCPListenerDemo\\TCPListenerDemo.csproj",
+      "packagesPath": "C:\\Users\\Dominika\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\TCPListenerDemo\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\tothl\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Dominika\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -59,7 +59,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

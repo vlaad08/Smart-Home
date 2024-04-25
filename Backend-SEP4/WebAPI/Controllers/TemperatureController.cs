@@ -1,4 +1,5 @@
 ﻿using DBComm.Logic.Interfaces;
+using DBComm.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -9,14 +10,13 @@ public class TemperatureController : ControllerBase
 
     private readonly ITemperatureLogic _temperatureLogic;
     
-    [HttpGet("/")]
-    public async Task<ActionResult> get()
+    [HttpGet("/{hardwareId}")]
+    public async Task<ActionResult> getLatestTemperature()
     {
         try
         {
-            Console.WriteLine("segg");
-            _temperatureLogic.getTemp();
-            return Ok();
+            Temperature temperature = await _temperatureLogic.getTemperature();
+            return Ok(temperature);
         }
         catch (Exception e)
         {

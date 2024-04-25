@@ -8,11 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Repository\" />
-      <Folder Include="Shared\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\TCPListener\TCPListener.csproj" />
     </ItemGroup>
 

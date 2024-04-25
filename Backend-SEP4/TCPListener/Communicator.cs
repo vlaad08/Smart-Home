@@ -29,16 +29,17 @@ public class Communicator : ICommunicator
         {
         }
 
-        public void UpdateClient(TcpClient newClient)
+        public NetworkStream UpdateClient(TcpClient newClient)
         {
             CloseCurrentClient();
             client = newClient;
             stream = newClient.GetStream();
             Console.WriteLine("Communicator updated with new client.");
+            return stream;
         }
 
         // Send message to the current client
-        public void Send(string message)
+        private void Send(string message)
         {
             if (client != null && stream != null)
             {
@@ -58,6 +59,12 @@ public class Communicator : ICommunicator
             {
                 Console.WriteLine("No client connected to send a message.");
             }
+        }
+        
+        public string getTemperature()
+        {
+            Send("Send temperature.");
+            return null;
         }
 
         // Close the current client connection

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\WebAPI\\WebAPI.csproj": {}
+    "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\WebAPI\\WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj": {
+    "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj",
+        "projectUniqueName": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj",
         "projectName": "Intermediary-DB",
-        "projectPath": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj",
-        "packagesPath": "C:\\Users\\tothl\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\Intermediary-DB\\obj\\",
+        "projectPath": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj",
+        "packagesPath": "C:\\Users\\Dominika\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\Intermediary-DB\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\tothl\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Dominika\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -26,8 +26,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\TCPListener\\TCPListener.csproj": {
-                "projectPath": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\TCPListener\\TCPListener.csproj"
+              "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\TCPListener\\TCPListener.csproj": {
+                "projectPath": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\TCPListener\\TCPListener.csproj"
               }
             }
           }
@@ -57,21 +57,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\TCPListener\\TCPListener.csproj": {
+    "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\TCPListener\\TCPListener.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\TCPListener\\TCPListener.csproj",
+        "projectUniqueName": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\TCPListener\\TCPListener.csproj",
         "projectName": "TCPListener",
-        "projectPath": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\TCPListener\\TCPListener.csproj",
-        "packagesPath": "C:\\Users\\tothl\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\TCPListener\\obj\\",
+        "projectPath": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\TCPListener\\TCPListener.csproj",
+        "packagesPath": "C:\\Users\\Dominika\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\TCPListener\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\tothl\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Dominika\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -110,21 +110,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\WebAPI\\WebAPI.csproj": {
+    "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\WebAPI\\WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\WebAPI\\WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\WebAPI\\WebAPI.csproj",
         "projectName": "WebAPI",
-        "projectPath": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\WebAPI\\WebAPI.csproj",
-        "packagesPath": "C:\\Users\\tothl\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\WebAPI\\obj\\",
+        "projectPath": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\WebAPI\\WebAPI.csproj",
+        "packagesPath": "C:\\Users\\Dominika\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\tothl\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Dominika\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -136,8 +136,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj": {
-                "projectPath": "C:\\Users\\tothl\\RiderProjects\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj"
+              "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj": {
+                "projectPath": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj"
               }
             }
           }
@@ -180,7 +180,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
