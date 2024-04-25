@@ -10,12 +10,14 @@ public class TemperatureRepository : IBaseRepository
         throw new NotImplementedException();
     }
 
-    public Task<Temperature> getLates()
+    public async Task<Temperature> getLates()
     {
-        Temperature temperature = new Temperature();
-        temperature.Value = 21;
-        temperature.ReadAt = new DateTime();
-        return Task.FromResult(temperature);
+        Temperature temperature = new Temperature
+        {
+            Value = 21,
+            ReadAt = DateTime.Now
+        };
+        return temperature;
     }
 
     public Task get<T>(T element)

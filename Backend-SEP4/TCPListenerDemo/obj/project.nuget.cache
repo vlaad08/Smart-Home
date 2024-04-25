@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "UPJL5i2EplozKMQDlIt0OMsxylljyX7E3A3hQ8jducZAYzRTSBWx9Ca2jhcplGmMzapsf9pDMAigPnPv4G3HJw==",
+  "dgSpecHash": "4/u+YddYV66a/F10qmv7K3WT2qm9OiN9nE5iNAdS5Dld4mGRUhSGlzi9ZAJtlyHRjJuuTvRJOpM9Ysj2LN+Isg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Dominika\\Desktop\\SEP4\\Backend-SEP4\\TCPListenerDemo\\TCPListenerDemo.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\TCPListenerDemo\\TCPListenerDemo.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\vlada\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.15\\microsoft.netcore.app.ref.7.0.15.nupkg.sha512",
+    "C:\\Users\\vlada\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.15\\microsoft.windowsdesktop.app.ref.7.0.15.nupkg.sha512",
+    "C:\\Users\\vlada\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.15\\microsoft.aspnetcore.app.ref.7.0.15.nupkg.sha512",
+    "C:\\Users\\vlada\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.15\\microsoft.netcore.app.host.win-x64.7.0.15.nupkg.sha512"
+  ],
   "logs": []
 }
