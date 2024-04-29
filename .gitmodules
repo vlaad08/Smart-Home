@@ -1,0 +1,3 @@
+[submodule "sep4-IoT/lib/micro-ecc"]
+	path = sep4-IoT/lib/micro-ecc
+	url = https://github.com/kmackay/micro-ecc.git
