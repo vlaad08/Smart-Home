@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build ./Backend-SEP4 --file Dockerfile --tag smart-home-bk:$(date +%s)
+      run: docker build ./Backend-SEP4 --tag smart-home-bk:$(date +%s)
