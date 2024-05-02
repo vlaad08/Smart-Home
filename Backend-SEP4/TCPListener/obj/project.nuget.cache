@@ -1,6 +1,10 @@
 {
   "version": 2,
+<<<<<<< Updated upstream
   "dgSpecHash": "WXsNUYpIiVWvKjuMjdHAveibNnGdgXBO2rfEwndEOzmM6VPYV9DIe+Ftw3iUsJuFO/SIf9148mp6rqbF7VimCw==",
+=======
+  "dgSpecHash": "JuhXxcB4aFoqIc2fgbDigR20JhkXgO2PegZ96+2mdCHy97O2RzHQid2p1/ZHhWyFwYhrG8SVyGtxYWdJgCKHEw==",
+>>>>>>> Stashed changes
   "success": true,
   "projectFilePath": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/TCPListener/TCPListener.csproj",
   "expectedPackageFiles": [],

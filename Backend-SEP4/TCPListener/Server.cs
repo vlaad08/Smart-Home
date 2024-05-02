@@ -21,7 +21,7 @@ public class Server
         serverThread.Start();
     }
 
-    private void ListenForClients()
+    private async void ListenForClients()
     {
         Console.WriteLine("Server started, listening for clients...");
         while (isRunning)
@@ -30,7 +30,7 @@ public class Server
             {
                 TcpClient newClient = listener.AcceptTcpClient();
                 Console.WriteLine("Client connected.");
-                NetworkStream stream = Communicator.Instance.UpdateClient(newClient);
+                NetworkStream stream = await Communicator.Instance.UpdateClient(newClient);
                 
                 byte[] buffer = new byte[1024];
                 // Read data from the network stream

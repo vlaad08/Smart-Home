@@ -4,6 +4,7 @@
     "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/WebAPI/WebAPI.csproj": {}
   },
   "projects": {
+<<<<<<< Updated upstream
     "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/Intermediary-DB/Intermediary-DB.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -72,6 +73,19 @@
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/AgostonBabicz/.nuget/NuGet/NuGet.Config"
+=======
+    "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/ECC/ECC.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/ECC/ECC.csproj",
+        "projectName": "ECC",
+        "projectPath": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/ECC/ECC.csproj",
+        "packagesPath": "/Users/AgostonBabicz/.nuget/packages/",
+        "outputPath": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/ECC/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/AgostonBabicz/.nuget/NuGet/NuGet.Config"
+>>>>>>> Stashed changes
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -83,6 +97,133 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.403/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+<<<<<<< Updated upstream
+    "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/WebAPI/WebAPI.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/WebAPI/WebAPI.csproj",
+        "projectName": "WebAPI",
+        "projectPath": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/WebAPI/WebAPI.csproj",
+        "packagesPath": "/Users/AgostonBabicz/.nuget/packages/",
+        "outputPath": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/WebAPI/obj/",
+=======
+    "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/Intermediary-DB/Intermediary-DB.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/Intermediary-DB/Intermediary-DB.csproj",
+        "projectName": "Intermediary-DB",
+        "projectPath": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/Intermediary-DB/Intermediary-DB.csproj",
+        "packagesPath": "/Users/AgostonBabicz/.nuget/packages/",
+        "outputPath": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/Intermediary-DB/obj/",
+>>>>>>> Stashed changes
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/AgostonBabicz/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+<<<<<<< Updated upstream
+=======
+              "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/TCPListener/TCPListener.csproj": {
+                "projectPath": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/TCPListener/TCPListener.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.403/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/TCPListener/TCPListener.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/TCPListener/TCPListener.csproj",
+        "projectName": "TCPListener",
+        "projectPath": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/TCPListener/TCPListener.csproj",
+        "packagesPath": "/Users/AgostonBabicz/.nuget/packages/",
+        "outputPath": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/TCPListener/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/AgostonBabicz/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/ECC/ECC.csproj": {
+                "projectPath": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/ECC/ECC.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -136,6 +277,7 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
+>>>>>>> Stashed changes
               "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/Intermediary-DB/Intermediary-DB.csproj": {
                 "projectPath": "/Users/AgostonBabicz/Documents/GitHub/Smart-Home/Backend-SEP4/Intermediary-DB/Intermediary-DB.csproj"
               }
