@@ -22,13 +22,17 @@ jobs:
         python -m pip install --upgrade pip
         pip install platformio
 
+    - name: Change to IoT project directory
+      run: cd sep4-IoT
+    
     - name: Run PlatformIO Build
       run: |
         pio project init --board uno
         pio run
 
-    - name: Upload Build Artifact
+    - name: Upload PlatformIO Build Artifacts
       uses: actions/upload-artifact@v2
       with:
         name: firmware
         path: .pio/build/uno/firmware.hex
+
