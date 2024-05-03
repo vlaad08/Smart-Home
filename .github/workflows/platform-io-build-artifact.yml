@@ -28,8 +28,8 @@ jobs:
         pio run
 
     - name: Upload PlatformIO Build Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: firmware
-        path: .pio/build/uno/firmware.hex
+        path: sep4-IoT/.pio/build/uno/firmware.hex
 
