@@ -31,5 +31,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: firmware
-        path: sep4-IoT/.pio/build/uno/firmware.hex
+        path: sep4-IoT/.pio/build
 
