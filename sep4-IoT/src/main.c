@@ -16,8 +16,12 @@
 
 #include "uECC.h"
 #include "Enc.h"
+#include "aes.h"
 // Buffer to hold the received message
+//Enc enc;
+
 char received_message_buffer[128];
+
 
 bool contains(const char *haystack, const char *needle) {
     return strstr(haystack, needle) != NULL;
@@ -50,6 +54,8 @@ char** split(const char* str, const char* delim, int* num_tokens) {
     return tokens;
 }
 
+
+
 void getTemptAndHum(){
     uint8_t humidity_integer = 0; 
     uint8_t  humidity_decimal = 0; 
@@ -59,11 +65,24 @@ void getTemptAndHum(){
 
     DHT11_ERROR_MESSAGE_t status = dht11_get(&humidity_integer,&humidity_decimal,&temperature_integer,&temperature_decimal);
 
+    struct AES_ctx my_AES_ctx;
+    Enc enc;
+    uint8_t * sharedkey=getSharedKey(&enc);
+    uint8_t iv[16];
+    generate_iv(iv,16);
+    AES_init_ctx_iv(&my_AES_ctx,sharedkey,iv);
+
     if (status == DHT11_OK)
     {
         char result[50];
         sprintf(result, "TEMP: %d.%d; HUMI: %d.%d\n", temperature_integer, temperature_decimal, humidity_integer, humidity_decimal);
+        //wifi_command_TCP_transmit((uint8_t*)result,strlen(result));
+        AES_CBC_encrypt_buffer(&my_AES_ctx,result,strlen(result));
+
         wifi_command_TCP_transmit((uint8_t*)result,strlen(result));
+
+        AES_CBC_decrypt_buffer(&my_AES_ctx,result,strlen(result));
+        pc_comm_send_array_blocking(result,50);
     }
     else{
         wifi_command_TCP_transmit((uint8_t*)"Temp Hum Error ",16);
@@ -78,8 +97,9 @@ void Callback(){
         const char* delim = ":";
         int num_tokens; //its the number of how many splits happened in one string
         char** tokens = split(received_message_buffer, delim, &num_tokens);
-        pc_comm_send_array_blocking(tokens[1],64);
-        
+        Enc enc;
+        createSharedKey(&enc,tokens[1]);
+        //pc_comm_send_array_blocking(tokens[1],64);
         free(tokens);
     }
     
@@ -94,8 +114,10 @@ void setup(){
     tone_init();
     leds_init();
     wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
-    wifi_command_create_TCP_connection("192.168.175.153",6868,Callback,received_message_buffer);
+    wifi_command_create_TCP_connection("192.168.10.208",6868,Callback,received_message_buffer);
 }
+
+
 
 
 int main(){
@@ -108,7 +130,7 @@ int main(){
     wifi_command_TCP_transmit((uint8_t*)connection,strlen(connection));
     free(connection);
 
-    periodic_task_init_a(getTemptAndHum,120000);
+    periodic_task_init_a(getTemptAndHum,10000);
 
 
     while (1)

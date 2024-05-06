@@ -18,9 +18,11 @@ int simple_rng(uint8_t *dest, unsigned size);
 
 void createSharedKey(Enc * self, uint8_t CloudPublicKey);
 
-uint8_t getSharedKey(Enc * self);
+uint8_t * getSharedKey(Enc * self);
 
 uint8_t getIOTPublicKey(Enc *self);
+
+void generate_iv(uint8_t *iv, size_t iv_size);
 
 char* print_hex(uint8_t *buf, size_t len);
 

@@ -14,7 +14,7 @@ void createSharedKey(Enc * self, uint8_t CloudPublicKey){
     uECC_shared_secret(CloudPublicKey,self->IOTPrivateKey,self->SharedKey,self->curve);
 }
 
-uint8_t getSharedKey(Enc * self){
+uint8_t * getSharedKey(Enc * self){
     return self->SharedKey;
 }
 
@@ -23,6 +23,17 @@ uint8_t getIOTPublicKey(Enc *self){
 }
 
 
+
+#define IV_SIZE 16 // Size of the IV in bytes for AES (128 bits)
+
+// Function to generate a random IV
+void generate_iv(uint8_t *iv, size_t iv_size) {
+    size_t i;
+    for (i = 0; i < iv_size; ++i) {
+        // Generate a random byte and store it in the IV
+        iv[i] = rand() & 0xFF;
+    }
+}
 
 
 int simple_rng(uint8_t *dest, unsigned size){
