@@ -14,17 +14,16 @@ public class TemperatureLogic : ITemperatureLogic
     public TemperatureLogic()
     {
         communicator = Communicator.Instance;
-        repository = new TemperatureRepository();
+        repository = new TemperatureRepository(new Context());
     }
-    
-    public async Task<Temperature> getTemperature()
+    public async Task<TemperatureReading> getLatestTemperature(string hardwareId)
     {
-        return await repository.getLatest();
+        return await repository.getLatest(hardwareId);
     }
 
-    public void saveTemperature(Temperature temperature)
+    public void saveTemperature(TemperatureReading temperatureReading)
     {
-        repository.update(temperature);
+        repository.update(temperatureReading);
         
     }
 }

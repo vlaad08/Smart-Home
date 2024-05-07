@@ -12,11 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITemperatureLogic, TemperatureLogic>();
-builder.Services.AddScoped<ILightLogic, LightLogic>();
 builder.Services.AddScoped<IBaseRepository, TemperatureRepository>();
-builder.Services.AddScoped<IHumidityLogic, HumidityLogic>();
-builder.Services.AddScoped<IBaseRepository, LightRepository>();
-
+builder.Services.AddDbContext<Context>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
