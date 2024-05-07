@@ -11,6 +11,7 @@
 #include <string.h>
 #include <dht11.h>
 #include <periodic_task.h>
+#include <servo.h>
 // Buffer to hold the received message
 char received_message_buffer[128];
 
@@ -33,6 +34,39 @@ void getTemptAndHum(){
         wifi_command_TCP_transmit((uint8_t*)"Temp Hum Error ",16);
     }
 }
+
+void setRadiatorLevel(uint8_t level) {
+    // Map levels to angles
+    uint8_t angle = 0;
+    switch (level) {
+        case 0:
+            angle = 0;
+            break;
+        case 1:
+            angle = 30;
+            break;
+        case 2:
+            angle = 60;
+            break;
+        case 3:
+            angle = 90;
+            break;
+        case 4:
+            angle = 120;
+            break;
+        case 5:
+            angle = 150;
+            break;
+        case 6:
+            angle = 180;
+            break;
+        default:
+            // Invalid level, set angle to 0
+            angle = 0;
+            break;
+    }
+    // Call the servo function with the mapped angle
+    servo(angle);
 
 void Callback(){
     pc_comm_send_string_blocking(received_message_buffer);
@@ -62,6 +96,8 @@ int main(){
     //void(*test)();
     //test =& getTemptAndHum;
     //periodic_task_init_a(test,2000);
+
+     setRadiatorLevel(3);
 
     while (1)
     {
