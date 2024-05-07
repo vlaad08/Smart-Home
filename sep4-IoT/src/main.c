@@ -66,12 +66,12 @@ void getTemptAndHum(){
     uint8_t temperature_decimal = 0;
 
     DHT11_ERROR_MESSAGE_t status = dht11_get(&humidity_integer,&humidity_decimal,&temperature_integer,&temperature_decimal);
-    char *result[16];
+    char result[16];
 
 
     if (status == DHT11_OK)
     {
-        sprintf((uint8_t*)result, "T:%d.%d H:%d.%d", temperature_integer, temperature_decimal, humidity_integer, humidity_decimal); //might not be the null terminator at the end
+        sprintf(result, "T:%d.%d H:%d.%d", temperature_integer, temperature_decimal, humidity_integer, humidity_decimal); //might not be the null terminator at the end
         //AES_CBC_encrypt_buffer(&my_AES_ctx,result,strlen(result));
         AES_ECB_encrypt(&my_AES_ctx,(uint8_t*)result);
         wifi_command_TCP_transmit((uint8_t*)result,16);
@@ -88,7 +88,7 @@ void getTemptAndHum(){
 void Callback(){
     //pc_comm_send_array_blocking(getSharedKey(&enc),32);
     //wifi_command_TCP_transmit((uint8_t*)"Recieved ", 10);
-    if (contains(received_message_buffer,"Cloud PK:"))
+    if (1/*contains(received_message_buffer,"Cloud PK:")*/)
     {
         //wifi_command_TCP_transmit((uint8_t*)"shared", 7);
 

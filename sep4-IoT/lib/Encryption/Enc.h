@@ -20,7 +20,7 @@ void createSharedKey(Enc * self, char* CloudPublicKey);
 
 uint8_t * getSharedKey(Enc * self);
 
-uint8_t getIOTPublicKey(Enc *self);
+uint8_t * getIOTPublicKey(Enc *self);
 
 void generate_iv(uint8_t *iv, size_t iv_size);
 

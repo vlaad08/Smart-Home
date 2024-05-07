@@ -26,14 +26,14 @@ uint8_t* string_to_uint8(const char* str) {
 }
 */
 void createSharedKey(Enc * self, char* CloudPublicKey){
-    uECC_shared_secret(CloudPublicKey,self->IOTPrivateKey,self->SharedKey,self->curve);
+    uECC_shared_secret((uint8_t *)CloudPublicKey,self->IOTPrivateKey,self->SharedKey,self->curve);
 }
 
 uint8_t * getSharedKey(Enc * self){
     return self->SharedKey;
 }
 
-uint8_t getIOTPublicKey(Enc *self){
+uint8_t * getIOTPublicKey(Enc *self){
     return self->IOTPublicKey;
 }
 
@@ -58,7 +58,7 @@ int simple_rng(uint8_t *dest, unsigned size){
     // Fill 'dest' with the current value
     for (unsigned i = 0; i < size; ++i)
     {
-        dest[i] = value + i + 8; // 7 is my random number. To be more random, you could read a value from a analog input, using the ADC.
+        dest[i] = value + i + 7; // 7 is my random number. To be more random, you could read a value from a analog input, using the ADC.
     }
     return 1; // Indicate success
 }
