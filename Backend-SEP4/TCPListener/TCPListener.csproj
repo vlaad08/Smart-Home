@@ -8,4 +8,8 @@
         <RootNamespace>ConsoleApp1</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ECC\ECC.csproj" />
+    </ItemGroup>
+
 </Project>
