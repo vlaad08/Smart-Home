@@ -1,19 +1,17 @@
-﻿using DBComm.Logic;
 using DBComm.Logic.Interfaces;
 using DBComm.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
-[ApiController] [Route("Temperature")]
-public class TemperatureController : ControllerBase
+[ApiController] [Route("Humidity")]
+public class HumidityController : ControllerBase
 {
+    private readonly IHumidityLogic _humidityLogic;
 
-    private readonly ITemperatureLogic _temperatureLogic;
-
-    public TemperatureController(ITemperatureLogic temperatureLogic)
+    public HumidityController(IHumidityLogic humidityLogic)
     {
-        this._temperatureLogic = temperatureLogic;
+        this._humidityLogic = humidityLogic;
     }
 
     [HttpGet("{hardwareId}")]
@@ -21,7 +19,7 @@ public class TemperatureController : ControllerBase
     {
         try
         {
-            Temperature? temperature = await _temperatureLogic.getTemperature();
+            Humidity? temperature = await _humidityLogic.getHumidity();
             return Ok(temperature);
         }
         catch (Exception e)
@@ -30,5 +28,4 @@ public class TemperatureController : ControllerBase
             throw;
         }
     }
-    
 }

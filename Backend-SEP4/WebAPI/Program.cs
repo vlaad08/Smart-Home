@@ -13,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITemperatureLogic, TemperatureLogic>();
 builder.Services.AddScoped<IBaseRepository, TemperatureRepository>();
+builder.Services.AddScoped<IHumidityLogic, HumidityLogic>();
 
 var app = builder.Build();
 
