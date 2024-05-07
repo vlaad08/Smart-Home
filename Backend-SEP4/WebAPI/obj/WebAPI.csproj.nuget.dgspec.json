@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\WebAPI\\WebAPI.csproj": {}
+    "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\WebAPI\\WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj": {
+    "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj",
+        "projectUniqueName": "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj",
         "projectName": "Intermediary-DB",
-        "projectPath": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj",
-        "packagesPath": "C:\\Users\\vlada\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\Intermediary-DB\\obj\\",
+        "projectPath": "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj",
+        "packagesPath": "C:\\Users\\Dominika\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\Intermediary-DB\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\vlada\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Dominika\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -26,8 +26,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\TCPListener\\TCPListener.csproj": {
-                "projectPath": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\TCPListener\\TCPListener.csproj"
+              "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\TCPListener\\TCPListener.csproj": {
+                "projectPath": "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\TCPListener\\TCPListener.csproj"
               }
             }
           }
@@ -52,40 +52,26 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[7.0.15, 7.0.15]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[7.0.15, 7.0.15]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[7.0.15, 7.0.15]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\TCPListener\\TCPListener.csproj": {
+    "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\TCPListener\\TCPListener.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\TCPListener\\TCPListener.csproj",
+        "projectUniqueName": "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\TCPListener\\TCPListener.csproj",
         "projectName": "TCPListener",
-        "projectPath": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\TCPListener\\TCPListener.csproj",
-        "packagesPath": "C:\\Users\\vlada\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\TCPListener\\obj\\",
+        "projectPath": "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\TCPListener\\TCPListener.csproj",
+        "packagesPath": "C:\\Users\\Dominika\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\TCPListener\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\vlada\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Dominika\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -119,44 +105,26 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[7.0.15, 7.0.15]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[7.0.15, 7.0.15]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[7.0.15, 7.0.15]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[7.0.15, 7.0.15]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\WebAPI\\WebAPI.csproj": {
+    "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\WebAPI\\WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\WebAPI\\WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\WebAPI\\WebAPI.csproj",
         "projectName": "WebAPI",
-        "projectPath": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\WebAPI\\WebAPI.csproj",
-        "packagesPath": "C:\\Users\\vlada\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\WebAPI\\obj\\",
+        "projectPath": "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\WebAPI\\WebAPI.csproj",
+        "packagesPath": "C:\\Users\\Dominika\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\vlada\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Dominika\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -168,8 +136,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj": {
-                "projectPath": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj"
+              "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj": {
+                "projectPath": "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj"
               }
             }
           }
@@ -204,24 +172,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[7.0.15, 7.0.15]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[7.0.15, 7.0.15]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[7.0.15, 7.0.15]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[7.0.15, 7.0.15]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -230,7 +180,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

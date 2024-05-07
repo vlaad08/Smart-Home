@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lwpVfITgD7fc5cNaJKRFM8/BRqY7COKheHBKbtnV/UZQQyJDu/DZ/ttQzqC/3TpuWyLRvZKddrewdW2yBvWGeA==",
+  "dgSpecHash": "23a4dG100BMpK4Y0yn/fFLNb6k+fFT+GubvVtAONpUc7qDkd0YBe1JYH5nORk3vfgCh+sPl2VjMq2/aCbUMLVw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\vlada\\Documents\\GitHub\\Backend-SEP4\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\vlada\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.15\\microsoft.netcore.app.ref.7.0.15.nupkg.sha512",
-    "C:\\Users\\vlada\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.15\\microsoft.windowsdesktop.app.ref.7.0.15.nupkg.sha512",
-    "C:\\Users\\vlada\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.15\\microsoft.aspnetcore.app.ref.7.0.15.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Users\\Dominika\\Documents\\SEP4-Backend\\Backend-SEP4\\Intermediary-DB\\Intermediary-DB.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }

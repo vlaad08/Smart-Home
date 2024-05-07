@@ -8,6 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = TCPListener
-build_property.ProjectDir = C:\Users\vlada\Documents\GitHub\Backend-SEP4\Backend-SEP4\TCPListenerDemo\
-build_property.EnableComHosting = 
-build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.ProjectDir = C:\Users\Dominika\Documents\SEP4-Backend\Backend-SEP4\TCPListenerDemo\
