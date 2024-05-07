@@ -22,10 +22,4 @@
         </PackageReference>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="HumidityTests\" />
-      <Folder Include="LightTests\" />
-      <Folder Include="TemperatureTests\" />
-    </ItemGroup>
-
 </Project>
