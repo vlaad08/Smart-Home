@@ -17,11 +17,11 @@ public class TemperatureController : ControllerBase
     }
 
     [HttpGet("/{hardwareId}")]
-    public async Task<ActionResult> getLatestTemperature()
+    public async Task<ActionResult> getLatestTemperature([FromRoute] string hardwareId)
     {
         try
         {
-            Temperature? temperature = await _temperatureLogic.getTemperature();
+            TemperatureReading? temperature = await _temperatureLogic.getLatestTemperature(hardwareId);
             return Ok(temperature);
         }
         catch (Exception e)
