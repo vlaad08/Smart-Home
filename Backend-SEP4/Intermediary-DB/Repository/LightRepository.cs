@@ -1,23 +1,21 @@
-﻿using DBComm.Shared;
+using DBComm.Shared;
 
 namespace DBComm.Repository;
 
-public class TemperatureRepository : IBaseRepository
+public class LightRepository : IBaseRepository
 {
-    public Task getOne<T>(T element)
+    public async Task<Light> getLatest()
     {
-        
-        throw new NotImplementedException();
+        Light light = new Light
+        {
+          test = "Test"
+        };
+        return light;
     }
 
-    public async Task<Temperature> getLatest()
+    public Task getOne<T>(T element)
     {
-        Temperature temperature = new Temperature
-        {
-            Value = 21,
-            ReadAt = DateTime.Now
-        };
-        return temperature;
+        throw new NotImplementedException();
     }
 
     public Task get<T>(T element)

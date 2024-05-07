@@ -12,8 +12,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITemperatureLogic, TemperatureLogic>();
+builder.Services.AddScoped<ILightLogic, LightLogic>();
 builder.Services.AddScoped<IBaseRepository, TemperatureRepository>();
 builder.Services.AddScoped<IHumidityLogic, HumidityLogic>();
+builder.Services.AddScoped<IBaseRepository, LightRepository>();
 
 var app = builder.Build();
 

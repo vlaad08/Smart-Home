@@ -19,7 +19,7 @@ public class TemperatureLogic : ITemperatureLogic
     
     public async Task<Temperature> getTemperature()
     {
-        return await repository.getLates();
+        return await repository.getLatest();
     }
 
     public void saveTemperature(Temperature temperature)
