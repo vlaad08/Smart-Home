@@ -10,9 +10,9 @@ public class TemperatureLogicTest
   [Fact]
   public async void GetTemperature_calls_for_dbcomm()
   {
-    var dbComm = new Mock<TemperatureRepository>();
-    var logic = new TemperatureLogic();
-    await logic.getTemperature();
-    dbComm.Verify(d=>d.getLatest());
+    var dbComm = new Mock<IBaseRepository>();
+    var logic = new TemperatureLogic(dbComm.Object);
+    await logic.getLatestTemperature("1");
+    dbComm.Verify(d=>d.getOne("1"));
   }
 }

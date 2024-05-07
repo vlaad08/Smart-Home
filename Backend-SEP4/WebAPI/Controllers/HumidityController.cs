@@ -1,4 +1,5 @@
 using DBComm.Logic.Interfaces;
+using DBComm.Repository;
 using DBComm.Shared;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +16,11 @@ public class HumidityController : ControllerBase
     }
 
     [HttpGet("{hardwareId}")]
-    public async Task<ActionResult> getLatestTemperature()
+    public async Task<ActionResult> getLatestTemperature([FromRoute]string hardwareId)
     {
         try
         {
-            Humidity? temperature = await _humidityLogic.getHumidity();
+            HumidityReading? temperature = await _humidityLogic.getHumidity(hardwareId);
             return Ok(temperature);
         }
         catch (Exception e)

@@ -6,14 +6,14 @@ namespace DBComm.Logic;
 
 public class LightLogic : ILightLogic
 {
-    private LightRepository _repository;
+    private IBaseRepository _repository;
 
-    public LightLogic()
+    public LightLogic(IBaseRepository repository)
     {
-        this._repository = new LightRepository();
+        this._repository = repository;
     }
-    public async Task<Light> getLight()
+    public async Task<LightReading> getLight(string hardwareId)
     {
-        return await _repository.getLatest();
+        return (LightReading)await _repository.getOne(hardwareId);
     }
 }

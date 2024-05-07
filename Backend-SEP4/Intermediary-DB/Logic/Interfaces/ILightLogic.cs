@@ -4,5 +4,5 @@ namespace DBComm.Logic.Interfaces;
 
 public interface ILightLogic
 {
-    Task<Light> getLight();
+    Task<LightReading> getLight(string hardwareId);
 }

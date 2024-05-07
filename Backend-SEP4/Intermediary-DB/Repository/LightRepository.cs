@@ -1,39 +1,50 @@
+using DBComm.Logic;
 using DBComm.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace DBComm.Repository;
 
 public class LightRepository : IBaseRepository
 {
-    public async Task<Light> getLatest()
+    public Context Context;
+    public LightRepository(Context context)
     {
-        Light light = new Light
+        Context = context;
+    }
+
+    public async Task<Object?> getOne(Object element)
+    {
+        try
         {
-          test = "Test"
-        };
-        return light;
+            IQueryable<HumidityReading> lightReadings = Context.HumidityReadings
+                .Where(tr => tr.Room.DeviceId == element.ToString())  
+                .OrderByDescending(tr => tr.ReadAt);
+
+            HumidityReading? result = await lightReadings.FirstOrDefaultAsync();
+            return result;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
-    public Task getOne<T>(T element)
+    public Task<Object?> get(Object element)
     {
         throw new NotImplementedException();
     }
 
-    public Task get<T>(T element)
+    public Task<Object?> create(Object element)
     {
         throw new NotImplementedException();
     }
 
-    public Task create<T>(T element)
+    public Task<Object?> update(Object element)
     {
         throw new NotImplementedException();
     }
 
-    public Task update<T>(T element)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task delete<T>(T element)
+    public Task<Object?> delete(Object element)
     {
         throw new NotImplementedException();
     }

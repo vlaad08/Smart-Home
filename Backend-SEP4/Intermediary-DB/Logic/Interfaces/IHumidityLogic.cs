@@ -4,6 +4,6 @@ namespace DBComm.Logic.Interfaces;
 
 public interface IHumidityLogic
 {
-    Task<Humidity> getHumidity();
+    Task<HumidityReading> getHumidity(string hardwareId);
     void saveHumidity(Humidity humidity);
 }

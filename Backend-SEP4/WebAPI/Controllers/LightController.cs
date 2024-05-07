@@ -17,11 +17,11 @@ public class LightController : ControllerBase
     }
 
     [HttpGet("{hardwareId}")]
-    public async Task<ActionResult> getLatestLight()
+    public async Task<ActionResult> getLatestLight([FromRoute]string hardwareId)
     {
         try
         {
-            Light? light = await _lightLogic.getLight();
+            LightReading? light = await _lightLogic.getLight(hardwareId);
             return Ok(light);
         }
         catch (Exception e)

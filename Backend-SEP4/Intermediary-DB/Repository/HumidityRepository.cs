@@ -1,41 +1,50 @@
+using DBComm.Logic;
 using DBComm.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace DBComm.Repository;
 
 public class HumidityRepository : IBaseRepository
 {
-    
-    public async Task<Humidity> getLates()
+    public Context Context;
+    public HumidityRepository(Context context)
     {
-        Humidity humidity = new Humidity()
+        Context = context;
+    }
+    
+    public async Task<Object> getOne(Object element)
+    {
+        try
         {
-            Value = 65,
-            ReadAt = DateTime.Now
-        };
-        return humidity;
+            IQueryable<HumidityReading> humidityReading = Context.HumidityReadings
+                .Where(tr => tr.Room.DeviceId == element.ToString())  
+                .OrderByDescending(tr => tr.ReadAt);
+
+            HumidityReading? result = await humidityReading.FirstOrDefaultAsync();
+            return result;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
-    
-    public Task getOne<T>(T element)
+
+    public Task<Object?> get(Object element)
     {
         throw new NotImplementedException();
     }
 
-    public Task get<T>(T element)
+    public Task<Object?> create(Object element)
     {
         throw new NotImplementedException();
     }
 
-    public Task create<T>(T element)
+    public Task<Object?> update(Object element)
     {
         throw new NotImplementedException();
     }
 
-    public Task update<T>(T element)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task delete<T>(T element)
+    public Task<Object?> delete(Object element)
     {
         throw new NotImplementedException();
     }

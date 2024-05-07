@@ -11,46 +11,40 @@ public class TemperatureRepository : IBaseRepository
     {
         Context = context;
     }
-    public Task getOne<T>(T element)
-    {
-        
-        throw new NotImplementedException();
-    }
 
-    public async Task<TemperatureReading> getLatest(string hardwareId)
+    public async Task<Object?> getOne(Object element)
     {
         try
         {
             IQueryable<TemperatureReading> temperatureReadings = Context.TemperatureReadings
-                .Where(tr => tr.Room.DeviceId == hardwareId)  
+                .Where(tr => tr.Room.DeviceId == element.ToString())  
                 .OrderByDescending(tr => tr.ReadAt);
 
-            TemperatureReading result = await temperatureReadings.FirstOrDefaultAsync();
+            TemperatureReading? result = await temperatureReadings.FirstOrDefaultAsync();
             return result;
         }
         catch (Exception e)
         {
             throw new Exception(e.Message);
         }
-        
     }
 
-    public Task get<T>(T element)
+    public Task<Object?> get(Object element)
     {
         throw new NotImplementedException();
     }
 
-    public Task create<T>(T element)
+    public Task<Object?> create(Object element)
     {
         throw new NotImplementedException();
     }
 
-    public Task update<T>(T element)
+    public Task<Object?> update(Object element)
     {
         throw new NotImplementedException();
     }
 
-    public Task delete<T>(T element)
+    public Task<Object?> delete(Object element)
     {
         throw new NotImplementedException();
     }

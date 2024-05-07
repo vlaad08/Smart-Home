@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.JavaScript;
 using DBComm.Logic;
 using DBComm.Repository;
 using Moq;
@@ -9,9 +10,9 @@ public class HumidityLogicTest
     [Fact]
     public async void GetHumidity_calls_for_dbcomm()
     {
-        var dbComm = new Mock<HumidityRepository>();
-        var logic = new HumidityLogic();
-        await logic.getHumidity();
-        dbComm.Verify(d=>d.getLates());
+        var dbComm = new Mock<IBaseRepository>();
+        var logic = new HumidityLogic(dbComm.Object);
+        await logic.getHumidity("1");
+        dbComm.Verify(d=>d.getOne("1"));
     }
 }
