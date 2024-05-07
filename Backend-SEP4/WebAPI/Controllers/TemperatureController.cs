@@ -16,7 +16,7 @@ public class TemperatureController : ControllerBase
         this._temperatureLogic = temperatureLogic;
     }
 
-    [HttpGet("/{hardwareId}")]
+    [HttpGet("{hardwareId}")]
     public async Task<ActionResult> getLatestTemperature([FromRoute] string hardwareId)
     {
         try

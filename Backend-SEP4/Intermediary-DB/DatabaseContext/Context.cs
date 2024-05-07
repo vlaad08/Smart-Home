@@ -19,7 +19,7 @@ public class Context : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         ///cloud 
-        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=SmartHome_db;Username=postgres;Password=sql3486;");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=SmartHome_db;Username=postgres;Password=password;");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,26 +1,26 @@
-﻿using DBComm.Logic;
+using DBComm.Logic;
 using DBComm.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace DBComm.Repository;
 
-public class TemperatureRepository : IBaseRepository
+public class HumidityRepository : IBaseRepository
 {
     public Context Context;
-    public TemperatureRepository(Context context)
+    public HumidityRepository(Context context)
     {
         Context = context;
     }
-
-    public async Task<Object?> getOne(Object element)
+    
+    public async Task<Object> getOne(Object element)
     {
         try
         {
-            IQueryable<TemperatureReading> temperatureReadings = Context.TemperatureReadings
+            IQueryable<HumidityReading> humidityReading = Context.HumidityReadings
                 .Where(tr => tr.Room.DeviceId == element.ToString())  
                 .OrderByDescending(tr => tr.ReadAt);
 
-            TemperatureReading? result = await temperatureReadings.FirstOrDefaultAsync();
+            HumidityReading? result = await humidityReading.FirstOrDefaultAsync();
             return result;
         }
         catch (Exception e)
