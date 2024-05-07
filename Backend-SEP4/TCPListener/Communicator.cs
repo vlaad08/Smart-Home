@@ -42,27 +42,33 @@ public class Communicator : ICommunicator
             return stream;
         }
 
-        // Send message to the current client
-        private void Send(string message)
+
+        // Send a byte array to the current client
+        private void Send(byte[] data)
         {
             if (client != null && stream != null)
             {
                 try
                 {
-                    byte[] data = Encoding.UTF8.GetBytes(message);
                     stream.Write(data, 0, data.Length);
-                    Console.WriteLine("Message sent: " + message);
+                    Console.WriteLine("Data sent successfully.");
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error sending message: " + e.Message);
+                    Console.WriteLine("Error sending data: " + e.Message);
                     CloseCurrentClient();
                 }
             }
             else
             {
-                Console.WriteLine("No client connected to send a message.");
+                Console.WriteLine("No client connected to send data.");
             }
+        }
+        
+        private void Send(string message)
+        {
+            byte[] data = Encoding.UTF8.GetBytes(message);
+            Send(data);
         }
         
         public string getTemperature()
@@ -78,9 +84,31 @@ public class Communicator : ICommunicator
             Point multipliedG = Point.Multiply(r, curve.G);
             Point addedPoints = Point.Add(multipliedG, curve.G);
             keyPair = Cryptography.GetKeyPair(curve);
-            Send(keyPair.PublicKey.ToString());
+            
+            //Converting hex PK to uint8_[64] for IoT
+            string hexKey = keyPair.PublicKey.ToString();
+            Send(HexStringToByteArray(hexKey));
         }
 
+        
+        //kex conversions
+        private byte[] HexStringToByteArray(string hex)
+        {
+            //Although we can assume that the key is valid with an even lenght we do exception handling
+            if (string.IsNullOrEmpty(hex))
+                throw new ArgumentException("Hex string is null or empty.");
+            if (hex.Length % 2 != 0)
+                throw new ArgumentException("Hex string must have an even length.");
+
+            byte[] bytes = new byte[hex.Length / 2];
+            for (int i = 0; i < hex.Length; i += 2)
+            {
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            }
+            return bytes;
+        }
+
+        
         // Close the current client connection
         private void CloseCurrentClient()
         {
