@@ -16,7 +16,7 @@ void createIOTKeys(Enc * self);
 
 int simple_rng(uint8_t *dest, unsigned size);
 
-void createSharedKey(Enc * self, uint8_t CloudPublicKey);
+void createSharedKey(Enc * self, char* CloudPublicKey);
 
 uint8_t * getSharedKey(Enc * self);
 
