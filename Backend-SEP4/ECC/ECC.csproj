@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
+   
     <ItemGroup>
       <Content Include="ECC.NET.Exceptions\ECC.NET.Exceptions.csproj" />
       <Content Include="ECC.NET.Test\ECC.NET.Test.csproj" />
