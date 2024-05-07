@@ -13,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITemperatureLogic, TemperatureLogic>();
 builder.Services.AddScoped<IBaseRepository, TemperatureRepository>();
-
+builder.Services.AddDbContext<Context>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

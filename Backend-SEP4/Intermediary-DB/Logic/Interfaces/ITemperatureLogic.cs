@@ -4,7 +4,7 @@ namespace DBComm.Logic.Interfaces;
 
 public interface ITemperatureLogic
 {
-    Task<Temperature> getTemperature();
-    void saveTemperature(Temperature temperature);
+    Task<TemperatureReading> getLatestTemperature(string hardwareId);
+    void saveTemperature(TemperatureReading temperatureReading);
 
 }
