@@ -67,6 +67,7 @@ void setRadiatorLevel(uint8_t level) {
     }
     // Call the servo function with the mapped angle
     servo(angle);
+}
 
 void Callback(){
     pc_comm_send_string_blocking(received_message_buffer);
@@ -87,17 +88,16 @@ int main(){
     buttons_init();
     tone_init();
     leds_init();
-    wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
-    wifi_command_create_TCP_connection("192.168.175.232",6868,Callback,received_message_buffer);
+    wifi_command_join_AP("002","zabijemsazalentilku");
+    wifi_command_create_TCP_connection("192.168.236.153",23,Callback,received_message_buffer);
     wifi_command_TCP_transmit((uint8_t*)"Connected ", 11);
 
     periodic_task_init_a(getTemptAndHum,120000);
+setRadiatorLevel(1);
+_delay_ms(1000);
+//setRadiatorLevel(0);
 
-    //void(*test)();
-    //test =& getTemptAndHum;
-    //periodic_task_init_a(test,2000);
 
-     setRadiatorLevel(3);
 
     while (1)
     {
