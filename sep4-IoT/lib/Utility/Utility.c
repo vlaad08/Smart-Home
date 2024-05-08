@@ -1,3 +1,5 @@
+#ifndef WIN_TEST
+
 #include "Utility.h"
 #include <stdio.h>
 
@@ -32,3 +34,5 @@ char** split(const char* str, const char* delim, int* num_tokens) {
     *num_tokens = count;
     return tokens;
 }
+
+#endif

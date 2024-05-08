@@ -1,3 +1,5 @@
+#ifndef WIN_TEST
+
 #include "Enc.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -77,3 +79,5 @@ char* print_hex(uint8_t *buf, size_t len) {
 
     return result; // Return the formatted hex string
 }
+
+#endif

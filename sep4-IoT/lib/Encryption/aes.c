@@ -1,3 +1,5 @@
+#ifndef WIN_TEST
+
 /*
 
 This is an implementation of the AES algorithm, specifically ECB, CTR and CBC mode.
@@ -570,3 +572,4 @@ void AES_CTR_xcrypt_buffer(struct AES_ctx* ctx, uint8_t* buf, size_t length)
 
 #endif // #if defined(CTR) && (CTR == 1)
 
+#endif
