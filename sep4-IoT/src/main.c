@@ -36,24 +36,37 @@ void getTemptAndHum(){
     }
 }
 
-void setRadiatorLevel() {
-    // Map levels to angles
-    uint8_t angle = 180; //100 is 90* ; zero is perfect start; 
-    
-    
-    // Call the servo function with the mapped angle
+void setRadiatorLevel(uint8_t level) {
+    uint8_t angle = 0;
+    switch (level) {
+        case 0:
+            angle = 0;
+            break;
+        case 1:
+            angle = 30;
+            break;
+        case 2:
+            angle = 60;
+            break;
+        case 3:
+            angle = 90;
+            break;
+        case 4:
+            angle = 120;
+            break;
+        case 5:
+            angle = 150;
+            break;
+        case 6:
+            angle = 180;
+            break;
+        default:
+            // Invalid level, set angle to 0
+            angle = 0;
+            break;
+    }
     servo(angle);
 }
-
-void setRadiatorLevel2() {
-    // Map levels to angles
-    uint8_t angle = 0; //100 is 90* ; zero is perfect start; 
-    
-    
-    // Call the servo function with the mapped angle
-    servo(angle);
-}
-
 
 void Callback(){
     pc_comm_send_string_blocking(received_message_buffer);
@@ -74,15 +87,22 @@ int main(){
     buttons_init();
     tone_init();
     leds_init();
-    wifi_command_join_AP("002","zabijemsazalentilku");
-    wifi_command_create_TCP_connection("192.168.236.153",23,Callback,received_message_buffer);
+    wifi_command_join_AP("AglioOlioPomodoro","ziemniak");
+    wifi_command_create_TCP_connection("192.168.6.26",23,Callback,received_message_buffer);
     wifi_command_TCP_transmit((uint8_t*)"Connected ", 11);
 
     periodic_task_init_a(getTemptAndHum,120000);
+      setRadiatorLevel(4);
+    _delay_ms(1000);
+    setRadiatorLevel(5);
+    _delay_ms(1000);
+    setRadiatorLevel(6);
+   
+  
+        
+
     while(1){
-       setRadiatorLevel2();
-       _delay_ms(100);
-    setRadiatorLevel(); 
+       
     }
     
 
