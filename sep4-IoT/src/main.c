@@ -71,10 +71,10 @@ void getTemptAndHum(){
 
     if (status == DHT11_OK)
     {
-        sprintf(result, "T:%d.%d H:%d.%d", temperature_integer, temperature_decimal, humidity_integer, humidity_decimal); //might not be the null terminator at the end
+        sprintf(result, "T:%d.%d    H:%d.%d", temperature_integer, temperature_decimal, humidity_integer, humidity_decimal); //might not be the null terminator at the end
         //AES_CBC_encrypt_buffer(&my_AES_ctx,result,strlen(result));
         AES_ECB_encrypt(&my_AES_ctx,(uint8_t*)result);
-        wifi_command_TCP_transmit((uint8_t*)result,16);
+        wifi_command_TCP_transmit((uint8_t*)result,15);
 
         //AES_CBC_decrypt_buffer(&my_AES_ctx,result,strlen(result));
         AES_ECB_decrypt(&my_AES_ctx,(uint8_t*)result);
@@ -101,7 +101,7 @@ void Callback(){
         //pc_comm_send_array_blocking(tokens[1],64);
         //char * test=(char*) malloc((sizeof("Shared created ") + strlen(getSharedKey(&enc)) + 1) * sizeof(char));
         //sprintf(test, "Shared created %s", getSharedKey(&enc));
-        pc_comm_send_array_blocking(getSharedKey(&enc),32);
+        //pc_comm_send_array_blocking(getSharedKey(&enc),32);
 
         wifi_command_TCP_transmit((uint8_t*)"shared", 7);
         free(tokens);
