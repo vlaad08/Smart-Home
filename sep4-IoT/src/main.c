@@ -94,8 +94,7 @@ int main(){
 
     periodic_task_init_a(getTemptAndHum,120000);
 setRadiatorLevel(1);
-_delay_ms(1000);
-//setRadiatorLevel(0);
+
 
 
 
