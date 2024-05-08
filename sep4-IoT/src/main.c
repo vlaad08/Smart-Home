@@ -38,35 +38,47 @@ void getTemptAndHum(){
 
 void setRadiatorLevel(uint8_t level) {
     uint8_t angle = 0;
+    uint8_t dis = 0;
     switch (level) {
         case 0:
             angle = 0;
+            dis = 0;
             break;
         case 1:
             angle = 30;
+            dis = 1;
             break;
         case 2:
             angle = 60;
+            dis = 2;
             break;
         case 3:
             angle = 90;
+            dis = 3;
             break;
         case 4:
             angle = 120;
+            dis = 4;
             break;
         case 5:
             angle = 150;
+            dis = 5;
             break;
         case 6:
             angle = 180;
+            dis = 6;
             break;
         default:
             // Invalid level, set angle to 0
             angle = 0;
+            dis = 0;
             break;
     }
     servo(angle);
+    display_setValues(0,1,0,dis); //0=0 1=1 2=2 3=3 4=4 5=9 6=8 7=7 8=8 9=9 10=a 11=
+    
 }
+
 
 void Callback(){
     pc_comm_send_string_blocking(received_message_buffer);
@@ -91,18 +103,18 @@ int main(){
     wifi_command_create_TCP_connection("192.168.6.26",23,Callback,received_message_buffer);
     wifi_command_TCP_transmit((uint8_t*)"Connected ", 11);
 
-    periodic_task_init_a(getTemptAndHum,120000);
-      setRadiatorLevel(4);
-    _delay_ms(1000);
-    setRadiatorLevel(5);
     _delay_ms(1000);
     setRadiatorLevel(6);
    
+      //setRadiatorLevel(3)
+      //display_setValues(3,3,3,3);
+        setRadiatorLevel(3);
+ 
   
         
+    while(1)
+    {
 
-    while(1){
-       
     }
     
 
