@@ -47,8 +47,10 @@
                             Communicator.Instance.GenSharedSecret(receivedMessage);
                             Communicator.Instance.DeriveSymmetricKey(); //might not need this in this exact place 😥😥
                         }
-                        else {
-                            Console.WriteLine(Communicator.Instance.DecryptMessage(receivedMessage, /*2nd parameter wont be needed will be replaced w/ key*/))
+                        else
+                        {
+                            Console.WriteLine(Communicator.Instance.DecryptMessage(
+                                receivedMessage /*2nd parameter wont be needed will be replaced w/ key*/));
                         }
                         
                         // ez mi a geci? --> "Received: " + receivedMessage);

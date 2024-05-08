@@ -46,7 +46,7 @@ public class Communicator : ICommunicator
         return stream;
     }
 
-    // Send a byte array to the current client
+    // Send a byte array to the current client this for key sending this shi doesnt need to be encrypted n fucked with
     private void Send(byte[] data)
     {
         if (client != null && stream != null)
@@ -71,7 +71,8 @@ public class Communicator : ICommunicator
     //send a string to current client
     private void Send(string message)
     {
-        string encMsg = EncryptMessage(message, /*second parameter wont be needed if i bring myself to change the keys*/);
+        //string encMsg = EncryptMessage(message, /*second parameter wont be needed if i bring myself to change the keys*/);
+        string encMsg = EncryptMessage(message);
         byte[] data = Encoding.UTF8.GetBytes(encMsg);
         Send(data);
     }
@@ -158,11 +159,11 @@ public class Communicator : ICommunicator
     //encrypt
     //actually this shit ass fuck shit needs to return an encrypted byte[] ??? 🤔🤔🤔
     //actually it can return string but no its shit with the send cuz we send strings as byte[]s anyways no? 🤔
-    public string EncryptMessage(string plainText, byte[] key) //replace the key with actual key symmetricKey
+    public string EncryptMessage(string plainText/*, byte[] key*/) //replace the key with actual key symmetricKey
     {
         using (Aes aesAlg = Aes.Create())
         {
-            aesAlg.Key = key;
+            aesAlg.Key = symmetricKey;
             aesAlg.GenerateIV();
 
             ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
@@ -180,7 +181,7 @@ public class Communicator : ICommunicator
         }
     }
     //decrypt
-    public string DecryptMessage(string cipherText, byte[] key) //replace the key with actual key symmetricKey
+    public string DecryptMessage(string cipherText/*, byte[] key = symmetricKey*/) //replace the key with actual key symmetricKey
     {
         byte[] fullCipher = Convert.FromBase64String(cipherText);
 
@@ -192,7 +193,7 @@ public class Communicator : ICommunicator
             Array.Copy(fullCipher, iv, iv.Length);
             Array.Copy(fullCipher, iv.Length, cipher, 0, cipher.Length);
 
-            aesAlg.Key = key;
+            aesAlg.Key = symmetricKey;
             aesAlg.IV = iv;
 
             ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
