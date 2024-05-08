@@ -25,7 +25,12 @@ jobs:
     - name: Run PlatformIO Build
       run: |
         cd sep4-IoT
-        pio run
+        pio run -e target_run
+
+    - name: Run PlatformIO Tests
+      run: |
+        cd sep4-IoT
+        platformio test --environment target_native
 
     - name: Upload PlatformIO Build Artifacts
       uses: actions/upload-artifact@v4
