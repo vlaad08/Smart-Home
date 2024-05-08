@@ -103,9 +103,9 @@ int main(){
     wifi_command_create_TCP_connection("192.168.6.26",23,Callback,received_message_buffer);
     wifi_command_TCP_transmit((uint8_t*)"Connected ", 11);
 
-    _delay_ms(1000);
-    setRadiatorLevel(6);
-   
+    //periodic_task_init_a(getTemptAndHum,120000);
+      //setRadiatorLevel(0);
+      
       //setRadiatorLevel(3)
       //display_setValues(3,3,3,3);
         setRadiatorLevel(3);
@@ -116,9 +116,6 @@ int main(){
     {
 
     }
-    
-
-
 
 
     while (1)
