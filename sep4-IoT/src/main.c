@@ -11,6 +11,9 @@
 #include <string.h>
 #include <dht11.h>
 #include <periodic_task.h>
+#include <light.h>
+#include <stdio.h>
+
 #include <stdbool.h>
 
 
@@ -85,6 +88,14 @@ void getTemptAndHum(){
     }
 }
 
+void getLightInfo() {
+    uint16_t light_value = light_read(); 
+    char result[50];
+    sprintf(result, "LIGHT: %d\n", light_value);
+    wifi_command_TCP_transmit((uint8_t*)result, strlen(result));
+}
+
+
 void Callback(){
     //pc_comm_send_array_blocking(getSharedKey(&enc),32);
     //wifi_command_TCP_transmit((uint8_t*)"Recieved ", 10);
@@ -113,6 +124,7 @@ void setup(){
     pc_comm_init(9600,NULL);
     wifi_init();
     dht11_init();
+    light_init();
     display_init();
     buttons_init();
     tone_init();
@@ -137,11 +149,12 @@ int main(){
     wifi_command_TCP_transmit((uint8_t*)connection,strlen(connection));
     free(connection);
 
-    periodic_task_init_a(getTemptAndHum,10000);
+    periodic_task_init_a(getTemptAndHum,13000);
+    periodic_task_init_b(getLightInfo,12000);
 
 
     while (1)
     {
-        /* code */
+     
     }
 }
