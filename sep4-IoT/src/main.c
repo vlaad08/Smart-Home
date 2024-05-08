@@ -15,6 +15,7 @@
 #include "Utility.h"
 #include "TempAndHum.h"
 #include "LightInfo.h"
+#include "AdjustLight.h"
 
 
 #include "uECC.h"
@@ -23,6 +24,8 @@
 Enc enc;
 uint8_t iv[16];
 struct AES_ctx my_AES_ctx;
+
+bool IsPKAcquired=false;
 
 // Buffer to hold the received message
 char received_message_buffer[128];
@@ -39,11 +42,10 @@ void transmitData(uint8_t * data,uint16_t length){
 
 
 void Callback(){
-    //pc_comm_send_array_blocking(getSharedKey(&enc),32);
+    
     //wifi_command_TCP_transmit((uint8_t*)"Recieved ", 10);
-    if (1/*contains(received_message_buffer,"Cloud PK:")*/)
+    if (!IsPKAcquired/*contains(received_message_buffer,"Cloud PK:")*/)
     {
-        //wifi_command_TCP_transmit((uint8_t*)"shared", 7);
 
         const char* delim = ":";
         int num_tokens; //its the number of how many splits happened in one string
@@ -51,15 +53,18 @@ void Callback(){
         createSharedKey(&enc,tokens[1]);
         uint8_t * sharedkey=getSharedKey(&enc);
         AES_init_ctx_iv(&my_AES_ctx,sharedkey,iv);
-        //pc_comm_send_array_blocking(tokens[1],64);
-        //char * test=(char*) malloc((sizeof("Shared created ") + strlen(getSharedKey(&enc)) + 1) * sizeof(char));
-        //sprintf(test, "Shared created %s", getSharedKey(&enc));
-        //pc_comm_send_array_blocking(getSharedKey(&enc),32);
-
         wifi_command_TCP_transmit((uint8_t*)"shared", 7);
         free(tokens);
+        IsPKAcquired=true;
+        memset(received_message_buffer, 0, sizeof(received_message_buffer));
+
     }
-    
+    else{
+        uint8_t level = received_message_buffer[0] - '0'; // Convert ASCII character to integer
+        AdjustLight(&level); // Pass the integer value to AdjustLight
+
+        memset(received_message_buffer, 0, sizeof(received_message_buffer));
+    }
 }
 
 void setup(){
@@ -100,8 +105,8 @@ void sendLight(){
 int main(){
     setup();
     
-    periodic_task_init_a(sendTempAndHumidity,13000);
-    periodic_task_init_b(sendLight,12000);
+    //periodic_task_init_a(sendTempAndHumidity,13000);
+    //periodic_task_init_b(sendLight,12000);
 
 
     while (1)
