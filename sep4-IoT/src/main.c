@@ -124,6 +124,7 @@ void setup(){
     pc_comm_init(9600,NULL);
     wifi_init();
     dht11_init();
+    light_init();
     display_init();
     buttons_init();
     tone_init();
@@ -148,7 +149,8 @@ int main(){
     wifi_command_TCP_transmit((uint8_t*)connection,strlen(connection));
     free(connection);
 
-    periodic_task_init_a(getTemptAndHum,10000);
+    periodic_task_init_a(getTemptAndHum,13000);
+    periodic_task_init_b(getLightInfo,12000);
 
 
     while (1)
