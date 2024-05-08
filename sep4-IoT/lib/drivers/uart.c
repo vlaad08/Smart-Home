@@ -1,3 +1,4 @@
+#ifndef WIN_TEST
 #ifndef EXCLUDE_UART
 
 
@@ -418,3 +419,5 @@ ISR(USART3_UDRE_vect)
 #endif
 
 #endif//EXCLUDE_UART
+
+#endif
