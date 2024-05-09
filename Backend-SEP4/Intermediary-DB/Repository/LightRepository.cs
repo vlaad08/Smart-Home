@@ -6,7 +6,7 @@ namespace DBComm.Repository;
 
 public class LightRepository : IBaseRepository
 {
-    public Context Context;
+    private Context Context;
     public LightRepository(Context context)
     {
         Context = context;
@@ -16,11 +16,11 @@ public class LightRepository : IBaseRepository
     {
         try
         {
-            IQueryable<HumidityReading> lightReadings = Context.HumidityReadings
-                .Where(tr => tr.Room.DeviceId == element.ToString())  
-                .OrderByDescending(tr => tr.ReadAt);
+            IQueryable<LightReading> lightReadings = Context.LightReadings
+                .Where(lr => lr.Room.DeviceId == element.ToString())  
+                .OrderByDescending(lr => lr.ReadAt);
 
-            HumidityReading? result = await lightReadings.FirstOrDefaultAsync();
+            LightReading? result = await lightReadings.FirstOrDefaultAsync();
             return result;
         }
         catch (Exception e)
