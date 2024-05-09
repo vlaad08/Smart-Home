@@ -6,4 +6,5 @@ public interface IHumidityLogic
 {
     Task<HumidityReading> getHumidity(string hardwareId);
     void saveHumidity(Humidity humidity);
+    Task<ICollection<HumidityReading>> getHumidityHistory(string hardwareId, DateTime dateFrom, DateTime dateTo);
 }

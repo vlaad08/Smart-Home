@@ -10,9 +10,9 @@ public class HumidityLogicTest
     [Fact]
     public async void GetHumidity_calls_for_dbcomm()
     {
-        var dbComm = new Mock<IBaseRepository>();
+        var dbComm = new Mock<IHumidityRepository>();
         var logic = new HumidityLogic(dbComm.Object);
         await logic.getHumidity("1");
-        dbComm.Verify(d=>d.getOne("1"));
+        dbComm.Verify(d=>d.GetOne("1"));
     }
 }

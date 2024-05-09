@@ -6,14 +6,19 @@ namespace DBComm.Logic;
 
 public class LightLogic : ILightLogic
 {
-    private IBaseRepository _repository;
+    private ILigthRepository _repository;
 
-    public LightLogic(IBaseRepository repository)
+    public LightLogic(ILigthRepository repository)
     {
         this._repository = repository;
     }
     public async Task<LightReading> getLight(string hardwareId)
     {
-        return (LightReading)await _repository.getOne(hardwareId);
+        return await _repository.GetOne(hardwareId);
+    }
+
+    public async Task<ICollection<LightReading>> getLightHistory(string hardwareId, DateTime dateFrom, DateTime dateTo)
+    {
+        return await _repository.GetHistory(hardwareId, dateFrom, dateTo);
     }
 }

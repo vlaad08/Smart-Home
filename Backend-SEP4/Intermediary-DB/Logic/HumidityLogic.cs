@@ -9,9 +9,9 @@ public class HumidityLogic : IHumidityLogic
 {
     private ICommunicator communicator;
 
-    private IBaseRepository _repository;
+    private IHumidityRepository _repository;
     //maybe private
-    public HumidityLogic(IBaseRepository repository)
+    public HumidityLogic(IHumidityRepository repository)
     {
         communicator = Communicator.Instance;
         this._repository = repository;
@@ -19,12 +19,17 @@ public class HumidityLogic : IHumidityLogic
     
     public async Task<HumidityReading> getHumidity(string hardwareId)
     {
-        return (HumidityReading)await _repository.getOne(hardwareId);
+        return await _repository.GetOne(hardwareId);
     }
 
     public void saveHumidity(Humidity humidity)
     {
-        _repository.update(humidity);
+        //_repository.update(humidity);
         
+    }
+
+    public async Task<ICollection<HumidityReading>> getHumidityHistory(string hardwareId, DateTime dateFrom, DateTime dateTo)
+    {
+        return await _repository.GetHistory(hardwareId, dateFrom, dateTo);
     }
 }
