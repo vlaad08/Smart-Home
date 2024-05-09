@@ -15,6 +15,7 @@ builder.Services.AddScoped<ITemperatureLogic, TemperatureLogic>();
 builder.Services.AddScoped<IHumidityLogic, HumidityLogic>();
 builder.Services.AddScoped<ILightLogic, LightLogic>();
 builder.Services.AddScoped<INotificationLogic, NotificationLogic>();
+builder.Services.AddScoped<IWindowLogic, WindowLogic>();
 builder.Services.AddScoped<IBaseRepository, TemperatureRepository>();
 builder.Services.AddScoped<IBaseRepository, LightRepository>();
 builder.Services.AddScoped<IBaseRepository, HumidityRepository>();
@@ -23,7 +24,7 @@ builder.Services.AddDbContext<Context>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())    
 {
     app.UseSwagger();
     app.UseSwaggerUI();

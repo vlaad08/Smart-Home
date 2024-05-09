@@ -79,10 +79,17 @@ public class Communicator : ICommunicator
         Send(data);
     }
 
-    public string getTemperature()
+    public Task<string> getTemperature()
     {
         Send("Send temperature.");
         return null;
+    }
+
+    public Task SwitchWindow()
+    {
+        Send("Switch window");
+        Console.WriteLine("Switch window");
+        return Task.CompletedTask;
     }
 
     //Sending PU to IoT
