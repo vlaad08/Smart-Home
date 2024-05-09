@@ -50,4 +50,5 @@ public class LightRepository : ILigthRepository
             throw new Exception(e.Message);
         }
     }
+
 }

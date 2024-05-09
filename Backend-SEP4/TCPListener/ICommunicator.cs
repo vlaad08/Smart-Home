@@ -2,6 +2,12 @@
 
 public interface ICommunicator
 { 
+
+    public string getTemperature();
+    public void setTemperature(string hardwareId, int level);
+    public void setLight(string hardwareId, int level);
+
     public Task<string> getTemperature();
     public Task SwitchWindow();
+
 }

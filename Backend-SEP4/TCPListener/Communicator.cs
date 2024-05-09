@@ -85,12 +85,25 @@ public class Communicator : ICommunicator
         return null;
     }
 
+
+    public void setTemperature(string hardwareId, int level)
+    {
+        Send($"Set temperature {level} on {hardwareId}");
+    }
+
+    public void setLight(string hardwareId, int level)
+    {
+        Send($"Set light {level} on {hardwareId}");
+    }
+    
+
     public virtual Task SwitchWindow()
     {
         Send("Switch window");
         Console.WriteLine("Switch window");
         return Task.CompletedTask;
     }
+
 
     //Sending PU to IoT
     private async Task handshake()
