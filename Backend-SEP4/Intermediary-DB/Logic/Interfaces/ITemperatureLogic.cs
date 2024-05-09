@@ -6,5 +6,5 @@ public interface ITemperatureLogic
 {
     Task<TemperatureReading> getLatestTemperature(string hardwareId);
     void saveTemperature(TemperatureReading temperatureReading);
-
+    void SetTemperatureLevel(string hardwareId, int temperatureLevel);
 }

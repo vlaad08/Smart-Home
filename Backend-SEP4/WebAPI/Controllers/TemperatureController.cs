@@ -30,5 +30,20 @@ public class TemperatureController : ControllerBase
             throw;
         }
     }
+
+    [HttpPost("{hardwareId}/{temperatureLevel}")]
+    public async Task<IActionResult> SetTemperatureLevel([FromRoute] string hardwareId, [FromRoute] int temperatureLevel)
+    {
+        try
+        {
+            _temperatureLogic.SetTemperatureLevel(hardwareId, temperatureLevel);
+            return await Task.FromResult(Ok());
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
     
 }

@@ -49,23 +49,30 @@ public class Communicator : ICommunicator
     // Send a byte array to the current client this for key sending this shi doesnt need to be encrypted n fucked with
     private void Send(byte[] data)
     {
-        if (client != null && stream != null)
+        try
         {
-            try
+                if (client != null && stream != null)
             {
-                
-                stream.Write(data, 0, data.Length);
-                Console.WriteLine("Data sent successfully.");
+                try
+                {
+                    
+                    stream.Write(data, 0, data.Length);
+                    Console.WriteLine("Data sent successfully.");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error sending data: " + e.Message);
+                    CloseCurrentClient();
+                }
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine("Error sending data: " + e.Message);
-                CloseCurrentClient();
+                Console.WriteLine("No client connected to send data.");
             }
         }
-        else
+        catch(Exception)
         {
-            Console.WriteLine("No client connected to send data.");
+            throw new ArgumentNullException("TCP listener on IOT part is not running");
         }
     }
     //send a string to current client
@@ -82,7 +89,7 @@ public class Communicator : ICommunicator
         Send("Send temperature.");
         return null;
     }
-
+ 
     private async Task handshake()
     {
         Curve curve = new Curve(Curve.CurveName.secp256r1);
@@ -227,5 +234,11 @@ public class Communicator : ICommunicator
             client = null;
         }
         Console.WriteLine("Client connection closed.");
+    }
+
+    public void setTemperature(string temperature)
+    {
+        string message = $"Set temperature: {temperature}";
+        Send(message);
     }
 }

@@ -25,4 +25,14 @@ public class TemperatureLogic : ITemperatureLogic
         repository.update(temperatureReading);
         
     }
+
+    
+    public void SetTemperatureLevel(string hardwareId, int temperatureLevel){
+        if (temperatureLevel < 0 || temperatureLevel > 6)
+        {
+            throw new HttpRequestException("Invalid temperature level. Temperature level must be between 0 and 6.");
+        }
+
+        communicator.setTemperature(temperatureLevel.ToString());
+    }
 }
