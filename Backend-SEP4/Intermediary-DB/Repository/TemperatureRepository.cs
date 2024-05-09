@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DBComm.Repository;
 
-public class TemperatureRepository : IBaseRepository
+public class TemperatureRepository : ITemperatureRepository
 {
     public Context Context;
     public TemperatureRepository(Context context)
@@ -12,12 +12,12 @@ public class TemperatureRepository : IBaseRepository
         Context = context;
     }
 
-    public async Task<Object?> getOne(Object element)
+    public async Task<TemperatureReading> GetOne(string deviceId)
     {
         try
         {
             IQueryable<TemperatureReading> temperatureReadings = Context.TemperatureReadings
-                .Where(tr => tr.Room.DeviceId == element.ToString())  
+                .Where(tr => tr.Room.DeviceId == deviceId)  
                 .OrderByDescending(tr => tr.ReadAt);
 
             TemperatureReading? result = await temperatureReadings.FirstOrDefaultAsync();
@@ -29,23 +29,26 @@ public class TemperatureRepository : IBaseRepository
         }
     }
 
-    public Task<Object?> get(Object element)
+    public async Task<ICollection<TemperatureReading>> GetHistory(string deviceId, DateTime dateFrom, DateTime dateTo)
     {
-        throw new NotImplementedException();
-    }
+        try
+        {
+            var query = Context.TemperatureReadings
+                .Where(lr => lr.ReadAt >= dateFrom && lr.ReadAt <= dateTo && lr.Room.DeviceId == deviceId)
+                .GroupBy(lr => lr.ReadAt.Date) // Group by date
+                .Select(group => new TemperatureReading()
+                {
+                    ReadAt = group.Key,
+                    Value = group.Average(lr => lr.Value) // Calculate average light level for each group
+                })
+                .OrderBy(result => result.ReadAt); // Optional: Order by date
 
-    public Task<Object?> create(Object element)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Object?> update(Object element)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Object?> delete(Object element)
-    {
-        throw new NotImplementedException();
+            var averageTemperatureLevels = await query.ToListAsync();
+            return averageTemperatureLevels;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }

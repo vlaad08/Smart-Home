@@ -29,4 +29,18 @@ public class HumidityController : ControllerBase
             throw;
         }
     }
+    [HttpGet, Route("History/{hardwareId}")]
+    public async Task<ActionResult<ICollection<LightReading>>> getHistory([FromRoute] string hardwareId,
+        [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)
+    {
+        try
+        {
+            var lightHistory = await _humidityLogic.getHumidityHistory(hardwareId, dateFrom, dateTo);
+            return Ok(lightHistory);
+        }catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
