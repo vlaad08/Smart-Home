@@ -45,5 +45,19 @@ public class LightController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpPost, Route("{hardwareId}/{level}")]
+    public async Task<ActionResult> SetLight([FromRoute] string hardwareId, int level)
+    {
+        try
+        {
+            await _lightLogic.SetLight(hardwareId, level);
+            return Ok();
+        }catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
     
 }

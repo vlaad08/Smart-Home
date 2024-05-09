@@ -45,8 +45,8 @@ public class TemperatureController : ControllerBase
         }
     }
 
-    [HttpPost, Route("Set/{hardwareId}")]
-    public async Task<IActionResult> setTemperature([FromRoute] string hardwareId, [FromQuery] int level)
+    [HttpPost, Route("{hardwareId}/{level}")]
+    public async Task<IActionResult> setTemperature([FromRoute] string hardwareId, [FromRoute ] int level)
     {
         if (level < 1 || level > 6)
         {
