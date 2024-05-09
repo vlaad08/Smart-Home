@@ -3,7 +3,7 @@
     using System.Net.Sockets;
     using System.Text;
     using System.Xml.Serialization;
-
+    using ECC.Encryption;
 
     public class Server
     {
@@ -33,6 +33,7 @@
                     NetworkStream stream = await Communicator.Instance.UpdateClient(newClient);
                     
                     byte[] buffer = new byte[1024];
+                    
                     // Read data from the network stream
                     int bytesRead;
                     string receivedMessage = "";
@@ -40,22 +41,21 @@
                     {
                         // Convert the received data to a string
                         receivedMessage = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-
+                        
+                        // Recognize that we are receiving their PU
                         if (receivedMessage.StartsWith("Connected:"))
                         {
-                            //communicator methdo
-                            Communicator.Instance.GenSharedSecret(receivedMessage);
-                            Communicator.Instance.DeriveSymmetricKey(); //might not need this in this exact place 😥😥
+                            // Generate shared secret from their PU and our PK 
+                            Encryption.GenSharedSecret(receivedMessage);
                         }
                         else
                         {
-                            Console.WriteLine(Communicator.Instance.DecryptMessage(
-                                receivedMessage /*2nd parameter wont be needed will be replaced w/ key*/));
+                            // Print the decrypted received message
+                            Console.WriteLine(Encryption.DecryptMessage(receivedMessage));
                         }
-                        
-                        // ez mi a geci? --> "Received: " + receivedMessage);
                     }
 
+                    /*  Will be used to save data received from IoT to db 
                     switch (receivedMessage)
                     {
                         case  "temperature" :
@@ -64,6 +64,7 @@
                             break;
                     }
                     //Communicator.Instance.Send("Force");
+                    */
                 }
                 catch (Exception e)
                 {
