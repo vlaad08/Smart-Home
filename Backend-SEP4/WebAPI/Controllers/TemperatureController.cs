@@ -44,7 +44,45 @@ public class TemperatureController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
+
+    [HttpPost, Route("Set/{hardwareId}")]
+    public async Task<IActionResult> setTemperature([FromRoute] string hardwareId, [FromQuery] int level)
+    {
+        if (level < 1 || level > 6)
+        {
+            return BadRequest("Level must be between 1 and 6.");
+        }
+        
+        try
+        {
+            await _temperatureLogic.setTemperature(hardwareId, level);
+            return Ok($"Light level set to {level} for hardware ID: {hardwareId}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
     
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

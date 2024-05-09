@@ -85,6 +85,11 @@ public class Communicator : ICommunicator
         return null;
     }
 
+    public void setTemperature(string hardwareId, int level)
+    {
+        Send($"Set temperature {level} on {hardwareId}");
+    }
+    
     //Sending PU to IoT
     private async Task handshake()
     {

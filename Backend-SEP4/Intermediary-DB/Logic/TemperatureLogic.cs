@@ -30,4 +30,9 @@ public class TemperatureLogic : ITemperatureLogic
     {
         return await repository.GetHistory(hardwareId, dateFrom, dateTo);
     }
+
+    public async Task setTemperature(string hardwareId, int level)
+    {
+        communicator.setTemperature(hardwareId, level);
+    }
 }

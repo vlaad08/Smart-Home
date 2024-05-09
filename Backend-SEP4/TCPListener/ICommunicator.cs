@@ -3,4 +3,5 @@
 public interface ICommunicator
 { 
     public string getTemperature();
+    public void setTemperature(string hardwareId, int level);
 }
