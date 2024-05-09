@@ -17,8 +17,8 @@ public class HumidityRepository : IBaseRepository
         try
         {
             IQueryable<HumidityReading> humidityReading = Context.HumidityReadings
-                .Where(tr => tr.Room.DeviceId == element.ToString())  
-                .OrderByDescending(tr => tr.ReadAt);
+                .Where(hr => hr.Room.DeviceId == element.ToString())  
+                .OrderByDescending(hr => hr.ReadAt);
 
             HumidityReading? result = await humidityReading.FirstOrDefaultAsync();
             return result;
