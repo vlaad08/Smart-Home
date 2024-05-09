@@ -1,4 +1,5 @@
 using DBComm.Logic;
+using DBComm.Logic.Interfaces;
 using DBComm.Repository;
 using Moq;
 
@@ -10,9 +11,9 @@ public class LightLogicTest
   [Fact]
   public async void GetLight_calls_for_dbcomm()
   {
-    var dbComm = new Mock<IBaseRepository>();
+    var dbComm = new Mock<ILigthRepository>();
     var logic = new LightLogic(dbComm.Object);
     await logic.getLight("1");
-    dbComm.Verify(d=>d.getOne("1"));
+    dbComm.Verify(d=>d.GetOne("1"));
   }
 }
