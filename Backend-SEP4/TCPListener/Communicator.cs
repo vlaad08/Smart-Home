@@ -30,7 +30,7 @@ public class Communicator : ICommunicator
         }
     }
 
-    private Communicator()
+    protected Communicator()
     {
     }
 
@@ -71,18 +71,25 @@ public class Communicator : ICommunicator
     private void Send(string message)
     {
         // Encrypt message before sending it
-        string encMsg = Encryption.EncryptMessage(message);
+        // string encMsg = Encryption.EncryptMessage(message);
         
         // Convert to byte[] before sending it
-        byte[] data = Encoding.UTF8.GetBytes(encMsg);
+        byte[] data = Encoding.UTF8.GetBytes(message);
         
         Send(data);
     }
 
-    public string getTemperature()
+    public Task<string> getTemperature()
     {
         Send("Send temperature.");
         return null;
+    }
+
+    public virtual Task SwitchWindow()
+    {
+        Send("Switch window");
+        Console.WriteLine("Switch window");
+        return Task.CompletedTask;
     }
 
     //Sending PU to IoT

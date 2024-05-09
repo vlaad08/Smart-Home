@@ -2,5 +2,6 @@
 
 public interface ICommunicator
 { 
-    public string getTemperature();
+    public Task<string> getTemperature();
+    public Task SwitchWindow();
 }
