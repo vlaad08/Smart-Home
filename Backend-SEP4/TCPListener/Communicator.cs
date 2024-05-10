@@ -97,10 +97,17 @@ public class Communicator : ICommunicator
     }
     
 
-    public virtual Task SwitchWindow()
+    public Task SwitchWindow()
     {
         Send("Switch window");
         Console.WriteLine("Switch window");
+        return Task.CompletedTask;
+    }
+
+    public Task SwitchDoor()
+    {
+        Send($"Switch door");
+        Console.WriteLine("Switch door");
         return Task.CompletedTask;
     }
 

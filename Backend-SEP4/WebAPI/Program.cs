@@ -15,11 +15,13 @@ builder.Services.AddScoped<ITemperatureLogic, TemperatureLogic>();
 builder.Services.AddScoped<IHumidityLogic, HumidityLogic>();
 builder.Services.AddScoped<ILightLogic, LightLogic>();
 builder.Services.AddScoped<INotificationLogic, NotificationLogic>();
+builder.Services.AddScoped<IDoorLogic, DoorLogic>();
 
 builder.Services.AddScoped<IWindowLogic, WindowLogic>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ILigthRepository, LightRepository>();
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
+builder.Services.AddScoped<IDoorRepository, DoorRepository>();
 
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ILigthRepository, LightRepository>();
