@@ -9,14 +9,14 @@ void custom_delay_ms(uint16_t milliseconds) {
 #endif
 }
 
-char* AdjustLight(uint8_t * level){
+char* AdjustLight(uint8_t level){
     leds_turnOff(1);
     leds_turnOff(2);
     leds_turnOff(3);
     leds_turnOff(4);
     uint8_t count=0;
     
-    while (count<*level)
+    while (count<level)
     {
         if (count>4){
         count=4;
@@ -32,5 +32,7 @@ char* AdjustLight(uint8_t * level){
     }
     
     display_setValues(0,4,0,count);
-    return "0,4,0,"+count;
+    char* x = malloc(8);
+    sprintf(x,"0,4,0,%d",count);
+    return x;
 }

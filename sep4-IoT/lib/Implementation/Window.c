@@ -6,7 +6,7 @@ void openWindow(){
     servo(180);
     servo(0);
     servo(90);
-    _delay_ms(1000);
+    //_delay_ms(1000);
     servo(180);
 }
 
@@ -15,6 +15,6 @@ void closeWindow(){
     servo(180);
     servo(0);
     servo(90);
-    _delay_ms(1000);
+    //_delay_ms(1000);
     servo(0);
 }

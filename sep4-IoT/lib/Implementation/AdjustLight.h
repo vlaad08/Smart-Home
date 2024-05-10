@@ -12,4 +12,4 @@
 
 
 
-char* AdjustLight(uint8_t * level);
+char* AdjustLight(uint8_t level);
