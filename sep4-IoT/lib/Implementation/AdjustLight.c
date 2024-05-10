@@ -2,6 +2,14 @@
 #include "AdjustLight.h"
 #define MaxLightLevel 4
 
+void custom_delay_ms(uint16_t milliseconds) {
+#ifdef __AVR__
+    _delay_ms(milliseconds); // Use _delay_ms() for AVR microcontroller
+#else
+    usleep(milliseconds * 1000); // Use usleep() for POSIX systems (convert milliseconds to microseconds)
+#endif
+}
+
 
 void AdjustLight(uint8_t * level){
     leds_turnOff(1);
@@ -18,7 +26,7 @@ void AdjustLight(uint8_t * level){
         }
         count++;
         leds_turnOn(count);
-        _delay_ms(1000);
+        custom_delay_ms(1000);
     }
     if (count>4)
     {
