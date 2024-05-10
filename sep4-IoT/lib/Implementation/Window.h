@@ -2,10 +2,11 @@
 #include <string.h>
 #include "stdlib.h"
 #include <stdio.h>
+
 #ifdef __AVR__
-#include <util/delay.h> // Include for AVR microcontroller
+  #include <util/delay.h> // Include for AVR microcontroller
 #else
-#include <unistd.h> // Include for POSIX systems (Linux, macOS, etc.)
+  #include <unistd.h> // Include for POSIX systems (Linux, macOS, etc.)
 #endif
 
 #include "servo.h"
