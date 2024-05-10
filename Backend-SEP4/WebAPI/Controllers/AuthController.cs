@@ -12,19 +12,19 @@ namespace WebAPI.Service;
 public class AuthController : ControllerBase
 {
     private readonly IConfiguration config;
-    private readonly IAccountService _accountService;
+    private readonly IAccountLogic _accountLogic;
  
-    public AuthController(IConfiguration config, IAccountService accountService)
+    public AuthController(IConfiguration config, IAccountLogic accountService)
     {
         this.config = config;
-        this._accountService = accountService;
+        this._accountLogic = accountService;
     }
     
     
     [HttpPost, Route("register")]
-    public async Task<ActionResult> Register([FromBody] Member member)
+    public async Task<ActionResult> Register([FromQuery] string username, [FromQuery] string password)
     {
-        await _accountService.RegisterMember(member);
+        await _accountLogic.RegisterMember(username, password);
         return Ok();
     }
     

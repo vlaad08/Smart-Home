@@ -11,6 +11,11 @@ public class Member
     public Home Home { get; set; }
     public Admin Admin { get; set; }
 
+    public Member(string username, string password)
+    {
+        Username = username;
+        Password = password;
+    }
     public Member()
     {
         

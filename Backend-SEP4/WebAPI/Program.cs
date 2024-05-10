@@ -25,11 +25,12 @@ builder.Services.AddScoped<IWindowLogic, WindowLogic>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ILigthRepository, LightRepository>();
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ILigthRepository, LightRepository>();
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
-builder.Services.AddScoped<IAccountService, AccountLogic>();
+builder.Services.AddScoped<IAccountLogic, AccountLogic>();
 
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddDbContext<Context>();
