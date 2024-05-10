@@ -17,6 +17,8 @@
 #include "TempAndHum.h"
 #include "LightInfo.h"
 #include "AdjustLight.h"
+#include "RadiatorPossition.h"
+#include "Window.h"
 
 
 #include "uECC.h"
@@ -40,49 +42,7 @@ void transmitData(uint8_t * data,uint16_t length){
     free(data);
 }
 
-void setRadiatorLevel(uint8_t level) {
-    uint8_t angle = 0;
-   //this line has to be before switch case ...warum?
-    display_setValues(0,1,0,level); //0=0 1=1 2=2 3=3 4=4 5=9 6=8 7=7 8=8 9=9 10=a 11=
-    
-    switch (level) {
-        case 0:
-            angle = 0;
-           
-            break;
-        case 1:
-            angle = 30;
-           
-            break;
-        case 2:
-            angle = 60;
-           
-            break;
-        case 3:
-            angle = 90;
-           
-            break;
-        case 4:
-            angle = 120;
-           
-            break;
-        case 5:
-            angle = 150;
-           
-            break;
-        case 6:
-            angle = 180;
-           
-            break;
-        default:
-            // Invalid level, set angle to 0
-            angle = 0;
-           
-            break;
-    }
-    servo(angle);
-   
-}
+
 
 
 void Callback(){
@@ -123,10 +83,10 @@ void setup(){
     createIOTKeys(&enc);
     generate_iv(iv,16);
 
-    //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
+    wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
     //wifi_command_join_AP("KBENCELT 3517","p31A05)1");
-    wifi_command_join_AP("002","zabijemsazalentilku");
-    wifi_command_create_TCP_connection("192.168.236.208",6868,Callback,received_message_buffer);
+    //wifi_command_join_AP("002","zabijemsazalentilku");
+    wifi_command_create_TCP_connection("192.168.10.232",6868,Callback,received_message_buffer);
 
     char* public_key_hex = print_hex(getIOTPublicKey(&enc), 64);
     char* connection = (char*)malloc((sizeof("Connected:") + strlen(public_key_hex) + 1) * sizeof(char));
@@ -146,12 +106,27 @@ void sendLight(){
     transmitData(data,16);
 }
 
+void setRadiator(uint8_t level){
+    setRadiatorLevel(level);
+}
+
+void windowAcction(uint8_t status){
+    //to indicate that we are moving the window with a servo we are going all the way up, all the way down 
+    //then going to the middle and waits for a second and then if open then going up is closed going down
+    if (status)
+        openWindow();
+    else
+        closeWindow();
+}
+
 
 int main(){
     setup();
     
     periodic_task_init_a(sendTempAndHumidity,13000);
     periodic_task_init_b(sendLight,12000);
+
+    windowAcction(0);
 
     while (1)
     {
