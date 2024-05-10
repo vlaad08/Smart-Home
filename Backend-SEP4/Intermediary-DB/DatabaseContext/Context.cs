@@ -5,21 +5,25 @@ namespace DBComm.Logic;
 
 public class Context : DbContext
 {
-    public DbSet<Home> Homes { get; set; }
-    public DbSet<Room> Rooms { get; set; }
-    public DbSet<Door> Doors { get; set; }
-    public DbSet<HumidityReading> HumidityReadings { get; set; }
-    public DbSet<LightReading> LightReadings { get; set; }
-    public DbSet<TemperatureReading> TemperatureReadings { get; set; }
-    public DbSet<Admin> Admins { get; set; }
-    public DbSet<Member> Members { get; set; }
-    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<Home> home { get; set; }
+    public DbSet<Room> room { get; set; }
+    public DbSet<Door> door { get; set; }
+    public DbSet<HumidityReading> humidity_reading { get; set; }
+    public DbSet<LightReading> light_reading { get; set; }
+    public DbSet<TemperatureReading> temperature_reading { get; set; }
+    public DbSet<Admin> admin { get; set; }
+    public DbSet<Member> member { get; set; }
+    public DbSet<Notification> notification { get; set; }
 
 
+    private string SECRETSECTION_HOST = "smart-homel.postgres.database.azure.com";
+    private string SECRETSECTION_DB = "smart_home";
+    private string SECRETSECTION_NAME = "sep_user";
+    private string SECRETSECTION_PASSWORD = "Semester4Password";
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         ///cloud 
-        optionsBuilder.UseNpgsql("Host=smart-homel.postgres.database.azure.com;Port=5432;Database=smart_home;Username=sep_user;Password=Semester4Password;");
+        optionsBuilder.UseNpgsql($"Host={SECRETSECTION_HOST};Port=5432;Database={SECRETSECTION_DB};Username={SECRETSECTION_NAME};Password={SECRETSECTION_PASSWORD};");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
