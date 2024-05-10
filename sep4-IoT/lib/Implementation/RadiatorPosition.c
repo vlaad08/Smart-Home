@@ -4,7 +4,7 @@ uint8_t* setRadiatorLevel(uint8_t level) {
     static uint8_t values[5]; // Array to hold level, angle, and display values
 
     uint8_t angle = 0;
-    display_setValues(0, 4, 0, level);
+    display_setValues(0, 1, 0, level);
     
     switch (level) {
         case 0:
@@ -36,7 +36,7 @@ uint8_t* setRadiatorLevel(uint8_t level) {
     servo(angle);
 
     values[0] = 0;       
-    values[1] = 4;      
+    values[1] = 1;      
     values[2] = 0;      
     values[3] = level;  
     values[4] = angle;  

@@ -1,4 +1,4 @@
-#include "RadiatorPossition.h"
+#include "RadiatorPosition.h"
 #include "unity.h"
 #include "../fff.h"
 #include <string.h>
@@ -16,7 +16,7 @@ void tearDown(void) {}
 
 void test_Radiator_Level0(void){
      uint8_t level = 0;
-    uint8_t expected_values[] = {0, 1, 0, 0, 0}; // Expected values: 0, 4, 0, 0, 0
+    uint8_t expected_values[] = {0, 1, 0, 0, 0};
     
     setRadiatorLevel_fake.return_val = expected_values;
     // Call the function under test
@@ -28,7 +28,7 @@ void test_Radiator_Level0(void){
 }
 void test_Radiator_Level1(void){
      uint8_t level = 1;
-    uint8_t expected_values[] = {0, 1, 0, 1, 30}; // Expected values: 0, 4, 0, 0, 0
+    uint8_t expected_values[] = {0, 1, 0, 1, 30}; 
     
     setRadiatorLevel_fake.return_val = expected_values;
     // Call the function under test
@@ -40,7 +40,7 @@ void test_Radiator_Level1(void){
 }
 void test_Radiator_Level2(void){
      uint8_t level = 2;
-    uint8_t expected_values[] = {0, 1, 0, 2, 60}; // Expected values: 0, 4, 0, 0, 0
+    uint8_t expected_values[] = {0, 1, 0, 2, 60}; 
     
     setRadiatorLevel_fake.return_val = expected_values;
     // Call the function under test
@@ -52,7 +52,7 @@ void test_Radiator_Level2(void){
 }
 void test_Radiator_Level3(void){
      uint8_t level = 3;
-    uint8_t expected_values[] = {0, 1, 0, 3, 90}; // Expected values: 0, 4, 0, 0, 0
+    uint8_t expected_values[] = {0, 1, 0, 3, 90}; 
     
     setRadiatorLevel_fake.return_val = expected_values;
     // Call the function under test
@@ -64,7 +64,7 @@ void test_Radiator_Level3(void){
 }
 void test_Radiator_Level4(void){
      uint8_t level = 4;
-    uint8_t expected_values[] = {0, 1, 0, 4, 120}; // Expected values: 0, 4, 0, 0, 0
+    uint8_t expected_values[] = {0, 1, 0, 4, 120}; 
     
     setRadiatorLevel_fake.return_val = expected_values;
     // Call the function under test
@@ -76,7 +76,7 @@ void test_Radiator_Level4(void){
 }
 void test_Radiator_Level5(void){
      uint8_t level = 5;
-    uint8_t expected_values[] = {0, 1, 0, 5, 150}; // Expected values: 0, 4, 0, 0, 0
+    uint8_t expected_values[] = {0, 1, 0, 5, 150}; 
     
     setRadiatorLevel_fake.return_val = expected_values;
     // Call the function under test
@@ -88,7 +88,7 @@ void test_Radiator_Level5(void){
 }
 void test_Radiator_Level6(void){
      uint8_t level = 6;
-    uint8_t expected_values[] = {0, 1, 0, 6, 180}; // Expected values: 0, 4, 0, 0, 0
+    uint8_t expected_values[] = {0, 1, 0, 6, 180};
     
     setRadiatorLevel_fake.return_val = expected_values;
     // Call the function under test
@@ -104,12 +104,12 @@ void test_Radiator_Level6(void){
 
 
 int main() {
-   // RESET_FAKE(setRadiatorLevel); //method for turning radiator
+  
 
     UNITY_BEGIN();
 
-    RUN_TEST(test_Radiator_Level0); //mytests
-    RUN_TEST(test_Radiator_Level1); //mytests
+    RUN_TEST(test_Radiator_Level0); 
+    RUN_TEST(test_Radiator_Level1); 
     RUN_TEST(test_Radiator_Level2); 
     RUN_TEST(test_Radiator_Level3); 
     RUN_TEST(test_Radiator_Level4); 

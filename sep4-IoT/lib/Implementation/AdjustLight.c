@@ -2,7 +2,7 @@
 #include "AdjustLight.h"
 #define MaxLightLevel 4
 
-void custom_delay_ms(uint16_t milliseconds) {
+void static custom_delay_ms(uint16_t milliseconds) {
 #ifdef __AVR__
     _delay_ms(milliseconds); // Use _delay_ms() for AVR microcontroller
 #else
