@@ -16,7 +16,7 @@ public class TemperatureRepository : ITemperatureRepository
     {
         try
         {
-            IQueryable<TemperatureReading> temperatureReadings = Context.TemperatureReadings
+            IQueryable<TemperatureReading> temperatureReadings = Context.temperature_reading
                 .Where(tr => tr.Room.DeviceId == deviceId)  
                 .OrderByDescending(tr => tr.ReadAt);
 
@@ -33,7 +33,7 @@ public class TemperatureRepository : ITemperatureRepository
     {
         try
         {
-            var query = Context.TemperatureReadings
+            var query = Context.temperature_reading
                 .Where(lr => lr.ReadAt >= dateFrom && lr.ReadAt <= dateTo && lr.Room.DeviceId == deviceId)
                 .GroupBy(lr => lr.ReadAt.Date) // Group by date
                 .Select(group => new TemperatureReading()
