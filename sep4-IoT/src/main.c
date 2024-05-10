@@ -43,14 +43,18 @@ void transmitData(uint8_t * data,uint16_t length){
 }
 
 
-
+void windowAction(uint8_t status){
+    //to indicate that we are moving the window with a servo we are going all the way up, all the way down 
+    //then going to the middle and waits for a second and then if open then going up is closed going down
+    if (status)
+        openWindow();
+    else
+        closeWindow();
+}
 
 void Callback(){
-    
-    //wifi_command_TCP_transmit((uint8_t*)"Recieved ", 10);
-    if (!IsPKAcquired/*contains(received_message_buffer,"Cloud PK:")*/)
+    if (!IsPKAcquired)
     {
-
         const char* delim = ":";
         int num_tokens; //its the number of how many splits happened in one string
         char** tokens = split(received_message_buffer, delim, &num_tokens);
@@ -60,14 +64,30 @@ void Callback(){
         wifi_command_TCP_transmit((uint8_t*)"shared", 7);
         free(tokens);
         IsPKAcquired=true;
-        memset(received_message_buffer, 0, sizeof(received_message_buffer));
-
     }
     else{
-        uint8_t level = received_message_buffer[0] - '0'; // Convert ASCII character to integer
-        AdjustLight(&level); // Pass the integer value to AdjustLight
-
-        memset(received_message_buffer, 0, sizeof(received_message_buffer));
+        uint8_t value;
+        switch (received_message_buffer[1])
+        {
+        case '1':
+            value = received_message_buffer[3] - '0';
+            setRadiatorLevel(value);
+            break;
+        case '2':
+            value = received_message_buffer[3] - '0';
+            windowAction(value);
+            break;
+        case '3':
+            /* code */
+            break;
+        case '4':
+            value = received_message_buffer[3] - '0';
+            AdjustLight(&value);
+            break;
+        default:
+            break;
+        }
+    
     }
 }
 
@@ -83,10 +103,10 @@ void setup(){
     createIOTKeys(&enc);
     generate_iv(iv,16);
 
-    wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
-    //wifi_command_join_AP("KBENCELT 3517","p31A05)1");
+    //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
+    wifi_command_join_AP("KBENCELT 3517","p31A05)1");
     //wifi_command_join_AP("002","zabijemsazalentilku");
-    wifi_command_create_TCP_connection("192.168.10.232",6868,Callback,received_message_buffer);
+    wifi_command_create_TCP_connection("192.168.137.1",6868,Callback,received_message_buffer);
 
     char* public_key_hex = print_hex(getIOTPublicKey(&enc), 64);
     char* connection = (char*)malloc((sizeof("Connected:") + strlen(public_key_hex) + 1) * sizeof(char));
@@ -110,15 +130,6 @@ void setRadiator(uint8_t level){
     setRadiatorLevel(level);
 }
 
-void windowAcction(uint8_t status){
-    //to indicate that we are moving the window with a servo we are going all the way up, all the way down 
-    //then going to the middle and waits for a second and then if open then going up is closed going down
-    if (status)
-        openWindow();
-    else
-        closeWindow();
-}
-
 
 int main(){
     setup();
@@ -126,8 +137,6 @@ int main(){
     periodic_task_init_a(sendTempAndHumidity,13000);
     periodic_task_init_b(sendLight,12000);
     setRadiator(2);
-
-    //windowAcction(0);
 
     while (1)
     {
