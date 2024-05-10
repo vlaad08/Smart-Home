@@ -82,7 +82,7 @@ void Callback(){
             break;
         case '4':
             value = received_message_buffer[3] - '0';
-            AdjustLight(&value);
+            AdjustLight(value);
             break;
         default:
             break;
