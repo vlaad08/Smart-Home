@@ -3,10 +3,13 @@
 #include "stdlib.h"
 #include <stdio.h>
 #include "leds.h"
-#include "pc_comm.h"
+#ifdef __AVR__
 #include <util/delay.h>
+#else
+#include <unistd.h>
+#endif
 #include "display.h"
 
 
 
-void AdjustLight(uint8_t * level);
+char* AdjustLight(uint8_t * level);
