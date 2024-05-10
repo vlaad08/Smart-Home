@@ -14,6 +14,8 @@ namespace ECC.Encryption
 
         private static Cryptography.KeyPair keyPair;
         private static Point sharedSecret;
+        //private static byte[] symmKey;
+        
         
         // Convert key retrieved from IoT into actual byte[]
         public static byte[] HexStringToByteArray(string hex)
@@ -74,6 +76,8 @@ namespace ECC.Encryption
             using (SHA256 sha256 = SHA256.Create())
             {
                 return sha256.ComputeHash(sharedSecret.X.ToByteArray());
+                // symmKey = sha256.ComputeHash(sharedSecret.X.ToByteArray());
+
             }
         }
 
@@ -83,6 +87,7 @@ namespace ECC.Encryption
             using (Aes aesAlg = Aes.Create())
             {
                 aesAlg.Key = DeriveSymmetricKey();
+                // aesAlg.Key = symmKey;
                 aesAlg.GenerateIV();
 
                 ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
@@ -115,6 +120,7 @@ namespace ECC.Encryption
                 Array.Copy(fullCipher, iv.Length, cipher, 0, cipher.Length);
 
                 aesAlg.Key = DeriveSymmetricKey();
+                // aesAlg.Key = symmKey;
                 aesAlg.IV = iv;
 
                 ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);

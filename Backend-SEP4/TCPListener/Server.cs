@@ -47,6 +47,8 @@
                         {
                             // Generate shared secret from their PU and our PK 
                             Encryption.GenSharedSecret(receivedMessage);
+
+                            //Encryption.DeriveSymmetricKey();
                         }
                         else
                         {
