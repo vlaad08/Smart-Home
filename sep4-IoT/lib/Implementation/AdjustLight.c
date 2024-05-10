@@ -9,8 +9,12 @@ void AdjustLight(uint8_t * level){
     leds_turnOff(4);
     uint8_t count=0;
     
-    while (count<=MaxLightLevel||count<*level)
+    while (count<*level)
     {
+        if (count>4){
+        count=4;
+        break;
+        }
         count++;
         leds_turnOn(count);
         _delay_ms(1000);

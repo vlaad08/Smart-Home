@@ -80,8 +80,9 @@ void setup(){
     generate_iv(iv,16);
 
     //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
-    wifi_command_join_AP("KBENCELT 3517","p31A05)1");
-    wifi_command_create_TCP_connection("192.168.137.1",6868,Callback,received_message_buffer);
+    //wifi_command_join_AP("KBENCELT 3517","p31A05)1");
+    wifi_command_join_AP("002","zabijemsazalentilku");
+    wifi_command_create_TCP_connection("192.168.236.208",6868,Callback,received_message_buffer);
 
     char* public_key_hex = print_hex(getIOTPublicKey(&enc), 64);
     char* connection = (char*)malloc((sizeof("Connected:") + strlen(public_key_hex) + 1) * sizeof(char));
