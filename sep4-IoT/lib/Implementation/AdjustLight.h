@@ -4,7 +4,11 @@
 #include <stdio.h>
 #include "leds.h"
 #include "pc_comm.h"
-#include <util/delay.h>
+#ifdef __AVR__
+#include <util/delay.h> // Include for AVR microcontroller
+#else
+#include <unistd.h> // Include for POSIX systems (Linux, macOS, etc.)
+#endif
 #include "display.h"
 
 
