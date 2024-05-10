@@ -1,9 +1,10 @@
 #include "RadiatorPossition.h"
 
+uint8_t* setRadiatorLevel(uint8_t level) {
+    static uint8_t values[5]; // Array to hold level, angle, and display values
 
-void setRadiatorLevel(uint8_t level) {
     uint8_t angle = 0;
-    display_setValues(0,4,0,level); //0=0 1=1 2=2 3=3 4=4 5=9 6=8 7=7 8=8 9=9 10=a 11=
+    display_setValues(0, 4, 0, level);
     
     switch (level) {
         case 0:
@@ -28,9 +29,16 @@ void setRadiatorLevel(uint8_t level) {
             angle = 180;           
             break;
         default:
-            // Invalid level, set angle to 0
+           
             angle = 0;           
             break;
     }
     servo(angle);
+
+    values[0] = 0;       
+    values[1] = 4;      
+    values[2] = 0;      
+    values[3] = level;  
+    values[4] = angle;  
+    return values;
 }
