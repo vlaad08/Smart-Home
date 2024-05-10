@@ -136,7 +136,7 @@ int main(){
     
     periodic_task_init_a(sendTempAndHumidity,13000);
     periodic_task_init_b(sendLight,12000);
-    setRadiator(2);
+    
 
     while (1)
     {
