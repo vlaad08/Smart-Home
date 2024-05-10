@@ -1,20 +1,30 @@
 ﻿using ConsoleApp1;
 using DBComm.Logic.Interfaces;
+using DBComm.Repository;
+using DBComm.Shared;
 
 namespace DBComm.Logic;
 
 public class TemperatureLogic : ITemperatureLogic
 {
     private ICommunicator communicator;
+
+    private TemperatureRepository repository;
     //maybe private
     public TemperatureLogic()
     {
         communicator = Communicator.Instance;
+        repository = new TemperatureRepository();
     }
     
-    public void getTemp()
+    public async Task<Temperature> getTemperature()
     {
-        Console.WriteLine("segg2");
-        communicator.Send("temperature");
+        return await repository.getLates();
+    }
+
+    public void saveTemperature(Temperature temperature)
+    {
+        repository.update(temperature);
+        
     }
 }

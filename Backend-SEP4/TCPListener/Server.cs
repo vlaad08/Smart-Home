@@ -1,5 +1,7 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Xml.Serialization;
 
 
@@ -11,7 +13,7 @@ public class Server
 
     public Server(int port)
     {
-        IPAddress localAddr = IPAddress.Parse("192.168.180.220");
+        IPAddress localAddr = IPAddress.Parse("10.154.208.96");
         listener = new TcpListener(localAddr, port);
         isRunning = true;
         listener.Start();
@@ -19,7 +21,7 @@ public class Server
         serverThread.Start();
     }
 
-    private void ListenForClients()
+    private async void ListenForClients()
     {
         Console.WriteLine("Server started, listening for clients...");
         while (isRunning)
@@ -28,7 +30,26 @@ public class Server
             {
                 TcpClient newClient = listener.AcceptTcpClient();
                 Console.WriteLine("Client connected.");
-                Communicator.Instance.UpdateClient(newClient);
+                NetworkStream stream = await Communicator.Instance.UpdateClient(newClient);
+                
+                byte[] buffer = new byte[1024];
+                // Read data from the network stream
+                int bytesRead;
+                string receivedMessage = "";
+                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    // Convert the received data to a string
+                    receivedMessage = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                    Console.WriteLine("Received: " + receivedMessage);
+                }
+
+                switch (receivedMessage)
+                {
+                    case  "temperature" :
+                        //database
+                    default:
+                        break;
+                }
                 //Communicator.Instance.Send("Force");
             }
             catch (Exception e)
@@ -39,6 +60,7 @@ public class Server
         }
         listener.Stop();
     }
+    
 
     public void StopServer()
     {

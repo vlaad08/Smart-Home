@@ -1,6 +1,8 @@
 ﻿using System.Net.Sockets;
+using System.Numerics;
 using System.Text;
 using ConsoleApp1;
+using ECC.NET;
 
 
 public class Communicator : ICommunicator
@@ -9,6 +11,7 @@ public class Communicator : ICommunicator
         private static readonly object _lock = new object();
         private TcpClient client;
         private NetworkStream stream;
+        private Cryptography.KeyPair keyPair;
 
         public static Communicator Instance
         {
@@ -29,16 +32,18 @@ public class Communicator : ICommunicator
         {
         }
 
-        public void UpdateClient(TcpClient newClient)
+        public async Task<NetworkStream> UpdateClient(TcpClient newClient)
         {
             CloseCurrentClient();
             client = newClient;
             stream = newClient.GetStream();
+            await handshake();
             Console.WriteLine("Communicator updated with new client.");
+            return stream;
         }
 
         // Send message to the current client
-        public void Send(string message)
+        private void Send(string message)
         {
             if (client != null && stream != null)
             {
@@ -58,6 +63,22 @@ public class Communicator : ICommunicator
             {
                 Console.WriteLine("No client connected to send a message.");
             }
+        }
+        
+        public string getTemperature()
+        {
+            Send("Send temperature.");
+            return null;
+        }
+
+        private async Task handshake() 
+        {
+            Curve curve = new Curve(Curve.CurveName.secp256r1);
+            BigInteger r = Numerics.GetNumberFromGroup(curve.N, curve.Length);
+            Point multipliedG = Point.Multiply(r, curve.G);
+            Point addedPoints = Point.Add(multipliedG, curve.G);
+            keyPair = Cryptography.GetKeyPair(curve);
+            Send(keyPair.PublicKey.ToString());
         }
 
         // Close the current client connection

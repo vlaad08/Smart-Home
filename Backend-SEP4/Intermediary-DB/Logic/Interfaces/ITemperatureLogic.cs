@@ -1,6 +1,10 @@
-﻿namespace DBComm.Logic.Interfaces;
+﻿using DBComm.Shared;
+
+namespace DBComm.Logic.Interfaces;
 
 public interface ITemperatureLogic
 {
-    void getTemp();
+    Task<Temperature> getTemperature();
+    void saveTemperature(Temperature temperature);
+
 }

@@ -1,6 +1,7 @@
 using ConsoleApp1;
 using DBComm.Logic;
 using DBComm.Logic.Interfaces;
+using DBComm.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITemperatureLogic, TemperatureLogic>();
-    
+builder.Services.AddScoped<IBaseRepository, TemperatureRepository>();
 
 var app = builder.Build();
 
@@ -21,6 +22,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true) // allow any origin
+    .AllowCredentials());
+
+
 
 app.UseHttpsRedirection();
 
