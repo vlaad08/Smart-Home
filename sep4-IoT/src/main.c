@@ -17,7 +17,7 @@
 #include "TempAndHum.h"
 #include "LightInfo.h"
 #include "AdjustLight.h"
-#include "RadiatorPossition.h"
+#include "RadiatorPosition.h"
 #include "Window.h"
 
 
