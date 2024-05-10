@@ -3,11 +3,13 @@
 #include "stdlib.h"
 #include <stdio.h>
 #include "leds.h"
+
 #ifdef __AVR__
-#include <util/delay.h>
+  #include <util/delay.h>
 #else
-#include <unistd.h>
+  #include <unistd.h>
 #endif
+
 #include "display.h"
 
 

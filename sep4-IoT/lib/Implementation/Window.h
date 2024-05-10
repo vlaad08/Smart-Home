@@ -2,12 +2,17 @@
 #include <string.h>
 #include "stdlib.h"
 #include <stdio.h>
-//#include <util/delay.h>
+
+#ifdef __AVR__
+  #include <util/delay.h> // Include for AVR microcontroller
+#else
+  #include <unistd.h> // Include for POSIX systems (Linux, macOS, etc.)
+#endif
 
 #include "servo.h"
 #include "display.h"
 
 
-void openWindow();
+int openWindow();
 
-void closeWindow();
+int closeWindow();

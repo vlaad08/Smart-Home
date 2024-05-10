@@ -6,4 +6,4 @@
 #include "servo.h"
 #include "display.h"
 
-void setRadiatorLevel(uint8_t level);
+uint8_t* setRadiatorLevel(uint8_t level);
