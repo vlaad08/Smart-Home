@@ -16,7 +16,7 @@ public class HumidityRepository : IHumidityRepository
     {
         try
         {
-            IQueryable<HumidityReading> humidityReading = Context.HumidityReadings
+            IQueryable<HumidityReading> humidityReading = Context.humidity_reading
                 .Where(hr => hr.Room.DeviceId == deviceId)  
                 .OrderByDescending(hr => hr.ReadAt);
 
@@ -33,7 +33,7 @@ public class HumidityRepository : IHumidityRepository
     {
         try
         {
-            var query = Context.HumidityReadings
+            var query = Context.humidity_reading
                 .Where(lr => lr.ReadAt >= dateFrom && lr.ReadAt <= dateTo && lr.Room.DeviceId == deviceId)
                 .GroupBy(lr => lr.ReadAt.Date) // Group by date
                 .Select(group => new HumidityReading()

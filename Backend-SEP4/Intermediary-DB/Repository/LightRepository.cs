@@ -15,7 +15,7 @@ public class LightRepository : ILigthRepository
     {
         try
         {
-            IQueryable<LightReading> lightReadings = Context.LightReadings
+            IQueryable<LightReading> lightReadings = Context.light_reading
                 .Where(lr => lr.Room.DeviceId == deviceId)  
                 .OrderByDescending(lr => lr.ReadAt);
 
@@ -32,7 +32,7 @@ public class LightRepository : ILigthRepository
     {
         try
         {
-            var query = Context.LightReadings
+            var query = Context.light_reading
                 .Where(lr => lr.ReadAt >= dateFrom && lr.ReadAt <= dateTo && lr.Room.DeviceId == deviceId)
                 .GroupBy(lr => lr.ReadAt.Date) // Group by date
                 .Select(group => new LightReading()

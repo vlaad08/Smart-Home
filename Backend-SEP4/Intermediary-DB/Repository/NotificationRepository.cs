@@ -20,7 +20,7 @@ public class NotificationRepository : INotificationRepository
             var todayUtc = DateTime.UtcNow.Date;
             var tomorrowUtc = todayUtc.AddDays(1);
 
-            IQueryable<Notification> notificationReadings = context.Notifications
+            IQueryable<Notification> notificationReadings = context.notification
                 .Where(nr => nr.SendAt >= todayUtc && nr.SendAt < tomorrowUtc);
 
             List<Notification> result = await notificationReadings.ToListAsync();
