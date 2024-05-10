@@ -12,12 +12,20 @@ namespace WebAPI.Service;
 public class AuthController : ControllerBase
 {
     private readonly IConfiguration config;
-    private readonly IAuthService authService;
+    private readonly IAccountService _accountService;
  
-    public AuthController(IConfiguration config, IAuthService authService)
+    public AuthController(IConfiguration config, IAccountService accountService)
     {
         this.config = config;
-        this.authService = authService;
+        this._accountService = accountService;
+    }
+    
+    
+    [HttpPost, Route("register")]
+    public async Task<ActionResult> Register([FromBody] Member member)
+    {
+        await _accountService.RegisterMember(member);
+        return Ok();
     }
     
     

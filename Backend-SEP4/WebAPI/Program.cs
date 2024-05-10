@@ -29,7 +29,7 @@ builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ILigthRepository, LightRepository>();
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
-builder.Services.AddScoped<IAuthService, AuthServiceImpl>();
+builder.Services.AddScoped<IAccountService, AccountLogic>();
 
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddDbContext<Context>();

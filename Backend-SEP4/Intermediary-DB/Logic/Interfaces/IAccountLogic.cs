@@ -2,7 +2,7 @@
 
 namespace WebAPI.Service;
 
-public interface IAuthService
+public interface IAccountService
 {
     Task<Admin> GetAdmin(string login, string password);
     Task RegisterMember(Member member);
