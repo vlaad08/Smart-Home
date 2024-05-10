@@ -1,9 +1,9 @@
-#include "RadiatorPossition.h"
+#include "RadiatorPosition.h"
 
 
 void setRadiatorLevel(uint8_t level) {
     uint8_t angle = 0;
-    display_setValues(0,4,0,level); //0=0 1=1 2=2 3=3 4=4 5=9 6=8 7=7 8=8 9=9 10=a 11=
+    display_setValues(0,1,0,level); //0=0 1=1 2=2 3=3 4=4 5=9 6=8 7=7 8=8 9=9 10=a 11=
     
     switch (level) {
         case 0:
