@@ -94,7 +94,7 @@ void Callback(){
             windowAction(value);
             break;
         case '3':
-            value=  received_message_buffer[3] - '0';
+            value = received_message_buffer[3] - '0';
             doorAction(value);
             break;
         case '4':
@@ -120,7 +120,7 @@ void setup(){
     leds_init();
     createIOTKeys(&enc);
     generate_iv(iv,16);
-
+    hc_sr04_init();
     //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
     wifi_command_join_AP("KBENCELT 3517","p31A05)1");
     //wifi_command_join_AP("002","zabijemsazalentilku");
@@ -163,6 +163,7 @@ int main(){
     periodic_task_init_a(sendTempAndHumidity,13000);
     periodic_task_init_b(sendLight,12000);
     periodic_task_init_c(breakingIn,1000);
+
     while (1)
     {
      
