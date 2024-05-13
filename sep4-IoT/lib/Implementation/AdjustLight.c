@@ -1,6 +1,5 @@
 
 #include "AdjustLight.h"
-#define MaxLightLevel 4
 
 
 void static custom_delay_ms(uint16_t milliseconds) {
@@ -12,6 +11,7 @@ void static custom_delay_ms(uint16_t milliseconds) {
 }
 
 char* AdjustLight(uint8_t level){
+    custom_delay_ms(1000);
     leds_turnOff(1);
     leds_turnOff(2);
     leds_turnOff(3);
@@ -20,21 +20,16 @@ char* AdjustLight(uint8_t level){
     
     while (count<level)
     {
-        if (count>4){
-        count=4;
-        break;
-        }
+        //if (count>4){
+        //count=4;
+        //break;
+        //}
         count++;
         leds_turnOn(count);
         custom_delay_ms(1000);
     }
-    if (count>4)
-    {
-        count=4;
-    }
-    
     display_setValues(0,4,0,count);
-    char* x = calloc(12,sizeof(char));
+    char* x = (char *) malloc(12*sizeof(char));
     sprintf(x,"0,4,0,%d",count);
     return x;
 }

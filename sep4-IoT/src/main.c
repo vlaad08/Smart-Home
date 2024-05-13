@@ -71,7 +71,8 @@ void Callback(){
         {
         case '1':
             value = received_message_buffer[3] - '0';
-            setRadiatorLevel(value);
+            uint8_t * radiator= setRadiatorLevel(value);
+            free(radiator);
             break;
         case '2':
             value = received_message_buffer[3] - '0';
@@ -105,10 +106,10 @@ void setup(){
     generate_iv(iv,16);
     hc_sr04_init();
 
-    wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
-    //wifi_command_join_AP("KBENCELT 3517","p31A05)1");
+    //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
+    wifi_command_join_AP("KBENCELT 3517","p31A05)1");
     //wifi_command_join_AP("002","zabijemsazalentilku");
-    wifi_command_create_TCP_connection("192.168.0.220",6868,Callback,received_message_buffer);
+    wifi_command_create_TCP_connection("192.168.137.1",6868,Callback,received_message_buffer);
 
     char* public_key_hex = print_hex(getIOTPublicKey(&enc), 64);
     char* connection = (char*)malloc((sizeof("Connected:") + strlen(public_key_hex) + 1) * sizeof(char));
@@ -133,12 +134,11 @@ void setRadiator(uint8_t level){
 }
 
 void breakingIn(){
-    char* x = alarm(false);
+    char * x = alarm(false);
     if (strlen(x)> 5)
     {
-        transmitData((uint8_t*)x,strlen(x));
+        transmitData((uint8_t*)x,16);
     }
-    free(x);
 }
 
 
@@ -147,7 +147,7 @@ int main(){
     
     periodic_task_init_a(sendTempAndHumidity,13000);
     periodic_task_init_b(sendLight,12000);
-    //periodic_task_init_a(breakingIn,1000);
+    periodic_task_init_c(breakingIn,1000);
     
     while (1)
     {
