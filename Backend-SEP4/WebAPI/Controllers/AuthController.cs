@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using WebAPI.DTOs;
 
 namespace WebAPI.Service;
 
@@ -25,8 +26,18 @@ public class AuthController : ControllerBase
     [HttpPost, Route("register")]
     public async Task<ActionResult> Register([FromQuery] string username, [FromQuery] string password)
     {
-        await _accountLogic.RegisterMember(username, password);
-        return Ok();
+        try
+        {
+            await _accountLogic.RegisterMember(username, password);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return BadRequest(e.Message);
+        }
+        
+        
     }
 
     [HttpDelete, Route("delete")]
@@ -36,7 +47,47 @@ public class AuthController : ControllerBase
         return Ok();
     }
 
-private string GenerateJwt(Member member)
+    [HttpPut, Route("edit/username")]
+    public async Task<ActionResult> EditUsername([FromBody] UsernameChangeDTO dto)
+    {
+        try
+        {
+            await _accountLogic.EditUsername(dto.OldUsername, dto.NewUsername);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+    [HttpPut, Route("edit/password")]
+        public async Task<ActionResult> EditPassword([FromBody] PasswordChangeDTO dto)
+        {
+            try
+            {
+                await _accountLogic.EditPassword(dto.Username,dto.OldPassword, dto.NewPassword);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+    [HttpPut, Route("edit/admin")]
+    public async Task<ActionResult> ToggleAdmin()
+    {
+        try
+        {
+            await _accountLogic.ToggleAdmin();
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+    
+    private string GenerateJwt(Member member)
     {
         List<Claim> claims = GenerateClaims(member);
         
