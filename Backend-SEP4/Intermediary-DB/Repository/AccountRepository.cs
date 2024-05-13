@@ -164,6 +164,7 @@ public class AccountRepository : IAccountRepository
                 .SingleOrDefaultAsync(m => m.Username == username);
             if (existing != null)
             {
+                //
                 existing.Home = null;
                 _context.member.Update(existing);
                 await _context.SaveChangesAsync();
