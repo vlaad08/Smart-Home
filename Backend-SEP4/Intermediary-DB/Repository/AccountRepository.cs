@@ -17,9 +17,17 @@ public class AccountRepository : IAccountRepository
     {
          try
         {
+            Member? existing = await _context.member.FirstOrDefaultAsync(m=> m.Username == username);
+            if (existing != null)
+            {
+                throw new Exception("Member with given username is already in the system.");
+            }
+
             Member member = new Member(username, password, true);
-            await context.member.AddAsync(member);
-            await context.SaveChangesAsync();
+
+
+            await _context.member.AddAsync(member);
+            await _context.SaveChangesAsync();
             return member ;
         }
         catch(Exception e)
@@ -91,6 +99,8 @@ public class AccountRepository : IAccountRepository
         else
         {
             if (member.Password!=hash)
+            Member? existing = await _context.member.FirstOrDefaultAsync(m=> m.Username == username);
+            if (existing != null)
             {
                 throw new Exception("Password mismatch");
             }
@@ -139,6 +149,31 @@ public class AccountRepository : IAccountRepository
 
             context.member.Remove(acc);
             await context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public async Task RemoveMemberFromHouse(string username, string houseId)
+    {
+        try
+        {
+            Member? existing = await _context.member.Include(m => m.Home)
+                .SingleOrDefaultAsync(m => m.Username == username);
+            if (existing != null)
+            {
+                /*Member member = new Member(existing.Username, existing.Password);
+                member.Id = existing.Id;
+                _context.member.Remove(existing);
+                await _context.member.AddAsync(member);
+                await _context.SaveChangesAsync();*/
+
+                existing.Home = null;
+                _context.member.Update(existing);
+                await _context.SaveChangesAsync();
+            }
         }
         catch (Exception e)
         {

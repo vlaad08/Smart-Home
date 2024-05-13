@@ -14,4 +14,6 @@ public interface IAccountRepository
     Task<bool> CheckExistingUser(string username);
     Task<bool> CheckNonExistingUser(string username,string hash);
     Task<bool> CheckIfAdmin(string adminUsername,string hash,string usernmae);
+
+    Task RemoveMemberFromHouse(string username, string houseId);
 }

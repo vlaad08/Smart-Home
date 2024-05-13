@@ -94,7 +94,21 @@ public class AuthController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-    
+
+    [HttpPatch, Route("members/remove")]
+    public async Task<ActionResult> RemoveMemberFromHouse([FromQuery] string username, [FromQuery] string houseId)
+    {
+        try
+        {
+            await _accountLogic.RemoveMemberFromHouse(username, houseId);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
     private string GenerateJwt(Member member)
     {
         List<Claim> claims = GenerateClaims(member);
