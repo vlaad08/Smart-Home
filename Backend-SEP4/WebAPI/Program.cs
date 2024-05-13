@@ -16,6 +16,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<Context>();
 builder.Services.AddScoped<ITemperatureLogic, TemperatureLogic>();
 builder.Services.AddScoped<IHumidityLogic, HumidityLogic>();
 builder.Services.AddScoped<ILightLogic, LightLogic>();
@@ -36,7 +37,6 @@ builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<IAccountLogic, AccountLogic>();
 
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
-builder.Services.AddDbContext<Context>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;
