@@ -30,6 +30,7 @@ uint8_t iv[16];
 struct AES_ctx my_AES_ctx;
 
 bool IsPKAcquired=false;
+bool UnlockingApproved=false;
 // Buffer to hold the received message
 char received_message_buffer[128];
 
@@ -53,10 +54,14 @@ void windowAction(uint8_t status){
         closeWindow();
 }
 void doorAction(uint8_t status){
-     if (status)
-        openDoor();
-    else
+     if (status){
+        UnlockingApproved=true;
+        openDoor();}
+     
+    else{
         closeDoor();
+        UnlockingApproved=false;}
+        
 }
 
 void Callback(){
