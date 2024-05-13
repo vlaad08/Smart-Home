@@ -29,7 +29,7 @@ void test_openDoorWithoutApproval(void) {
     bool isApproved = false;
     char* alarm_message = alarm(isApproved);
     TEST_ASSERT_NOT_NULL(alarm_message);
-    TEST_ASSERT_EQUAL_STRING("SOMEONE IS TRYING TO BREAK INTO THE HOUSE!!!", alarm_message);
+    TEST_ASSERT_EQUAL_STRING("Hello,Thief", alarm_message);
     free(alarm_message);
 }
 void test_openDoorWithApproval(void) {
@@ -48,6 +48,6 @@ int main() {
     UNITY_BEGIN();
 
     RUN_TEST(test_openDoorWithoutApproval);
-RUN_TEST(test_openDoorWithApproval);
+    RUN_TEST(test_openDoorWithApproval);
     return UNITY_END();
 }
