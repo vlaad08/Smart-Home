@@ -41,10 +41,18 @@ public class AuthController : ControllerBase
     }
 
     [HttpDelete, Route("delete")]
-    public async Task<ActionResult> Delete([FromQuery] string username)
+    public async Task<ActionResult> Delete([FromBody] UserGetterDTO dto)
     {
-        await _accountLogic.Delete(username);
-        return Ok();
+        try
+        {
+            await _accountLogic.Delete(dto.Username,dto.Password);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+        
     }
 
     [HttpPut, Route("edit/username")]
@@ -52,7 +60,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            await _accountLogic.EditUsername(dto.OldUsername, dto.NewUsername);
+            await _accountLogic.EditUsername(dto.OldUsername, dto.NewUsername,dto.Password);
             return Ok();
         }
         catch (Exception e)
@@ -74,11 +82,11 @@ public class AuthController : ControllerBase
             }
         }
     [HttpPut, Route("edit/admin")]
-    public async Task<ActionResult> ToggleAdmin()
+    public async Task<ActionResult> ToggleAdmin([FromBody] ToggleAdminDTO dto)
     {
         try
         {
-            await _accountLogic.ToggleAdmin();
+            await _accountLogic.ToggleAdmin(dto.AdminUsername,dto.AdminPassword,dto.Username);
             return Ok();
         }
         catch (Exception e)

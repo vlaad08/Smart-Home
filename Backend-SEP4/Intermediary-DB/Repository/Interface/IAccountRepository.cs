@@ -9,7 +9,9 @@ public interface IAccountRepository
     Task DeleteAccount(string username);
     Task EditUsername(string oldUsername, string newUsername);
     Task EditPassword(string username, string oldPassword, string newPassword);
-    Task ToggleAdmin();
+    Task ToggleAdmin(string username);
 
-    Task<bool> CheckUser(string username);
+    Task<bool> CheckExistingUser(string username);
+    Task<bool> CheckNonExistingUser(string username,string hash);
+    Task<bool> CheckIfAdmin(string adminUsername,string hash,string usernmae);
 }

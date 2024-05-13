@@ -51,34 +51,79 @@ public class AccountRepository : IAccountRepository
     public async Task EditUsername(string oldUsername, string newUsername)
     {
         Member member = await context.member.FirstOrDefaultAsync(m => m.Username == oldUsername);
-        if (member == null)
-        {
-            throw new Exception($"User with username {oldUsername} is not registered");
-        }
-
         member.Username = newUsername;
 
         await context.SaveChangesAsync();
     }
 
-    public Task EditPassword(string username, string oldPassword, string newPassword)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task ToggleAdmin()
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<bool> CheckUser(string username)
+    public async Task EditPassword(string username, string oldPassword, string newPassword)
     {
         Member member = await context.member.FirstOrDefaultAsync(m => m.Username == username);
+        member.Password = newPassword;
+        await context.SaveChangesAsync();
+    }
+
+    public async Task ToggleAdmin(string username)
+    {
+        Member member = await context.member.FirstOrDefaultAsync(m => m.Username == username);
+        bool oldAdminValue = member.IsAdmin;
+        member.IsAdmin = !oldAdminValue;
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<bool> CheckExistingUser(string username)
+    {
+        Member? member = await context.member.Include(m=>m.Home).FirstOrDefaultAsync(m => m.Username == username);
         if (member != null)
         {
             throw new Exception($"User with username {username} is already registered");
         }
+        return true;
+    }
+    
+    public async Task<bool> CheckNonExistingUser(string username,string hash)
+    {
+        Member? member = await context.member.Include(m=>m.Home).FirstOrDefaultAsync(m => m.Username == username);
+        if (member == null)
+        {
+            throw new Exception($"User with username {username} doesn't exist");
+        }
+        else
+        {
+            if (member.Password!=hash)
+            {
+                throw new Exception("Password mismatch");
+            }
+        }
+        return true;
+    }
 
+    public async Task<bool> CheckIfAdmin(string adminUsername, string hash,string username)
+    {
+        Member? member = await context.member.Include(m=>m.Home).FirstOrDefaultAsync(m => m.Username == adminUsername);
+        if (member == null)
+        {
+            throw new Exception($"User with username {adminUsername} doesn't exist");
+        }
+        else
+        {
+            if (member.Password!=hash)
+            {
+                throw new Exception("Password mismatch");
+            }
+            else
+            {
+                if (!member.IsAdmin)
+                {
+                    throw new Exception($"User {adminUsername} is not an admin.");
+                }
+            }
+        }
+        Member? userToBeSet = await context.member.Include(m=>m.Home).FirstOrDefaultAsync(m => m.Username == username);
+        if (userToBeSet == member)
+        {
+            throw new Exception("Admin cannot set themselves");
+        }
         return true;
     }
 

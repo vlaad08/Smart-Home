@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
+using System.Text;
 using DBComm.Repository;
 using DBComm.Shared;
 
@@ -7,10 +9,22 @@ namespace WebAPI.Service;
 public class AccountLogic : IAccountLogic
 {
     private IAccountRepository _repository;
-    //maybe private
     public AccountLogic(IAccountRepository repository)
     {
         this._repository = repository;
+    }
+
+    private async Task<string> _hashPassword(string password)
+    {
+        byte[] inputBytes = Encoding.UTF8.GetBytes(password);
+        string hashedString = "";
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            byte[] hashBytes = sha256.ComputeHash(inputBytes);
+            hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
+        }
+
+        return hashedString;
     }
     public Task<Member> GetAdmin(string login, string password)
     {
@@ -30,9 +44,10 @@ public class AccountLogic : IAccountLogic
         }
         try
         {
-            if (await _repository.CheckUser(username))
+            if (await _repository.CheckExistingUser(username))
             {
-                await _repository.RegisterMember(username, password);
+                string hash = await _hashPassword(password);
+                await _repository.RegisterMember(username, hash);
             }
         }
         catch (Exception e)
@@ -42,15 +57,19 @@ public class AccountLogic : IAccountLogic
         }
     }
 
-    public async Task Delete(string username)
+    public async Task Delete(string username,string password)
     {
         try
         {
-            await _repository.DeleteAccount(username);
+            string hash = await _hashPassword(password);
+            if (await _repository.CheckNonExistingUser(username,hash))
+            {
+                await _repository.DeleteAccount(username);
+            }
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error deleting account: " + e.Message);
+            throw new Exception(e.Message);
         }
     }
         
@@ -72,9 +91,10 @@ public class AccountLogic : IAccountLogic
         }
         try
         {
-            if (await _repository.CheckUser(username))
+            if (await _repository.CheckExistingUser(username))
             {
-                await _repository.RegisterAdmin(username, password);
+                string hash = await _hashPassword(password);
+                await _repository.RegisterAdmin(username, hash);
             }
         }
         catch (Exception e)
@@ -86,11 +106,15 @@ public class AccountLogic : IAccountLogic
         return;
     }
 
-    public async Task EditUsername(string oldUsername, string newUsername)
+    public async Task EditUsername(string oldUsername, string newUsername,string password)
     {
         try
         {
-            await _repository.EditUsername(oldUsername, newUsername);
+            string hash = await _hashPassword(password);
+            if (await _repository.CheckNonExistingUser(oldUsername,hash))
+            {
+                await _repository.EditUsername(oldUsername, newUsername);
+            }
         }
         catch (Exception e)
         {
@@ -103,7 +127,16 @@ public class AccountLogic : IAccountLogic
     {
         try
         {
-            await _repository.EditPassword(username, oldPassword, newPassword);
+            string hash = await _hashPassword(oldPassword);
+            if (await _repository.CheckNonExistingUser(username,hash))
+            {
+                string newHash = await _hashPassword(newPassword);
+                if (newHash == hash)
+                {
+                    throw new Exception("Cannot set same password");
+                }
+                await _repository.EditPassword(username, oldPassword, newHash);
+            }
         }
         catch (Exception e)
         {
@@ -112,11 +145,15 @@ public class AccountLogic : IAccountLogic
         }
     }
 
-    public async Task ToggleAdmin()
+    public async Task ToggleAdmin(string adminUsername,string adminPassword, string username)
     {
         try
         {
-            await _repository.ToggleAdmin();
+            string hash = await _hashPassword(adminPassword);
+            if (await _repository.CheckIfAdmin(adminUsername,hash,username))
+            {
+                await _repository.ToggleAdmin(username);
+            }
         }
         catch (Exception e)
         {
