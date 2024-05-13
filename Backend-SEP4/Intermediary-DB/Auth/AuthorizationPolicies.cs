@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.Extensions.DependencyInjection;
 
-
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! THIS MUST BE IMPLEMENTED LATER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 public static class AuthorizationPolicies
 {
     public static void AddPolicies(IServiceCollection services)

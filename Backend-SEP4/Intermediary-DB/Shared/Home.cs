@@ -6,7 +6,7 @@ namespace DBComm.Shared;
 public class Home
 {
     [Key]
-    public string Id { get; set; }
+    public int Id { get; set; }
     [JsonIgnore]
     public ICollection<Notification>? Notifications { get; set; }
     [JsonIgnore]

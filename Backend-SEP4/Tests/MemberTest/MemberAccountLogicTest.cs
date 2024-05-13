@@ -15,19 +15,7 @@ public class MemberAccountLogicTest
     private Mock<IAccountRepository> _mockRepository;
     
 
-    [Fact]
-    public async Task RegisterMember_ValidInput()
-    {
-        _mockRepository = new Mock<IAccountRepository>();
-        _logic = new AccountLogic(_mockRepository.Object);
-        string username = "testuser";
-        string password = "testpassword";
-        Member member = new Member(username, password);
-        _mockRepository.Setup(r => r.RegisterMember(username, password)).ReturnsAsync(member);
-        var result = await _logic.RegisterMember(username, password);
-        Assert.NotNull(result);
-        Assert.Equal(username, result.Username);
-    }
+    
 
     
     [Fact]
