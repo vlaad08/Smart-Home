@@ -52,17 +52,6 @@ public class AccountLogic : IAccountLogic
         }
     }
 
-    public async Task Delete(string username)
-    {
-        try
-        {
-            await _repository.DeleteAccount(username);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("Error deleting account: " + e.Message);
-        }
-    }
 
     public Task<Member> GetMember(string login, string password)
     {
