@@ -30,6 +30,7 @@ uint8_t iv[16];
 struct AES_ctx my_AES_ctx;
 
 bool IsPKAcquired=false;
+bool UnlockingApproved=false;
 // Buffer to hold the received message
 char received_message_buffer[128];
 
@@ -43,6 +44,7 @@ void transmitData(uint8_t * data,uint16_t length){
     free(data);
 }
 
+
 void windowAction(uint8_t status){
     //to indicate that we are moving the window with a servo we are going all the way up, all the way down 
     //then going to the middle and waits for a second and then if open then going up is closed going down
@@ -50,6 +52,16 @@ void windowAction(uint8_t status){
         openWindow();
     else
         closeWindow();
+}
+void doorAction(uint8_t status){
+     if (status){
+        UnlockingApproved=true;
+        openDoor();}
+     
+    else{
+        closeDoor();
+        UnlockingApproved=false;}
+        
 }
 
 void Callback(){
@@ -79,12 +91,12 @@ void Callback(){
             windowAction(value);
             break;
         case '3':
-            /* code */
+            value=  received_message_buffer[3] - '0';
+            doorAction(value);
             break;
         case '4':
             value = received_message_buffer[3] - '0';
-            char* lights = AdjustLight(value);
-            free(lights);
+            AdjustLight(value);
             break;
         default:
             break;
@@ -104,7 +116,6 @@ void setup(){
     leds_init();
     createIOTKeys(&enc);
     generate_iv(iv,16);
-    hc_sr04_init();
 
     //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
     wifi_command_join_AP("KBENCELT 3517","p31A05)1");
@@ -148,10 +159,9 @@ int main(){
     periodic_task_init_a(sendTempAndHumidity,13000);
     periodic_task_init_b(sendLight,12000);
     periodic_task_init_c(breakingIn,1000);
-    
     while (1)
     {
-        
+     
     }
 }
 
