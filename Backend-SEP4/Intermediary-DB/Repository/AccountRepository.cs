@@ -164,12 +164,6 @@ public class AccountRepository : IAccountRepository
                 .SingleOrDefaultAsync(m => m.Username == username);
             if (existing != null)
             {
-                /*Member member = new Member(existing.Username, existing.Password);
-                member.Id = existing.Id;
-                _context.member.Remove(existing);
-                await _context.member.AddAsync(member);
-                await _context.SaveChangesAsync();*/
-
                 existing.Home = null;
                 _context.member.Update(existing);
                 await _context.SaveChangesAsync();
