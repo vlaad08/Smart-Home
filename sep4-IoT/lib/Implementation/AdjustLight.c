@@ -34,7 +34,7 @@ char* AdjustLight(uint8_t level){
     }
     
     display_setValues(0,4,0,count);
-    char* x = malloc(8);
+    char* x = calloc(12,sizeof(char));
     sprintf(x,"0,4,0,%d",count);
     return x;
 }
