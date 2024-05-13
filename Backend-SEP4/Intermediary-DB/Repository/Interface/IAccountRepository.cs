@@ -6,4 +6,6 @@ public interface IAccountRepository
 {
     Task<Member> RegisterAdmin(string username, string password);
     Task<Member> RegisterMember(string username, string password);
+
+    Task RemoveMemberFromHouse(string username, string houseId);
 }

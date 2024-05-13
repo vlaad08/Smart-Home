@@ -1,17 +1,15 @@
-﻿using System.Data;
-using DBComm.Logic;
+﻿using DBComm.Logic;
 using DBComm.Shared;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 
 namespace DBComm.Repository;
 
 public class AccountRepository : IAccountRepository
 {
-    public Context Context;
+    public Context _context;
     public AccountRepository(Context context)
     {
-        Context = context;
+        _context = context;
     }
 
    
@@ -20,7 +18,7 @@ public class AccountRepository : IAccountRepository
     {
          try
         {
-            Member? existing = await Context.member.FirstOrDefaultAsync(m=> m.Username == username);
+            Member? existing = await _context.member.FirstOrDefaultAsync(m=> m.Username == username);
             if (existing != null)
             {
                 throw new Exception("Member with given username is already in the system.");
@@ -29,8 +27,8 @@ public class AccountRepository : IAccountRepository
             Member member = new Member(username, password, true);
 
 
-            await Context.member.AddAsync(member);
-            await Context.SaveChangesAsync();
+            await _context.member.AddAsync(member);
+            await _context.SaveChangesAsync();
             return member ;
         }
         catch(Exception e)
@@ -43,7 +41,7 @@ public class AccountRepository : IAccountRepository
     {
         try
         {
-            Member? existing = await Context.member.FirstOrDefaultAsync(m=> m.Username == username);
+            Member? existing = await _context.member.FirstOrDefaultAsync(m=> m.Username == username);
             if (existing != null)
             {
                 throw new Exception("Member with given username is already in the system.");
@@ -51,11 +49,36 @@ public class AccountRepository : IAccountRepository
 
             Member member = new Member(username, password);
 
-            await Context.member.AddAsync(member);
-            await Context.SaveChangesAsync();
+            await _context.member.AddAsync(member);
+            await _context.SaveChangesAsync();
             return member ;
         }
         catch(Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public async Task RemoveMemberFromHouse(string username, string houseId)
+    {
+        try
+        {
+            Member? existing = await _context.member.Include(m => m.Home)
+                .SingleOrDefaultAsync(m => m.Username == username);
+            if (existing != null)
+            {
+                /*Member member = new Member(existing.Username, existing.Password);
+                member.Id = existing.Id;
+                _context.member.Remove(existing);
+                await _context.member.AddAsync(member);
+                await _context.SaveChangesAsync();*/
+
+                existing.Home = null;
+                _context.member.Update(existing);
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception e)
         {
             throw new Exception(e.Message);
         }

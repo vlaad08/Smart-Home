@@ -24,8 +24,17 @@ public class AuthController : ControllerBase
     [HttpPost, Route("members/register")]
     public async Task<ActionResult> Register([FromQuery] string username, [FromQuery] string password)
     {
-        await _accountLogic.RegisterMember(username, password);
-        return Ok();
+        try
+        {
+            await _accountLogic.RegisterMember(username, password);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
+        
     }
     
     [HttpPost, Route("admins/register")]
@@ -34,7 +43,21 @@ public class AuthController : ControllerBase
         await _accountLogic.RegisterAdmin(username, password);
         return Ok();
     }
-    
+
+    [HttpPatch, Route("members/remove")]
+    public async Task<ActionResult> RemoveMemberFromHouse([FromQuery] string username, [FromQuery] string houseId)
+    {
+        try
+        {
+            await _accountLogic.RemoveMemberFromHouse(username, houseId);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
     private string GenerateJwt(Member member)
     {
         List<Claim> claims = GenerateClaims(member);

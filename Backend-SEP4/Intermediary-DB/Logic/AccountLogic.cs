@@ -60,4 +60,18 @@ public class AccountLogic : IAccountLogic
         
         return;
     }
+
+    public async Task RemoveMemberFromHouse(string username, string homeId)
+    {
+        try
+        {
+            //add check if user exists 
+            await _repository.RemoveMemberFromHouse(username, homeId);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+        
+    }
 }
