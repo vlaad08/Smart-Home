@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
 namespace WebAPI.Service;
+
 [ApiController]
 [Route("[controller]")]
 
@@ -13,29 +14,29 @@ public class AuthController : ControllerBase
 {
     private readonly IConfiguration config;
     private readonly IAccountLogic _accountLogic;
- 
+
     public AuthController(IConfiguration config, IAccountLogic accountService)
     {
         this.config = config;
         this._accountLogic = accountService;
     }
-    
-    
-    [HttpPost, Route("members/register")]
+
+
+    [HttpPost, Route("register")]
     public async Task<ActionResult> Register([FromQuery] string username, [FromQuery] string password)
     {
         await _accountLogic.RegisterMember(username, password);
         return Ok();
     }
-    
-    [HttpPost, Route("admins/register")]
-    public async Task<ActionResult> RegisterAdmin([FromQuery] string username, [FromQuery] string password)
+
+    [HttpDelete, Route("delete")]
+    public async Task<ActionResult> Delete([FromQuery] string username)
     {
-        await _accountLogic.RegisterAdmin(username, password);
+        await _accountLogic.Delete(username);
         return Ok();
     }
-    
-    private string GenerateJwt(Member member)
+
+private string GenerateJwt(Member member)
     {
         List<Claim> claims = GenerateClaims(member);
         
@@ -76,4 +77,7 @@ public class AuthController : ControllerBase
         };
         return claims.ToList();
     }
+    
+    
+    
 }
