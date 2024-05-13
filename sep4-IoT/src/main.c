@@ -20,6 +20,7 @@
 #include "RadiatorPosition.h"
 #include "Window.h"
 #include "AlarmDoor.h"
+#include "Door.h"
 
 
 #include "uECC.h"
@@ -56,11 +57,13 @@ void windowAction(uint8_t status){
 void doorAction(uint8_t status){
      if (status){
         UnlockingApproved=true;
-        openDoor();}
+        openDoor();
+    }
      
     else{
         closeDoor();
-        UnlockingApproved=false;}
+        UnlockingApproved=false;
+    }
         
 }
 
@@ -96,7 +99,8 @@ void Callback(){
             break;
         case '4':
             value = received_message_buffer[3] - '0';
-            AdjustLight(value);
+            char * light= AdjustLight(value);
+            free(light);
             break;
         default:
             break;
