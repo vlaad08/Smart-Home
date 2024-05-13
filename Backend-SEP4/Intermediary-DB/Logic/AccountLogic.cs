@@ -17,7 +17,7 @@ public class AccountLogic : IAccountLogic
         throw new NotImplementedException();
     }
 
-    public async Task RegisterMember(string username, string password)
+    public async Task<Member> RegisterMember(string username, string password)
     {
         if (string.IsNullOrEmpty(username))
         {
@@ -28,14 +28,14 @@ public class AccountLogic : IAccountLogic
         {
             throw new ValidationException("Password cannot be null");
         }
+
         try
         {
             if (await _repository.CheckUser(username))
             {
                 await _repository.RegisterMember(username, password);
             }
-        }
-        catch (Exception e)
+        catch(Exception e)
         {
             Console.WriteLine(e);
             throw new Exception(e.Message);
@@ -53,7 +53,7 @@ public class AccountLogic : IAccountLogic
             Console.WriteLine("Error deleting account: " + e.Message);
         }
     }
-        
+
     public Task<Member> GetMember(string login, string password)
     {
         throw new NotImplementedException();
@@ -85,6 +85,7 @@ public class AccountLogic : IAccountLogic
 
         return;
     }
+
 
     public async Task EditUsername(string oldUsername, string newUsername)
     {
@@ -125,3 +126,6 @@ public class AccountLogic : IAccountLogic
         }
     }
 }
+
+
+
