@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace DBComm.Shared;
 
@@ -12,6 +12,6 @@ public class Admin
 
     public Admin()
     {
-        
+
     }
 }

@@ -33,4 +33,23 @@ public class AccountRepository : IAccountRepository
             throw new Exception(e.Message);
         }
     }
+
+    public async Task DeleteAccount(string username)
+    {
+        try
+        {
+            Member? acc = await Context.member.FirstOrDefaultAsync(m=> m.Username == username);
+            if ( acc == null)
+            {
+                throw new Exception("No account with this username");
+            }
+
+            Context.member.Remove(acc);
+            await Context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
 }
