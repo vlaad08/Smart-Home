@@ -21,13 +21,19 @@ public class AuthController : ControllerBase
     }
     
     
-    [HttpPost, Route("register")]
+    [HttpPost, Route("members/register")]
     public async Task<ActionResult> Register([FromQuery] string username, [FromQuery] string password)
     {
         await _accountLogic.RegisterMember(username, password);
         return Ok();
     }
     
+    [HttpPost, Route("admins/register")]
+    public async Task<ActionResult> RegisterAdmin([FromQuery] string username, [FromQuery] string password)
+    {
+        await _accountLogic.RegisterAdmin(username, password);
+        return Ok();
+    }
     
     private string GenerateJwt(Member member)
     {
