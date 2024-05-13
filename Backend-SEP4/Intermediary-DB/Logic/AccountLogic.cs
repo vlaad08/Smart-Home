@@ -17,7 +17,7 @@ public class AccountLogic : IAccountLogic
         throw new NotImplementedException();
     }
 
-    public async Task RegisterMember(string username, string password)
+    public async Task<Member> RegisterMember(string username, string password)
     {
         if (string.IsNullOrEmpty(username))
         {
@@ -28,9 +28,16 @@ public class AccountLogic : IAccountLogic
         {
             throw new ValidationException("Password cannot be null");
         }
-        await _repository.RegisterMember(username, password);
+        
+        try
+        {
+            return await _repository.RegisterMember(username, password);
 
-        return;
+        }
+        catch(Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public async Task Delete(string username)
