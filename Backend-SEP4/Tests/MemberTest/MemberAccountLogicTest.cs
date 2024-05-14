@@ -21,11 +21,14 @@ public class MemberAccountLogicTest
         _logic = new AccountLogic(_mockRepository.Object);
         string username = "testuser";
         string password = "testpassword";
-        _mockRepository.Setup(r => r.RegisterMember(username, password)).ReturnsAsync(new Member(username, password));
-        _mockRepository.Setup(r => r.CheckExistingUser(username)).ReturnsAsync(true);
-        Member result = await _logic.RegisterMember(username, password);
-        Assert.NotNull(result);
-        Assert.Equal(username, result.Username);
+        using (var context = new Context())
+        {
+            var service = new AccountRepository(context);
+            var logic = new AccountLogic(service);
+            Member result = await logic.RegisterMember(username, password);
+            Assert.NotNull(result);
+            Assert.Equal(username, result.Username);
+        }
     }
 
     
