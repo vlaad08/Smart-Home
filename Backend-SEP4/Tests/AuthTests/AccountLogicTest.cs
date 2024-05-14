@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using DBComm.Repository;
+using DBComm.Shared;
 using Moq;
 using NuGet.Frameworks;
 using WebAPI.Service;
@@ -95,6 +96,18 @@ public class AccountLogicTest
         await logic.ToggleAdmin("TEST", "TEST", "TEST1");
         mockRepository.Verify(m => m.CheckIfAdmin("TEST",It.IsAny<string>(),"TEST1"), Times.Once); 
         mockRepository.Verify(m => m.ToggleAdmin("TEST1"), Times.Once);
+    }
+
+    [Fact]
+    public async Task Login_calls_for_repository()
+    {
+        var mockRepository = new Mock<IAccountRepository>();
+        mockRepository.Setup(m => m.Login("TEST", "TEST")).ReturnsAsync(new Member());
+        var logic = new AccountLogic(mockRepository.Object);
+        
+        await logic.Login("TEST", "TEST");
+                        // password TEST is hashed to 94EE059335E587E501CC4BF90613E0814F00A7B08BC7C648FD865A2AF6A22CC2
+        mockRepository.Verify(m => m.Login("TEST", "94EE059335E587E501CC4BF90613E0814F00A7B08BC7C648FD865A2AF6A22CC2"), Times.Once);
     }
 
 }

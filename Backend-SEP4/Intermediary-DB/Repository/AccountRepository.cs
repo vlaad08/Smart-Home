@@ -170,4 +170,15 @@ public class AccountRepository : IAccountRepository
             throw new Exception(e.Message);
         }
     }
+
+    public async Task<Member> Login(string username, string hash)
+    {
+        Member? member = await context.member.FirstOrDefaultAsync(m => m.Username == username && m.Password == hash);
+        if (member == null)
+        {
+            throw new Exception("Invalid username or password");
+        }
+        return member;
+
+    }
 }
