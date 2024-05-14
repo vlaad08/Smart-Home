@@ -1,3 +1,5 @@
+#ifndef WIN_TEST
+
 /**
  * @file periodic_task.c
  * @brief Periodic Task Driver implementation for ATmega2560
@@ -136,3 +138,4 @@ float get_exact_interval_a(void) {
     return ((float)(OCR3A + 1) / (F_CPU / 1024)) * 1000.0;
 }
 
+#endif
