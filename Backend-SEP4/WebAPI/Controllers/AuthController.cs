@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using WebAPI.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebAPI.Service;
 
@@ -38,6 +39,21 @@ public class AuthController : ControllerBase
         }
         
         
+    }
+
+    [HttpPost, Route("login")]
+    public async Task<ActionResult> Login([FromBody] UserLoginDto userLoginDto)
+    {
+        try
+        {
+            Member? member = await _accountLogic.Login(userLoginDto.Username, userLoginDto.Password);
+            string token = GenerateJwt(member);
+            return Ok(token);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete, Route("delete")]
@@ -118,20 +134,14 @@ public class AuthController : ControllerBase
     }
     private List<Claim> GenerateClaims(Member member)
     {
-        ///change claims as you like
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, config["Jwt:Subject"]),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-            /*
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Role, user.Role),
-            new Claim("DisplayName", user.Name),
-            new Claim("Email", user.Email),
-            new Claim("Age", user.Age.ToString()),
-            new Claim("Domain", user.Domain),
-            new Claim("SecurityLevel", user.SecurityLevel.ToString())*/
+            new Claim(ClaimTypes.Name, member.Username),
+            new Claim(ClaimTypes.Role, member.IsAdmin ? "Admin" : "User"),
+            new Claim("HouseId", member.Home?.Id)
         };
         return claims.ToList();
     }

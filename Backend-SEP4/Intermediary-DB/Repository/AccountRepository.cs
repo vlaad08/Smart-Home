@@ -181,6 +181,16 @@ public class AccountRepository : IAccountRepository
         }
     }
 
+    public async Task<Member> Login(string username, string hash)
+    {
+        Member? member = await context.member.FirstOrDefaultAsync(m => m.Username == username && m.Password == hash);
+        if (member == null)
+        {
+            throw new Exception("Invalid username or password");
+        }
+        return member;
+
+    }
     public async Task AddMemberToHouse(string username, string houseId)
     {
         try
