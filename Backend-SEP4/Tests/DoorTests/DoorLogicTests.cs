@@ -21,7 +21,6 @@ public class DoorLogicTest
         await _logic.ChangeLockPassword(homeId, newPassword);
         _mockRepository.Verify(r => r.ChangePassword(homeId, newPassword), Times.Once);
     }
-
     [Fact]
     public async Task ChangeLockPassword_EmptyHomeId_ThrowsException()
     {
@@ -31,11 +30,9 @@ public class DoorLogicTest
         int newPassword = 1234;
         await Assert.ThrowsAsync<Exception>(() => _logic.ChangeLockPassword(emptyHomeId, newPassword));
     }
-
     [Fact]
     public async Task ChangeLockPassword_DoorDoesNotExist()
     {
-        
         _mockRepository = new Mock<IDoorRepository>();
         _logic = new DoorLogic(_mockRepository.Object);
         string homeId = "nonExistentHomeId";
