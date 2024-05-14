@@ -87,6 +87,16 @@ public class AccountRepository : IAccountRepository
         return true;
     }
     
+    public async Task<bool> CheckUserExists(string username)
+    {
+        Member? member = await context.member.Include(m=>m.Home).FirstOrDefaultAsync(m => m.Username == username);
+        if (member != null)
+        {
+            return true;
+        }
+        return false;
+    }
+    
     public async Task<bool> CheckNonExistingUser(string username,string hash)
     {
         Member? member = await context.member.Include(m=>m.Home).FirstOrDefaultAsync(m => m.Username == username);
@@ -170,4 +180,35 @@ public class AccountRepository : IAccountRepository
             throw new Exception(e.Message);
         }
     }
+
+    public async Task AddMemberToHouse(string username, string houseId)
+    {
+        try
+        {
+            Member? existing = await context.member.Include(m => m.Home)
+                .SingleOrDefaultAsync(m => m.Username == username);
+            
+                if (existing.Home != null)
+                {
+                    throw new Exception("Member is already assigned to a house");
+                }
+
+                Home home = await context.home.FindAsync(houseId);
+                if (home == null)
+                {
+                    throw new Exception("No home w that id");
+                }
+
+                existing.Home = home;
+                context.member.Update(existing);
+                await context.SaveChangesAsync();
+                
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
 }

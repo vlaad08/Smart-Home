@@ -136,6 +136,21 @@ public class AuthController : ControllerBase
         return claims.ToList();
     }
 
+    [HttpPatch, Route("members/add")]
+    public async Task<ActionResult> AddMemberToHouse([FromQuery] string username, [FromQuery] string houseId)
+    {
+        try
+        {
+            await _accountLogic.AddMemberToHouse(username, houseId);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
     [HttpPatch, Route("members/remove")]
     public async Task<ActionResult> RemoveMemberFromHouse([FromQuery] string username)
     {
@@ -146,8 +161,7 @@ public class AuthController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            return BadRequest(e.Message);
         }
     }
 }
