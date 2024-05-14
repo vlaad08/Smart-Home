@@ -1,42 +1,54 @@
-﻿using DBComm.Shared;
+﻿using DBComm.Logic;
+using DBComm.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace DBComm.Repository;
 
-public class TemperatureRepository : IBaseRepository
+public class TemperatureRepository : ITemperatureRepository
 {
-    public Task getOne<T>(T element)
+    public Context Context;
+    public TemperatureRepository(Context context)
     {
-        
-        throw new NotImplementedException();
+        Context = context;
     }
 
-    public async Task<Temperature> getLates()
+    public async Task<TemperatureReading> GetOne(string deviceId)
     {
-        Temperature temperature = new Temperature
+        try
         {
-            Value = 21,
-            ReadAt = DateTime.Now
-        };
-        return temperature;
+            IQueryable<TemperatureReading> temperatureReadings = Context.temperature_reading
+                .Where(tr => tr.Room.DeviceId == deviceId)  
+                .OrderByDescending(tr => tr.ReadAt);
+
+            TemperatureReading? result = await temperatureReadings.FirstOrDefaultAsync();
+            return result;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
-    public Task get<T>(T element)
+    public async Task<ICollection<TemperatureReading>> GetHistory(string deviceId, DateTime dateFrom, DateTime dateTo)
     {
-        throw new NotImplementedException();
-    }
+        try
+        {
+            var query = Context.temperature_reading
+                .Where(lr => lr.ReadAt >= dateFrom && lr.ReadAt <= dateTo && lr.Room.DeviceId == deviceId)
+                .GroupBy(lr => lr.ReadAt.Date) // Group by date
+                .Select(group => new TemperatureReading()
+                {
+                    ReadAt = group.Key,
+                    Value = group.Average(lr => lr.Value) // Calculate average light level for each group
+                })
+                .OrderBy(result => result.ReadAt); // Optional: Order by date
 
-    public Task create<T>(T element)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task update<T>(T element)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task delete<T>(T element)
-    {
-        throw new NotImplementedException();
+            var averageTemperatureLevels = await query.ToListAsync();
+            return averageTemperatureLevels;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }

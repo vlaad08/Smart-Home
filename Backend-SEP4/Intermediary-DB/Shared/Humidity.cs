@@ -1,6 +1,6 @@
-﻿namespace DBComm.Shared;
+namespace DBComm.Shared;
 
-public class Temperature
+public class Humidity
 {
     public int Value { get; set; }
     public DateTime ReadAt { get; set; }
