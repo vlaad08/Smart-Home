@@ -26,8 +26,6 @@ public class MemberAccountLogicTest
             Assert.Equal(username, result.Username);
         }
     }
-
-    
     [Fact]
     public async Task RegisterMember_MemberAlreadyExists_ThrowsException()
     {
@@ -45,8 +43,6 @@ public class MemberAccountLogicTest
             await Assert.ThrowsAsync<Exception>(() => logic.RegisterMember(exisitngUsername, "password123"));
         }
     }
-
-
     [Fact]
     public async Task RegisterMember_Exception_When_Empty_Data()
     {
@@ -76,7 +72,6 @@ public class MemberAccountLogicTest
         var exception = await Assert.ThrowsAsync<Exception>(() => _logic.RemoveMemberFromHouse(username));
         Assert.Equal("User does not exist.", exception.Message);
     }
-
     [Fact]
     public async Task RemoveMemberFromHouse_RepositoryException()
     {
@@ -86,6 +81,4 @@ public class MemberAccountLogicTest
         _mockRepository.Setup(r => r.CheckExistingUser(username)).ThrowsAsync(new Exception("Simulated exception"));
         await Assert.ThrowsAsync<Exception>(() => _logic.RemoveMemberFromHouse(username));
     }
-
-
 }
