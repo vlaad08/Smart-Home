@@ -176,9 +176,13 @@ public class AccountLogic : IAccountLogic
         }
         try
         {
-            if (await _repository.CheckExistingUser(username))
+            if (await _repository.CheckUserExists(username))
             {
-                await _repository.RemoveMemberFromHouse(username);
+               await _repository.RemoveMemberFromHouse(username);
+            }
+            else
+            {
+                throw new Exception("User does not exist.");
             }
         }
         catch(Exception e)
