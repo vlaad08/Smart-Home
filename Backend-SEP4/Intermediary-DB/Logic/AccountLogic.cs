@@ -178,7 +178,7 @@ public class AccountLogic : IAccountLogic
         {
             if (await _repository.CheckExistingUser(username))
             {
-                _repository.RemoveMemberFromHouse(username);
+                await _repository.RemoveMemberFromHouse(username);
             }
         }
         catch(Exception e)
@@ -200,8 +200,8 @@ public class AccountLogic : IAccountLogic
         if (string.IsNullOrEmpty(password))
         {
             throw new ValidationException("Password cannot be null");
-        }
 
+        }
         try
         {
             string hash = await _hashPassword(password);
@@ -210,7 +210,25 @@ public class AccountLogic : IAccountLogic
         {
             throw new Exception(e.Message);
         }
-
         return null;
     }
+
+
+
+    public async Task AddMemberToHouse(string username, string houseId)
+    {
+        if (string.IsNullOrEmpty(username))
+        {
+            throw new ValidationException("Username null");
+        }
+        if (await _repository.CheckUserExists(username))
+        {
+            await _repository.AddMemberToHouse(username, houseId);
+        }
+        else
+        {
+            throw new Exception("No user w that username");
+        }
+    }
 }
+    
