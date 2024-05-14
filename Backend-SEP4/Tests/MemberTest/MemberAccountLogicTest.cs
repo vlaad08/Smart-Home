@@ -8,12 +8,8 @@ using WebAPI.Service;
 namespace Tests.MemberTest;
 public class MemberAccountLogicTest
 {
-    
-    
     private AccountLogic _logic;
     private Mock<IAccountRepository> _mockRepository;
-    
-
     [Fact]
     public async Task RegisterMember_ValidInput()
     {
