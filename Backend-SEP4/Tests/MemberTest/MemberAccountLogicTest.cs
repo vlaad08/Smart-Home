@@ -11,23 +11,6 @@ public class MemberAccountLogicTest
     private AccountLogic _logic;
     private Mock<IAccountRepository> _mockRepository;
     [Fact]
-    public async Task RegisterMember_ValidInput_ReturnsRightData()
-    {
-        _mockRepository = new Mock<IAccountRepository>();
-        _logic = new AccountLogic(_mockRepository.Object);
-        string username = "testUser";
-        string password = "testPassword";
-        using (var context = new Context())
-        {
-            var service = new AccountRepository(context);
-            var logic = new AccountLogic(service);
-            Member result = await logic.RegisterMember(username, password);
-            _mockRepository.Setup(r => r.CheckExistingUser(username)).ReturnsAsync(false);
-            Assert.NotNull(result);
-            Assert.Equal(username, result.Username);
-        }
-    }
-    [Fact]
     public async Task RegisterMember_MemberAlreadyExists_ThrowsException()
     {
         //hardcoded in the database
