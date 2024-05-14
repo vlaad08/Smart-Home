@@ -15,13 +15,14 @@ public class MemberAccountLogicTest
     {
         _mockRepository = new Mock<IAccountRepository>();
         _logic = new AccountLogic(_mockRepository.Object);
-        string username = "testuser";
-        string password = "testpassword";
+        string username = "testUser";
+        string password = "testPassword";
         using (var context = new Context())
         {
             var service = new AccountRepository(context);
             var logic = new AccountLogic(service);
             Member result = await logic.RegisterMember(username, password);
+            _mockRepository.Setup(r => r.CheckExistingUser(username)).ReturnsAsync(false);
             Assert.NotNull(result);
             Assert.Equal(username, result.Username);
         }
@@ -29,13 +30,8 @@ public class MemberAccountLogicTest
     [Fact]
     public async Task RegisterMember_MemberAlreadyExists_ThrowsException()
     {
-        string exisitngUsername = "testUsername";
-        using (var context = new Context())
-        {
-            var existingMember = new Member(exisitngUsername, "Password");
-            context.member.Add(existingMember);
-            await context.SaveChangesAsync();
-        }
+        //hardcoded in the database
+        string exisitngUsername = "testuser";
         using (var context = new Context())
         {
             var service = new AccountRepository(context);
@@ -55,11 +51,17 @@ public class MemberAccountLogicTest
     [Fact]
     public async Task RemoveMemberFromHouse_ValidInput_ThrowsException()
     {
+        string username = "testuser"; 
         _mockRepository = new Mock<IAccountRepository>();
-        _logic = new AccountLogic(_mockRepository.Object);
-        string username = "testuser";
         _mockRepository.Setup(r => r.CheckExistingUser(username)).ReturnsAsync(true);
-        await _logic.RemoveMemberFromHouse(username);
+        using (var context = new Context())
+        {
+            var service = new AccountRepository(context);
+            var logic = new AccountLogic(service);
+            await logic.RemoveMemberFromHouse(username);
+
+        }
+        
     }
 
     [Fact]
