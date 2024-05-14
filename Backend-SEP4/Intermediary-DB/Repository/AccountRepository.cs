@@ -17,12 +17,6 @@ public class AccountRepository : IAccountRepository
     {
          try
         {
-            Member? existing = await context.member.FirstOrDefaultAsync(m=> m.Username == username);
-            if (existing != null)
-            {
-                throw new Exception("Member with given username is already in the system.");
-            }
-
             Member member = new Member(username, password, true);
             await context.member.AddAsync(member);
             await context.SaveChangesAsync();
