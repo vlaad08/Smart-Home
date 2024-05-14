@@ -181,7 +181,6 @@ public class AccountRepository : IAccountRepository
         }
     }
 
-<<<<<<< HEAD
     public async Task<Member> Login(string username, string hash)
     {
         Member? member = await context.member.FirstOrDefaultAsync(m => m.Username == username && m.Password == hash);
@@ -192,7 +191,6 @@ public class AccountRepository : IAccountRepository
         return member;
 
     }
-=======
     public async Task AddMemberToHouse(string username, string houseId)
     {
         try
@@ -223,5 +221,4 @@ public class AccountRepository : IAccountRepository
         }
     }
     
->>>>>>> BACKEND
 }
