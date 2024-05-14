@@ -1,11 +1,11 @@
-#include "LightInfo.h"
-
 #include "unity.h"
 #include "../fff.h"
 #include <string.h>
 #include <stdlib.h>
 
 #include "light.h"
+
+#include "LightInfo.h"
 
 DEFINE_FFF_GLOBALS
 
@@ -21,6 +21,7 @@ void test_lightLevel_Darkness(void){
     
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("LIGHT: 1000      ", result);
+
     free(result);
 }
 
@@ -31,6 +32,7 @@ void test_lightLevel_Lightness(void){
     
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("LIGHT: 200      ", result);
+
     free(result);
 }
 
