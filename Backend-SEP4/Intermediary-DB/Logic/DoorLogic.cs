@@ -12,7 +12,7 @@ public class DoorLogic : IDoorLogic
     private ICommunicator _communicator;
     public DoorLogic(IDoorRepository repository)
     {
-        this._repository = repository;
+        _repository = repository;
         _communicator = Communicator.Instance;
     }
 
@@ -32,6 +32,26 @@ public class DoorLogic : IDoorLogic
         else
         {
             throw new Exception("Password mismatch");
+        }
+    }
+
+    public async Task ChangeLockPassword(string homeId, int password)
+    {
+        if (string.IsNullOrEmpty(homeId))
+        {
+            throw new Exception("House Id can not be empty");
+        }
+        try
+        {
+            if (await _repository.CheckIfDoorExist(homeId))
+            {
+               await _repository.ChangePassword(homeId, password); 
+            }
+            
+        }
+        catch(Exception e)
+        {
+            throw new Exception(e.Message);
         }
     }
 }

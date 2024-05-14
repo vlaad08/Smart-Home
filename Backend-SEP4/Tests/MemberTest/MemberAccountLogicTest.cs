@@ -6,7 +6,6 @@ using Moq;
 using WebAPI.Service;
 
 namespace Tests.MemberTest;
-
 public class MemberAccountLogicTest
 {
     
@@ -15,7 +14,19 @@ public class MemberAccountLogicTest
     private Mock<IAccountRepository> _mockRepository;
     
 
-    
+    [Fact]
+    public async Task RegisterMember_ValidInput()
+    {
+        _mockRepository = new Mock<IAccountRepository>();
+        _logic = new AccountLogic(_mockRepository.Object);
+        string username = "testuser";
+        string password = "testpassword";
+        _mockRepository.Setup(r => r.RegisterMember(username, password)).ReturnsAsync(new Member(username, password));
+        _mockRepository.Setup(r => r.CheckExistingUser(username)).ReturnsAsync(true);
+        Member result = await _logic.RegisterMember(username, password);
+        Assert.NotNull(result);
+        Assert.Equal(username, result.Username);
+    }
 
     
     [Fact]
@@ -43,7 +54,39 @@ public class MemberAccountLogicTest
         var mockRepository = new Mock<IAccountRepository>();
         var logic = new AccountLogic(mockRepository.Object);
         await Assert.ThrowsAsync<ValidationException>(() => logic.RegisterMember("", "Password"));
-        await Assert.ThrowsAsync<ValidationException>(() => logic.RegisterMember("JanKowalski", ""));
+        await Assert.ThrowsAsync<ValidationException>(() => logic.RegisterMember("TestUser", ""));
+        await Assert.ThrowsAsync<ValidationException>(() => logic.RegisterMember("", ""));
     }
+    [Fact]
+    public async Task RemoveMemberFromHouse_ValidInput()
+    {
+        _mockRepository = new Mock<IAccountRepository>();
+        _logic = new AccountLogic(_mockRepository.Object);
+        string username = "testuser";
+        _mockRepository.Setup(r => r.CheckExistingUser(username)).ReturnsAsync(true);
+        await _logic.RemoveMemberFromHouse(username);
+    }
+
+    [Fact]
+    public async Task RemoveMemberFromHouse_UserDoesNotExist()
+    {
+        _mockRepository = new Mock<IAccountRepository>();
+        _logic = new AccountLogic(_mockRepository.Object);
+        string username = "nonexistentuser";
+        _mockRepository.Setup(r => r.CheckExistingUser(username)).ReturnsAsync(false);
+        var exception = await Assert.ThrowsAsync<Exception>(() => _logic.RemoveMemberFromHouse(username));
+        Assert.Equal("User does not exist.", exception.Message);
+    }
+
+    [Fact]
+    public async Task RemoveMemberFromHouse_RepositoryException()
+    {
+        _mockRepository = new Mock<IAccountRepository>();
+        _logic = new AccountLogic(_mockRepository.Object);
+        string username = "testuser";
+        _mockRepository.Setup(r => r.CheckExistingUser(username)).ThrowsAsync(new Exception("Simulated exception"));
+        await Assert.ThrowsAsync<Exception>(() => _logic.RemoveMemberFromHouse(username));
+    }
+
 
 }

@@ -190,45 +190,13 @@ public class AccountLogic : IAccountLogic
         return;
     }
 
-    public async Task<Member> Login(string username, string password)
+    public Task<Member> Login(string username, string password)
     {
-        if (string.IsNullOrEmpty(username))
-        {
-            throw new ValidationException("Username cannot be null");
-        }
-
-        if (string.IsNullOrEmpty(password))
-        {
-            throw new ValidationException("Password cannot be null");
-
-        }
-        try
-        {
-            string hash = await _hashPassword(password);
-            return await _repository.Login(username, hash);
-        }catch(Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-        return null;
+        throw new NotImplementedException();
     }
 
-
-
-    public async Task AddMemberToHouse(string username, string houseId)
+    public Task AddMemberToHouse(string username, string houseId)
     {
-        if (string.IsNullOrEmpty(username))
-        {
-            throw new ValidationException("Username null");
-        }
-        if (await _repository.CheckUserExists(username))
-        {
-            await _repository.AddMemberToHouse(username, houseId);
-        }
-        else
-        {
-            throw new Exception("No user w that username");
-        }
+        throw new NotImplementedException();
     }
 }
-    
