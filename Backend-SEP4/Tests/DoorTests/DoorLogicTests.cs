@@ -8,7 +8,6 @@ public class DoorLogicTest
 {
     private DoorLogic _logic;
     private Mock<IDoorRepository> _mockRepository;
-    
     [Fact]
     public async Task ChangeLockPassword_ValidInput()
     {
@@ -40,5 +39,4 @@ public class DoorLogicTest
         _mockRepository.Setup(r => r.CheckIfDoorExist(homeId)).ThrowsAsync(new Exception("Door does not exist."));
         await Assert.ThrowsAsync<Exception>(() => _logic.ChangeLockPassword(homeId, newPassword));
     }
-
 }
