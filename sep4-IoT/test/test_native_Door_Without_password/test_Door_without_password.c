@@ -29,7 +29,7 @@ void test_openDoorWithoutApproval(void) {
     bool isApproved = false;
     char* alarm_message = alarm(isApproved);
     TEST_ASSERT_NOT_NULL(alarm_message);
-    TEST_ASSERT_EQUAL_STRING("Hello,Thief", alarm_message);
+    TEST_ASSERT_EQUAL_STRING("Hello, Thief! :)", alarm_message);
     free(alarm_message);
 }
 void test_openDoorWithApproval(void) {
@@ -41,7 +41,9 @@ void test_openDoorWithApproval(void) {
     char* alarm_message = alarm(isApproved);
     
     // Assert that the returned message is NULL since the door opening is approved
-    TEST_ASSERT_NULL(alarm_message);
+    TEST_ASSERT_NOT_NULL(alarm_message);
+    TEST_ASSERT_EQUAL_STRING("Approved doors! ", alarm_message);
+    free(alarm_message);
 }
 
 int main() {

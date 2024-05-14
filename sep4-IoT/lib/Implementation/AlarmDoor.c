@@ -8,9 +8,13 @@ char* alarm(bool isApproved){
     {
         if (!isApproved)
         {
-            //display_setValues(13,14,10,13);
-            sprintf(ret,"Hello,Thief");
+            display_setValues(13,14,10,13);
+            sprintf(ret,"Hello, Thief! :)");
             buzzer_beep();
+        }
+        else
+        {
+            sprintf(ret,"Approved doors! ");
         }
     }
     return ret;
