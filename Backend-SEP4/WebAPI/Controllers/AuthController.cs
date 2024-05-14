@@ -116,7 +116,6 @@ public class AuthController : ControllerBase
         string serializedToken = new JwtSecurityTokenHandler().WriteToken(token);
         return serializedToken;
     }
-
     private List<Claim> GenerateClaims(Member member)
     {
         ///change claims as you like
@@ -136,7 +135,19 @@ public class AuthController : ControllerBase
         };
         return claims.ToList();
     }
-    
-    
-    
+
+    [HttpPatch, Route("members/remove")]
+    public async Task<ActionResult> RemoveMemberFromHouse([FromQuery] string username)
+    {
+        try
+        {
+            await _accountLogic.RemoveMemberFromHouse(username);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 }

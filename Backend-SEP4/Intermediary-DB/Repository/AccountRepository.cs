@@ -2,7 +2,7 @@ using DBComm.Logic;
 using DBComm.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Npgsql;
+
 
 namespace DBComm.Repository;
 
@@ -17,6 +17,12 @@ public class AccountRepository : IAccountRepository
     {
          try
         {
+            Member? existing = await context.member.FirstOrDefaultAsync(m=> m.Username == username);
+            if (existing != null)
+            {
+                throw new Exception("Member with given username is already in the system.");
+            }
+
             Member member = new Member(username, password, true);
             await context.member.AddAsync(member);
             await context.SaveChangesAsync();
@@ -98,6 +104,7 @@ public class AccountRepository : IAccountRepository
         return true;
     }
 
+
     public async Task<bool> CheckIfAdmin(string adminUsername, string hash,string username)
     {
         Member? member = await context.member.Include(m=>m.Home).FirstOrDefaultAsync(m => m.Username == adminUsername);
@@ -139,6 +146,24 @@ public class AccountRepository : IAccountRepository
 
             context.member.Remove(acc);
             await context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+    public async Task RemoveMemberFromHouse(string username)
+    {
+        try
+        {
+            Member? existing = await context.member.Include(m => m.Home)
+                .SingleOrDefaultAsync(m => m.Username == username);
+            if (existing != null)
+            {
+                existing.Home = null;
+                context.member.Update(existing);
+                await context.SaveChangesAsync();
+            }
         }
         catch (Exception e)
         {

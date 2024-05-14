@@ -109,7 +109,6 @@ public class AccountLogic : IAccountLogic
     }
 
 
-
     public async Task EditUsername(string oldUsername, string newUsername,string password)
     {
         try
@@ -165,7 +164,30 @@ public class AccountLogic : IAccountLogic
             throw new Exception(e.Message);
         }
     }
+
+
+
+
+    public async Task RemoveMemberFromHouse(string username)
+    {
+        if (string.IsNullOrEmpty(username))
+        {
+            throw new ValidationException("Username cannot be null");
+        }
+        try
+        {
+            if (await _repository.CheckExistingUser(username))
+            {
+                _repository.RemoveMemberFromHouse(username);
+            }
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e);
+            throw new Exception(e.Message);
+        }
+
+        return;
+    }
+    
 }
-
-
-

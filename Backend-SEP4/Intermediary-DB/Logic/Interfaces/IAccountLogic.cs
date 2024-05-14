@@ -12,5 +12,5 @@ public interface IAccountLogic
     Task<Member> RegisterMember(string username, string password);
     Task<Member> GetMember(string login, string password);
     Task RegisterAdmin(string username, string password);
-
+    Task RemoveMemberFromHouse(string username);
 }
