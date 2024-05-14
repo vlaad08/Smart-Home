@@ -2,7 +2,7 @@ using DBComm.Logic;
 using DBComm.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Npgsql;
+
 
 namespace DBComm.Repository;
 
@@ -17,17 +17,15 @@ public class AccountRepository : IAccountRepository
     {
          try
         {
-            Member? existing = await _context.member.FirstOrDefaultAsync(m=> m.Username == username);
+            Member? existing = await context.member.FirstOrDefaultAsync(m=> m.Username == username);
             if (existing != null)
             {
                 throw new Exception("Member with given username is already in the system.");
             }
 
             Member member = new Member(username, password, true);
-
-
-            await _context.member.AddAsync(member);
-            await _context.SaveChangesAsync();
+            await context.member.AddAsync(member);
+            await context.SaveChangesAsync();
             return member ;
         }
         catch(Exception e)
@@ -99,14 +97,13 @@ public class AccountRepository : IAccountRepository
         else
         {
             if (member.Password!=hash)
-            Member? existing = await _context.member.FirstOrDefaultAsync(m=> m.Username == username);
-            if (existing != null)
             {
                 throw new Exception("Password mismatch");
             }
         }
         return true;
     }
+
 
     public async Task<bool> CheckIfAdmin(string adminUsername, string hash,string username)
     {
@@ -155,19 +152,17 @@ public class AccountRepository : IAccountRepository
             throw new Exception(e.Message);
         }
     }
-
-    public async Task RemoveMemberFromHouse(string username, string houseId)
+    public async Task RemoveMemberFromHouse(string username)
     {
         try
         {
-            Member? existing = await _context.member.Include(m => m.Home)
+            Member? existing = await context.member.Include(m => m.Home)
                 .SingleOrDefaultAsync(m => m.Username == username);
             if (existing != null)
             {
-                //
                 existing.Home = null;
-                _context.member.Update(existing);
-                await _context.SaveChangesAsync();
+                context.member.Update(existing);
+                await context.SaveChangesAsync();
             }
         }
         catch (Exception e)

@@ -94,21 +94,7 @@ public class AuthController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-
-    [HttpPatch, Route("members/remove")]
-    public async Task<ActionResult> RemoveMemberFromHouse([FromQuery] string username, [FromQuery] string houseId)
-    {
-        try
-        {
-            await _accountLogic.RemoveMemberFromHouse(username, houseId);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
+    
     private string GenerateJwt(Member member)
     {
         List<Claim> claims = GenerateClaims(member);
@@ -130,7 +116,6 @@ public class AuthController : ControllerBase
         string serializedToken = new JwtSecurityTokenHandler().WriteToken(token);
         return serializedToken;
     }
-
     private List<Claim> GenerateClaims(Member member)
     {
         ///change claims as you like
@@ -150,7 +135,19 @@ public class AuthController : ControllerBase
         };
         return claims.ToList();
     }
-    
-    
-    
+
+    [HttpPatch, Route("members/remove")]
+    public async Task<ActionResult> RemoveMemberFromHouse([FromQuery] string username)
+    {
+        try
+        {
+            await _accountLogic.RemoveMemberFromHouse(username);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 }
