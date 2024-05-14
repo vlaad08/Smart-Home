@@ -51,15 +51,13 @@ public class AccountLogic : IAccountLogic
                 Member member = await _repository.RegisterMember(username, hash);
                 return member;
             }
-            else
-            {
-                throw new Exception("User with provided username is already in the system.");
-            }
         }catch(Exception e)
         {
             Console.WriteLine(e);
             throw new Exception(e.Message);
         }
+
+        return null;
     }
 
     public async Task Delete(string username,string password)
