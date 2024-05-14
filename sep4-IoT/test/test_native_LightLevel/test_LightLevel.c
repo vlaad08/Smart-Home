@@ -1,13 +1,11 @@
-#include "AdjustLight.h"
-
 #include "unity.h"
 #include "../fff.h"
 #include <string.h>
 #include <stdlib.h>
 
+#include "AdjustLight.h"
 
 DEFINE_FFF_GLOBALS
-
 
 FAKE_VOID_FUNC(leds_turnOff,uint8_t);
 FAKE_VOID_FUNC(leds_turnOn,uint8_t);
@@ -21,6 +19,8 @@ void test_lightLevel_0(void){
     
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("0,4,0,0", result);
+
+    free(result);
 }
 
 void test_lightLevel_1(void){
@@ -28,6 +28,8 @@ void test_lightLevel_1(void){
     
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("0,4,0,1", result);
+
+    free(result);
 }
 
 void test_lightLevel_2(void){
@@ -35,6 +37,8 @@ void test_lightLevel_2(void){
     
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("0,4,0,2", result);
+
+    free(result);
 }
 
 void test_lightLevel_3(void){
@@ -42,6 +46,8 @@ void test_lightLevel_3(void){
     
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("0,4,0,3", result);
+
+    free(result);
 }
 
 void test_lightLevel_4(void){
@@ -49,12 +55,11 @@ void test_lightLevel_4(void){
     
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("0,4,0,4", result);
+
+    free(result);
 }
 
-
 int main() {
-
-
     UNITY_BEGIN();
 
     RUN_TEST(test_lightLevel_0);

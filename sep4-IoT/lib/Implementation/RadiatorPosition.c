@@ -29,10 +29,10 @@ uint8_t* setRadiatorLevel(uint8_t level) {
             angle = 180;           
             break;
         default:
-           
             angle = 0;           
             break;
     }
+    
     servo(angle);
 
     values[0] = 0;       

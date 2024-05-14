@@ -1,7 +1,7 @@
 #include "Door.h"
 
 int openDoor(){
- display_setValues(0,3,0,1);
+    display_setValues(0,3,0,1);
     servo(180);
     servo(0);
     servo(120);
@@ -10,7 +10,7 @@ int openDoor(){
 }
 
 int closeDoor(){
- display_setValues(0,3,0,0);
+    display_setValues(0,3,0,0);
     servo(180);
     servo(0);
     servo(90);

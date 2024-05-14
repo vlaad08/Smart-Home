@@ -1,6 +1,4 @@
-
 #include "AdjustLight.h"
-
 
 void static custom_delay_ms(uint16_t milliseconds) {
 #ifdef __AVR__
@@ -20,14 +18,11 @@ char* AdjustLight(uint8_t level){
     
     while (count<level)
     {
-        //if (count>4){
-        //count=4;
-        //break;
-        //}
         count++;
         leds_turnOn(count);
         custom_delay_ms(1000);
     }
+    
     display_setValues(0,4,0,count);
     char* x = (char *) malloc(12*sizeof(char));
     sprintf(x,"0,4,0,%d",count);

@@ -10,4 +10,5 @@
 #include "display.h"
 
 int openDoor();
+
 int closeDoor();

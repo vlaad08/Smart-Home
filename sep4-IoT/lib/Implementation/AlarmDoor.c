@@ -13,9 +13,7 @@ char* alarm(bool isApproved){
             buzzer_beep();
         }
         else
-        {
             sprintf(ret,"Approved doors! ");
-        }
     }
     return ret;
 }

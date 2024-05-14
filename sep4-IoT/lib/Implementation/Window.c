@@ -1,4 +1,3 @@
-
 #include "Window.h"
 
 void custom_delay_ms(uint16_t milliseconds) {
@@ -8,7 +7,6 @@ void custom_delay_ms(uint16_t milliseconds) {
     usleep(milliseconds * 1000); // Use usleep() for POSIX systems (convert milliseconds to microseconds)
 #endif
 }
-
 
 int openWindow(){
     display_setValues(0,2,0,1);

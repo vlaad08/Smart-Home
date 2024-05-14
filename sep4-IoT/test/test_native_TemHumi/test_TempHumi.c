@@ -1,11 +1,11 @@
-#include "TempAndHum.h"
-
 #include "unity.h"
 #include "../fff.h"
 #include <string.h>
 #include <stdlib.h>
 
 #include "dht11.h"
+
+#include "TempAndHum.h"
 
 DEFINE_FFF_GLOBALS
 
@@ -21,6 +21,7 @@ void test_getTemptAndHum_Success(void) {
 
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("T:0.0   H:0.0 ", result);
+
     free(result);
 }
 
@@ -31,6 +32,7 @@ void test_getTemptAndHum_Error(void) {
 
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("Temp Hum Error", result);
+    
     free(result);
 }
 
