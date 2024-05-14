@@ -56,6 +56,26 @@ void windowAction(uint8_t status){
         closeWindow();
 }
 
+void doorAproval(){
+    if (UnlockingApproved)
+    {
+            UnlockingApproved = false;
+    }
+}
+
+void doorAction(uint8_t status){
+     if (status){
+        UnlockingApproved = true;
+        openDoor();
+    }
+     
+    else{
+        closeDoor();
+        UnlockingApproved=false;
+    }
+        
+}
+
 void Callback(){
     if (!IsPKAcquired)
     {
@@ -80,7 +100,8 @@ void Callback(){
             windowAction(value);
             break;
         case '3':
-            /* code */
+            value = received_message_buffer[3] - '0';
+            doorAction(value);
             break;
         case '4':
             value = received_message_buffer[3] - '0';
@@ -105,11 +126,11 @@ void setup(){
     leds_init();
     createIOTKeys(&enc);
     generate_iv(iv,16);
-
-    //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
-    wifi_command_join_AP("KBENCELT 3517","p31A05)1");
+    hc_sr04_init();
+    wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
+    //wifi_command_join_AP("KBENCELT 3517","p31A05)1");
     //wifi_command_join_AP("002","zabijemsazalentilku");
-    wifi_command_create_TCP_connection("192.168.137.1",6868,Callback,received_message_buffer);
+    wifi_command_create_TCP_connection("192.168.0.208",6868,Callback,received_message_buffer);
 
     char* public_key_hex = print_hex(getIOTPublicKey(&enc), 64);
     char* connection = (char*)malloc((sizeof("Connected:") + strlen(public_key_hex) + 1) * sizeof(char));
@@ -131,7 +152,6 @@ void sendLight(){
 void setRadiator(uint8_t level){
     setRadiatorLevel(level);
 }
-
 
 void breakingIn(){
     char * x = alarm(UnlockingApproved);
