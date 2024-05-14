@@ -11,7 +11,7 @@ public class MemberAccountLogicTest
     private AccountLogic _logic;
     private Mock<IAccountRepository> _mockRepository;
     [Fact]
-    public async Task RegisterMember_ValidInput()
+    public async Task RegisterMember_ValidInput_ReturnsRightData()
     {
         _mockRepository = new Mock<IAccountRepository>();
         _logic = new AccountLogic(_mockRepository.Object);
@@ -29,7 +29,7 @@ public class MemberAccountLogicTest
 
     
     [Fact]
-    public async Task RegisterMember_MemberAlreadyExists()
+    public async Task RegisterMember_MemberAlreadyExists_ThrowsException()
     {
         string exisitngUsername = "testUsername";
         using (var context = new Context())
@@ -57,7 +57,7 @@ public class MemberAccountLogicTest
         await Assert.ThrowsAsync<ValidationException>(() => logic.RegisterMember("", ""));
     }
     [Fact]
-    public async Task RemoveMemberFromHouse_ValidInput()
+    public async Task RemoveMemberFromHouse_ValidInput_ThrowsException()
     {
         _mockRepository = new Mock<IAccountRepository>();
         _logic = new AccountLogic(_mockRepository.Object);
@@ -67,7 +67,7 @@ public class MemberAccountLogicTest
     }
 
     [Fact]
-    public async Task RemoveMemberFromHouse_UserDoesNotExist()
+    public async Task RemoveMemberFromHouse_UserDoesNotExist_ThrowsException()
     {
         _mockRepository = new Mock<IAccountRepository>();
         _logic = new AccountLogic(_mockRepository.Object);
