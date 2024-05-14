@@ -140,7 +140,7 @@ public class AuthController : ControllerBase
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
             new Claim(ClaimTypes.Name, member.Username),
-            new Claim(ClaimTypes.Role, member.IsAdmin ? "Admin" : "User")
+            new Claim(ClaimTypes.Role, member.IsAdmin ? "Admin" : "User"),
             new Claim("HouseId", member.Home?.Id)
         };
         return claims.ToList();
