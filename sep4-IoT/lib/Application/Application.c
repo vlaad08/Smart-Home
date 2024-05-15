@@ -109,7 +109,7 @@ void Callback(){
     }
 }
 
-void setup(){
+void start(){
     pc_comm_init(9600,NULL);
     wifi_init();
     dht11_init();

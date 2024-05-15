@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <stdbool.h>
 
 #include "wifi.h"
 #include "pc_comm.h"
@@ -21,9 +20,9 @@
 #include "Door.h"
 
 
-void setup();
+void start();
 
-void callback();
+void Callback();
 
 void breakingIn();
 

@@ -2,7 +2,7 @@
 
 
 int main(){
-    setup();
+    start();
     
     while (1)
     {
