@@ -73,6 +73,7 @@ public class Server
 
                     default:
                         await SaveTemperatureAsync(40);
+                        
                         break;
                 }
                 
