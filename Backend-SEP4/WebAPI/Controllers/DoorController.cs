@@ -31,7 +31,7 @@ public class DoorController : ControllerBase
         }
     }
     [HttpPut, Route("houses/{houseId}/doors/password"), Authorize(Policy = "Admin")]
-    public async Task<IActionResult> ChangePassword([FromRoute] string houseId, [FromBody] int newPassword)
+    public async Task<IActionResult> ChangePassword([FromRoute] string houseId, [FromBody] string newPassword)
     {
         try
         {
