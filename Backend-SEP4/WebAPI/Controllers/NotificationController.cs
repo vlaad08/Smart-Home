@@ -1,11 +1,13 @@
 using DBComm.Logic.Interfaces;
 using DBComm.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("Notifications")]
+[Route("notifications")]
+[Authorize]
 public class NotificationController : ControllerBase
 {
     private INotificationLogic _notificationLogic;
@@ -20,8 +22,8 @@ public class NotificationController : ControllerBase
     {
         try
         {
-            List<Notification>? temperature = await _notificationLogic.GetNotifications();
-            return Ok(temperature);
+            List<Notification>? notifications = await _notificationLogic.GetNotifications();
+            return Ok(notifications);
         }
         catch (Exception e)
         {

@@ -1,11 +1,13 @@
 ﻿using DBComm.Logic;
 using DBComm.Logic.Interfaces;
 using DBComm.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
-[ApiController] [Route("Temperature")]
+[ApiController] [Route("temperature")]
+[Authorize]
 public class TemperatureController : ControllerBase
 {
 
@@ -17,7 +19,7 @@ public class TemperatureController : ControllerBase
     }
 
     [HttpGet("{hardwareId}")]
-    public async Task<ActionResult> getLatestTemperature([FromRoute] string hardwareId)
+    public async Task<ActionResult> GetLatestTemperature([FromRoute] string hardwareId)
     {
         try
         {
@@ -30,14 +32,14 @@ public class TemperatureController : ControllerBase
             throw;
         }
     }
-    [HttpGet, Route("History/{hardwareId}")]
-    public async Task<ActionResult<ICollection<LightReading>>> getHistory([FromRoute] string hardwareId,
+    [HttpGet, Route("{hardwareId}/history")]
+    public async Task<ActionResult<ICollection<LightReading>>> GetHistory([FromRoute] string hardwareId,
         [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)
     {
         try
         {
-            var lightHistory = await _temperatureLogic.getTemperatureHistory(hardwareId, dateFrom, dateTo);
-            return Ok(lightHistory);
+            var temperatureHistory = await _temperatureLogic.getTemperatureHistory(hardwareId, dateFrom, dateTo);
+            return Ok(temperatureHistory);
         }catch (Exception e)
         {
             Console.WriteLine(e);
@@ -45,8 +47,8 @@ public class TemperatureController : ControllerBase
         }
     }
 
-    [HttpPost, Route("{hardwareId}/{level}")]
-    public async Task<IActionResult> setTemperature([FromRoute] string hardwareId, [FromRoute ] int level)
+    [HttpPost, Route("{hardwareId}/set")]
+    public async Task<IActionResult> SetTemperature([FromRoute] string hardwareId, [FromBody] int level)
     {
         if (level < 1 || level > 6)
         {

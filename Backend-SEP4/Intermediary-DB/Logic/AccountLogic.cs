@@ -48,7 +48,8 @@ public class AccountLogic : IAccountLogic
             if (await _repository.CheckExistingUser(username))
             {
                 string hash = await _hashPassword(password);
-                await _repository.RegisterMember(username, hash);
+                Member member = await _repository.RegisterMember(username, hash);
+                return member;
             }
         }catch(Exception e)
         {
@@ -176,9 +177,13 @@ public class AccountLogic : IAccountLogic
         }
         try
         {
-            if (await _repository.CheckExistingUser(username))
+            if (await _repository.CheckUserExists(username))
             {
-                await _repository.RemoveMemberFromHouse(username);
+               await _repository.RemoveMemberFromHouse(username);
+            }
+            else
+            {
+                throw new Exception("User does not exist.");
             }
         }
         catch(Exception e)
@@ -231,4 +236,3 @@ public class AccountLogic : IAccountLogic
         }
     }
 }
-    
