@@ -7,17 +7,17 @@ namespace DBComm.Logic;
 
 public class TemperatureLogic : ITemperatureLogic
 {
-    private ICommunicator communicator;
+    private ICommunicator _communicator;
 
-    private ITemperatureRepository repository;
+    private ITemperatureRepository _repository;
     public TemperatureLogic(ITemperatureRepository repository)
     {
-        communicator = Communicator.Instance;
-        this.repository = repository;
+        _communicator = Communicator.Instance;
+        this._repository = repository;
     }
     public async Task<TemperatureReading> getLatestTemperature(string hardwareId)
     {
-        return await repository.GetOne(hardwareId);
+        return await _repository.GetOne(hardwareId);
     }
 
     public void saveTemperature(TemperatureReading temperatureReading)
@@ -28,11 +28,17 @@ public class TemperatureLogic : ITemperatureLogic
 
     public async Task<ICollection<TemperatureReading>> getTemperatureHistory(string hardwareId, DateTime dateFrom, DateTime dateTo)
     {
-        return await repository.GetHistory(hardwareId, dateFrom, dateTo);
+        return await _repository.GetHistory(hardwareId, dateFrom, dateTo);
     }
 
     public async Task setTemperature(string hardwareId, int level)
     {
-        communicator.setTemperature(hardwareId, level);
+        _communicator.setTemperature(hardwareId, level);
+    }
+    
+    public async Task saveTempReading(string deviceId,double value)
+    {
+        DateTime dateTime = DateTime.UtcNow;
+        await _repository.SaveTemperatureReading(deviceId,value, dateTime);
     }
 }

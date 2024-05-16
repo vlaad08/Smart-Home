@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
 [ApiController] [Route("temperature")]
-[Authorize]
+// [Authorize]
 public class TemperatureController : ControllerBase
 {
 
@@ -66,8 +66,23 @@ public class TemperatureController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpPost, Route("devices/{deviceId}/{value}")]
+    public async Task<ActionResult> SaveCurrentTemperatureInRoom([FromRoute] string deviceId,[FromRoute] double value)
+    {
+        try
+        {
+            await _temperatureLogic.saveTempReading(deviceId,value);
+            return Ok($"Temperature saved for all rooms in house");
+        }catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
     
-    
+
+
 }
 
 

@@ -21,10 +21,10 @@ public class Context : DbContext
         DotNetEnv.Env.Load("..\\.env");
 
 
-        string SECRETSECTION_HOST = Environment.GetEnvironmentVariable("DATABASE_HOST");
-        string SECRETSECTION_DB = Environment.GetEnvironmentVariable("DATABASE_NAME");
-        string SECRETSECTION_USERNAME = Environment.GetEnvironmentVariable("DATABASE_USER");
-        string SECRETSECTION_PASSWORD = Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
+        string SECRETSECTION_HOST = "smart-homel.postgres.database.azure.com";
+        string SECRETSECTION_DB = "smart_home";
+        string SECRETSECTION_USERNAME = "sep_user";
+        string SECRETSECTION_PASSWORD = "Semester4Password";
 
 
         System.Console.WriteLine(11111111111111);
