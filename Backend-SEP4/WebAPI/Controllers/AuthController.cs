@@ -3,6 +3,7 @@ using DBComm.Shared;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using WebAPI.DTOs;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +11,8 @@ using Microsoft.AspNetCore.Identity;
 namespace WebAPI.Service;
 
 [ApiController]
-[Route("[controller]")]
+[Route("auth")]
+[Authorize]
 
 public class AuthController : ControllerBase
 {
@@ -24,13 +26,13 @@ public class AuthController : ControllerBase
     }
 
 
-    [HttpPost, Route("register")]
-    public async Task<ActionResult> Register([FromQuery] string username, [FromQuery] string password)
+    [HttpPost, Route("register"), AllowAnonymous]
+    public async Task<ActionResult> Register([FromBody] UserLoginDto dto)
     {
         try
         {
-            await _accountLogic.RegisterMember(username, password);
-            return Ok();
+            await _accountLogic.RegisterMember(dto.Username, dto.Password);
+            return Ok("User registered.");
         }
         catch (Exception e)
         {
@@ -41,7 +43,7 @@ public class AuthController : ControllerBase
         
     }
 
-    [HttpPost, Route("login")]
+    [HttpPost, Route("login"), AllowAnonymous]
     public async Task<ActionResult> Login([FromBody] UserLoginDto userLoginDto)
     {
         try
@@ -55,14 +57,14 @@ public class AuthController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-
-    [HttpDelete, Route("delete")]
-    public async Task<ActionResult> Delete([FromBody] UserGetterDTO dto)
+    
+    [HttpDelete, Route("delete/users/{username}")]
+    public async Task<ActionResult> Delete([FromRoute]string username, [FromBody] UserGetterDTO dto)
     {
         try
         {
-            await _accountLogic.Delete(dto.Username,dto.Password);
-            return Ok();
+            await _accountLogic.Delete(username,dto.Password);
+            return Ok("Account deleted.");
         }
         catch (Exception e)
         {
@@ -71,39 +73,39 @@ public class AuthController : ControllerBase
         
     }
 
-    [HttpPut, Route("edit/username")]
-    public async Task<ActionResult> EditUsername([FromBody] UsernameChangeDTO dto)
+    [HttpPut, Route("edit/{username}/username")]
+    public async Task<ActionResult> EditUsername([FromRoute]string username, [FromBody] UsernameChangeDTO dto)
     {
         try
         {
-            await _accountLogic.EditUsername(dto.OldUsername, dto.NewUsername,dto.Password);
-            return Ok();
+            await _accountLogic.EditUsername(username, dto.NewUsername,dto.Password);
+            return Ok("Username changed.");
         }
         catch (Exception e)
         {
             return BadRequest(e.Message);
         }
     }
-    [HttpPut, Route("edit/password")]
-        public async Task<ActionResult> EditPassword([FromBody] PasswordChangeDTO dto)
+    [HttpPut, Route("edit/{username}/password")]
+        public async Task<ActionResult> EditPassword([FromRoute]string username,[FromBody] PasswordChangeDTO dto)
         {
             try
             {
-                await _accountLogic.EditPassword(dto.Username,dto.OldPassword, dto.NewPassword);
-                return Ok();
+                await _accountLogic.EditPassword(username,dto.OldPassword, dto.NewPassword);
+                return Ok("Password changed.");
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
         }
-    [HttpPut, Route("edit/admin")]
-    public async Task<ActionResult> ToggleAdmin([FromBody] ToggleAdminDTO dto)
+    [HttpPut, Route("edit/{usernames}/admin"), Authorize(Policy = "Admin")]
+    public async Task<ActionResult> ToggleAdmin([FromRoute]string username, [FromBody] ToggleAdminDTO dto)
     {
         try
         {
             await _accountLogic.ToggleAdmin(dto.AdminUsername,dto.AdminPassword,dto.Username);
-            return Ok();
+            return Ok("Username changed.");
         }
         catch (Exception e)
         {
@@ -140,19 +142,19 @@ public class AuthController : ControllerBase
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
             new Claim(ClaimTypes.Name, member.Username),
-            new Claim(ClaimTypes.Role, member.IsAdmin ? "Admin" : "User"),
+            new Claim(ClaimTypes.Role, member.IsAdmin ? "Admin" : "Member"),
             new Claim("HouseId", member.Home?.Id)
         };
         return claims.ToList();
     }
 
-    [HttpPatch, Route("members/add")]
-    public async Task<ActionResult> AddMemberToHouse([FromQuery] string username, [FromQuery] string houseId)
+    [HttpPatch, Route("houses/{houseId}/members"), Authorize(Policy = "Admin")]
+    public async Task<ActionResult> AddMemberToHouse([FromRoute]string houseId, [FromQuery] string username)
     {
         try
         {
             await _accountLogic.AddMemberToHouse(username, houseId);
-            return Ok();
+            return Ok("Member added to house.");
         }
         catch (Exception e)
         {
@@ -161,13 +163,13 @@ public class AuthController : ControllerBase
         }
     }
     
-    [HttpPatch, Route("members/remove")]
-    public async Task<ActionResult> RemoveMemberFromHouse([FromQuery] string username)
+    [HttpPatch, Route("houses/members/{username}"), Authorize(Policy = "Admin")]
+    public async Task<ActionResult> RemoveMemberFromHouse([FromRoute] string username)
     {
         try
         {
             await _accountLogic.RemoveMemberFromHouse(username);
-            return Ok();
+            return Ok("Member removed.");
         }
         catch (Exception e)
         {
