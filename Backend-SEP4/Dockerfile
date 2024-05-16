@@ -9,11 +9,10 @@ ARG DATABASE_NAME
 ARG DATABASE_USER
 ARG DATABASE_PASSWORD
 
-RUN mkdir -p Intermediary-DB && \
-    echo "DATABASE_HOST=$DATABASE_HOST" > Intermediary-DB/.env && \
-    echo "DATABASE_NAME=$DATABASE_NAME" >> Intermediary-DB/.env && \
-    echo "DATABASE_USER=$DATABASE_USER" >> Intermediary-DB/.env && \
-    echo "DATABASE_PASSWORD=$DATABASE_PASSWORD" >> Intermediary-DB/.env
+RUN echo "DATABASE_HOST=$DATABASE_HOST" >> .env && \
+    echo "DATABASE_NAME=$DATABASE_NAME" >> .env && \
+    echo "DATABASE_USER=$DATABASE_USER" >> .env && \
+    echo "DATABASE_PASSWORD=$DATABASE_PASSWORD" >> .env
 
 RUN dotnet restore
 
