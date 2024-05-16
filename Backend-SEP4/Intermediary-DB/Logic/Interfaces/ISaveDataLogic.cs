@@ -4,5 +4,5 @@ namespace DBComm.Logic.Interfaces;
 
 public interface ISaveDataLogic
 {
-    Task saveTempReading(double value);
+    Task saveTempReading(string roomId,double value);
 }

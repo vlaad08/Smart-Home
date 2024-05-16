@@ -22,16 +22,15 @@ builder.Services.AddScoped<IHumidityLogic, HumidityLogic>();
 builder.Services.AddScoped<ILightLogic, LightLogic>();
 builder.Services.AddScoped<INotificationLogic, NotificationLogic>();
 builder.Services.AddScoped<IDoorLogic, DoorLogic>();
-builder.Services.AddScoped<ISaveDataLogic, SaveDataLogic>();
+builder.Services.AddScoped<IRoomLogic, RoomLogic>();
 
 builder.Services.AddScoped<IWindowLogic, WindowLogic>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ILigthRepository, LightRepository>();
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-builder.Services.AddScoped<ISaveDataRepository, SaveDataRepository>();
-
 builder.Services.AddScoped<IDoorRepository, DoorRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ILigthRepository, LightRepository>();

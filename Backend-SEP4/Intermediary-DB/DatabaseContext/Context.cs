@@ -15,14 +15,22 @@ public class Context : DbContext
     public DbSet<Notification> notification { get; set; }
 
 
-    private string SECRETSECTION_HOST = "smart-homel.postgres.database.azure.com";
-    private string SECRETSECTION_DB = "smart_home";
-    private string SECRETSECTION_NAME = "sep_user";
-    private string SECRETSECTION_PASSWORD = "Semester4Password";
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {   
+        DotNetEnv.Env.Load("..\\.env");
+
+
+        string SECRETSECTION_HOST = "smart-homel.postgres.database.azure.com";
+        string SECRETSECTION_DB = "smart_home";
+        string SECRETSECTION_USERNAME = "sep_user";
+        string SECRETSECTION_PASSWORD = "Semester4Password";
+
+
+        System.Console.WriteLine(11111111111111);
+        System.Console.WriteLine(SECRETSECTION_HOST);
         ///cloud 
-        optionsBuilder.UseNpgsql($"Host={SECRETSECTION_HOST};Port=5432;Database={SECRETSECTION_DB};Username={SECRETSECTION_NAME};Password={SECRETSECTION_PASSWORD};");
+        optionsBuilder.UseNpgsql($"Host={SECRETSECTION_HOST};Port=5432;Database={SECRETSECTION_DB};Username={SECRETSECTION_USERNAME};Password={SECRETSECTION_PASSWORD};");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

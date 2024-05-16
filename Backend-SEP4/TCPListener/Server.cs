@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using ECC.Encryption;
 
 public class Server
@@ -15,7 +16,7 @@ public class Server
 
     public Server(int port)
     {
-        IPAddress localAddr = IPAddress.Parse("10.154.208.96");
+        IPAddress localAddr = IPAddress.Parse("172.20.10.12");
         listener = new TcpListener(localAddr, port);
         isRunning = true;
         listener.Start();
@@ -71,6 +72,7 @@ public class Server
                         break;
 
                     default:
+                        await SaveTemperatureAsync(40);
                         break;
                 }
                 
@@ -83,7 +85,7 @@ public class Server
         }
         listener.Stop();
     }
-
+    
     private async Task SaveTemperatureAsync(double value)
     {
         var content = new FormUrlEncodedContent(new[]
@@ -93,7 +95,7 @@ public class Server
 
         try
         {
-            HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5000/Temperature/Save", content);
+            HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5084/temperature/", content);
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Temperature saved successfully.");

@@ -79,10 +79,10 @@ public class Communicator : ICommunicator
         Send(data);
     }
 
-    public Task<string> getTemperature()
+    public async Task<double> getTemperature()
     {
         Send("Send temperature.");
-        return null;
+        return 32;
     }
 
 

@@ -48,7 +48,8 @@ public class AccountLogic : IAccountLogic
             if (await _repository.CheckExistingUser(username))
             {
                 string hash = await _hashPassword(password);
-                await _repository.RegisterMember(username, hash);
+                Member member = await _repository.RegisterMember(username, hash);
+                return member;
             }
         }catch(Exception e)
         {
@@ -176,9 +177,13 @@ public class AccountLogic : IAccountLogic
         }
         try
         {
-            if (await _repository.CheckExistingUser(username))
+            if (await _repository.CheckUserExists(username))
             {
-                await _repository.RemoveMemberFromHouse(username);
+               await _repository.RemoveMemberFromHouse(username);
+            }
+            else
+            {
+                throw new Exception("User does not exist.");
             }
         }
         catch(Exception e)
@@ -190,29 +195,45 @@ public class AccountLogic : IAccountLogic
         return;
     }
 
+    public async Task<Member> Login(string username, string password)
+    {
+        if (string.IsNullOrEmpty(username))
+        {
+            throw new ValidationException("Username cannot be null");
+        }
+
+        if (string.IsNullOrEmpty(password))
+        {
+            throw new ValidationException("Password cannot be null");
+
+        }
+        try
+        {
+            string hash = await _hashPassword(password);
+            return await _repository.Login(username, hash);
+        }catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw new Exception(e.Message);
+        }
+        return null;
+    }
+
+
+
     public async Task AddMemberToHouse(string username, string houseId)
     {
         if (string.IsNullOrEmpty(username))
         {
             throw new ValidationException("Username null");
         }
-
-        try
+        if (await _repository.CheckUserExists(username))
         {
-            if (await _repository.CheckUserExists(username))
-            {
-                await _repository.AddMemberToHouse(username, houseId);
-            }
-            else
-            {
-                throw new Exception("No user w that username");
-            }
+            await _repository.AddMemberToHouse(username, houseId);
         }
-        catch (Exception e)
+        else
         {
-            Console.WriteLine(e);
-            throw;
+            throw new Exception("No user w that username");
         }
     }
-    
 }

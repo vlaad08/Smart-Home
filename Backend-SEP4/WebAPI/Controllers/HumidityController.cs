@@ -1,11 +1,13 @@
 using DBComm.Logic.Interfaces;
 using DBComm.Repository;
 using DBComm.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
+[Authorize]
 
-[ApiController] [Route("Humidity")]
+[ApiController] [Route("humidity")]
 public class HumidityController : ControllerBase
 {
     private readonly IHumidityLogic _humidityLogic;
@@ -15,13 +17,13 @@ public class HumidityController : ControllerBase
         this._humidityLogic = humidityLogic;
     }
 
-    [HttpGet("{hardwareId}")]
-    public async Task<ActionResult> getLatestTemperature([FromRoute]string hardwareId)
+    [HttpGet("{hardwareId}/latest")]
+    public async Task<ActionResult> GetLatestHumidity([FromRoute]string hardwareId)
     {
         try
         {
-            HumidityReading? temperature = await _humidityLogic.getHumidity(hardwareId);
-            return Ok(temperature);
+            HumidityReading? humidityReading = await _humidityLogic.getHumidity(hardwareId);
+            return Ok(humidityReading);
         }
         catch (Exception e)
         {
@@ -29,14 +31,14 @@ public class HumidityController : ControllerBase
             throw;
         }
     }
-    [HttpGet, Route("History/{hardwareId}")]
-    public async Task<ActionResult<ICollection<LightReading>>> getHistory([FromRoute] string hardwareId,
+    [HttpGet, Route("{hardwareId}/history")]
+    public async Task<ActionResult<ICollection<LightReading>>> GetHumidityHistory([FromRoute] string hardwareId,
         [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)
     {
         try
         {
-            var lightHistory = await _humidityLogic.getHumidityHistory(hardwareId, dateFrom, dateTo);
-            return Ok(lightHistory);
+            var humidityHistory = await _humidityLogic.getHumidityHistory(hardwareId, dateFrom, dateTo);
+            return Ok(humidityHistory);
         }catch (Exception e)
         {
             Console.WriteLine(e);
