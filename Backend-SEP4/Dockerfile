@@ -1,18 +1,10 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 ENV ASPNETCORE_ENVIRONMENT=Development
 WORKDIR /App
 
-ARG DATABASE_HOST
-ARG DATABASE_NAME
-ARG DATABASE_USER
-ARG DATABASE_PASSWORD
+COPY . ./
 
-ENV DATABASE_HOST=$DATABASE_HOST
-ENV DATABASE_NAME=$DATABASE_NAME
-ENV DATABASE_USER=$DATABASE_USER
-ENV DATABASE_PASSWORD=$DATABASE_PASSWORD
-
-COPY Intermediary-DB/. ./
+COPY Intermediary-DB/.env ../Intermediary-DB/
 
 RUN dotnet restore
 
