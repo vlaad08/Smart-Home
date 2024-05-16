@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 using ECC.Encryption;
 
 public class Server
@@ -12,17 +11,16 @@ public class Server
     private TcpListener listener;
     private Thread serverThread;
     private bool isRunning;
-    private HttpClient httpClient;
+    private static readonly HttpClient httpClient = new HttpClient();
 
     public Server(int port)
     {
-        IPAddress localAddr = IPAddress.Parse("172.20.10.12");
+        IPAddress localAddr = IPAddress.Parse("172.20.10.4");
         listener = new TcpListener(localAddr, port);
         isRunning = true;
         listener.Start();
         serverThread = new Thread(() => ListenForClients());
         serverThread.Start();
-        httpClient = new HttpClient(); // Initialize HttpClient
     }
 
     private async void ListenForClients()
@@ -43,8 +41,10 @@ public class Server
                 string receivedMessage = "";
                 while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                 {
+                    Console.WriteLine("segg");
                     // Convert the received data to a string
                     receivedMessage = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                    Console.WriteLine(receivedMessage);
                     
                     // Recognize that we are receiving their PU
                     if (receivedMessage.StartsWith("Connected:"))
@@ -56,27 +56,27 @@ public class Server
                     else
                     {
                         // Print the decrypted received message
-                        Console.WriteLine(Encryption.DecryptMessage(receivedMessage));
+                        //Console.WriteLine(Encryption.DecryptMessage(receivedMessage));
+                    }
+
+                    // Save data based on the received message
+                    switch (receivedMessage)
+                    {
+                        case var message when message.StartsWith("T:"): // received temperature reading starts with T: and has for example a number like this 21.21
+                            string tempString = message.Substring(2); // Extract temperature value
+                            if (double.TryParse(tempString, out double tempValue))
+                            {
+                                Console.WriteLine(tempValue);
+                                await SaveTemperatureAsync(tempValue);
+                                Console.WriteLine("after in switch");
+                            }
+                            break;
+
+                        default:
+                            await SaveTemperatureAsync(40);
+                            break;
                     }
                 }
-
-                // Save data based on the received message
-                switch (receivedMessage)
-                {
-                    case var message when message.StartsWith("T:"): // received temperature reading starts with T: and has for example a number like this 21.21
-                        string tempString = message.Substring(2); // Extract temperature value
-                        if (double.TryParse(tempString, out double tempValue))
-                        {
-                            await SaveTemperatureAsync(tempValue);
-                        }
-                        break;
-
-                    default:
-                        await SaveTemperatureAsync(40);
-                        
-                        break;
-                }
-                
             }
             catch (Exception e)
             {
@@ -89,14 +89,14 @@ public class Server
     
     private async Task SaveTemperatureAsync(double value)
     {
-        var content = new FormUrlEncodedContent(new[]
-        {
-            new KeyValuePair<string, string>("value", value.ToString())
-        });
-
         try
         {
-            HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5084/temperature/", content);
+            string id = "1";
+            string valuestring = value.ToString();
+            HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:5084/temperature/devices/1/20", null);
+            //HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5084/temperature/1");
+
+            Console.WriteLine(response.ToString());
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Temperature saved successfully.");
@@ -111,6 +111,7 @@ public class Server
             Console.WriteLine($"Exception occurred while saving temperature: {ex.Message}");
         }
     }
+
 
     public void StopServer()
     {

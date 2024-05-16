@@ -23,6 +23,7 @@ public class TemperatureController : ControllerBase
     {
         try
         {
+            Console.WriteLine("get hardware fasz");
             TemperatureReading? temperature = await _temperatureLogic.getLatestTemperature(hardwareId);
             return Ok(temperature);
         }
@@ -72,7 +73,9 @@ public class TemperatureController : ControllerBase
     {
         try
         {
+            Console.WriteLine("Controller");
             await _temperatureLogic.saveTempReading(deviceId,value);
+            Console.WriteLine("controller 2");
             return Ok($"Temperature saved for all rooms in house");
         }catch (Exception e)
         {

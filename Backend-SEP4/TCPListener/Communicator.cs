@@ -39,7 +39,7 @@ public class Communicator : ICommunicator
         CloseCurrentClient();
         client = newClient;
         stream = newClient.GetStream();
-        await handshake();
+        //await handshake();
         Console.WriteLine("Communicator updated with new client.");
         return stream;
     }

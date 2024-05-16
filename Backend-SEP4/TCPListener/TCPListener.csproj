@@ -10,7 +10,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ECC\ECC.csproj" />
-      <ProjectReference Include="..\SharedInterfaces\SharedInterfaces.csproj" />
     </ItemGroup>
 
 </Project>
