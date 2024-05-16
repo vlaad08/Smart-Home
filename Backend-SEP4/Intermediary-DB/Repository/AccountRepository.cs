@@ -193,7 +193,7 @@ public class AccountRepository : IAccountRepository
                     throw new Exception("Member is already assigned to a house");
                 }
 
-                Home home = await context.home.FindAsync(houseId);
+                Home? home = await context.home.FindAsync(houseId);
                 if (home == null)
                 {
                     throw new Exception("No home w that id");
