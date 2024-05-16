@@ -29,3 +29,8 @@ jobs:
           file: ./Backend-SEP4/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/smart-home:latest
+          build-args: |
+            DATABASE_HOST=${{ secrets.DATABASE_HOST }}
+            DATABASE_NAME=${{ secrets.DATABASE_NAME }}
+            DATABASE_USER=${{ secrets.DATABASE_USER }}
+            DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
