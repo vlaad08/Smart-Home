@@ -1,10 +1,12 @@
 using DBComm.Logic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 [ApiController]
-[Route("Door")]
+[Route("door")]
+[Authorize]
 public class DoorController : ControllerBase
 {
     private IDoorLogic _logic;
@@ -20,7 +22,7 @@ public class DoorController : ControllerBase
         try
         {
             await _logic.SwitchDoor(password);
-            return Ok("Done");
+            return Ok("Door unlocked.");
         }
         catch (Exception e)
         {
@@ -28,7 +30,7 @@ public class DoorController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    [HttpPut, Route("doors/{houseId}/password")]
+    [HttpPut, Route("houses/{houseId}/doors/password"), Authorize(Policy = "Admin")]
     public async Task<IActionResult> ChangePassword([FromRoute] string houseId, [FromBody] int newPassword)
     {
         try

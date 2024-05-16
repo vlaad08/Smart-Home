@@ -1,12 +1,14 @@
 using DBComm.Logic.Interfaces;
 using DBComm.Repository;
 using DBComm.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.DTOs;
 
 namespace WebAPI.Controllers;
 [ApiController]
-[Route("Rooms")]
+[Route("rooms")]
+[Authorize]
 public class RoomController : ControllerBase
 {
     private IRoomLogic logic;
@@ -21,7 +23,8 @@ public class RoomController : ControllerBase
     {
         try
         {
-            return await logic.GetAllRooms(homeId, deviceId);
+            var rooms = await logic.GetAllRooms(homeId, deviceId);
+            return Ok(rooms);
         }
         catch (Exception e)
         {
@@ -29,13 +32,14 @@ public class RoomController : ControllerBase
         }
     }
 
-    [HttpGet("{homeId}/{deviceId}")]
+    [HttpGet("{homeId}/devices/{deviceId}")]
     public async Task<ActionResult<RoomDataTransferDTO>> GetRoomData([FromRoute] string homeId, [FromRoute] string deviceId, [FromQuery] bool temp,
         [FromQuery] bool humi, [FromQuery] bool light)
     {
         try
         {
-            return await logic.GetRoomData(homeId, deviceId,temp,humi,light);
+            var data = await logic.GetRoomData(homeId, deviceId,temp,humi,light);
+            return Ok(data);
         }
         catch (Exception e)
         {
@@ -43,13 +47,13 @@ public class RoomController : ControllerBase
         }
     }
 
-    [HttpPost]
+    [HttpPost, Authorize(Policy = "Admin")]
     public async Task<ActionResult> AddRoom( [FromBody] RoomCreationDTO dto)
     {
         try
         {
             await logic.AddRoom(dto.name, dto.deviceId, dto.homeId);
-            return Ok();
+            return Ok("Room created.");
         }
         catch (Exception e)
         {
@@ -57,13 +61,13 @@ public class RoomController : ControllerBase
         }
     }
     
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}"), Authorize(Policy = "Admin")]
     public async Task<ActionResult> DeleteRoom([FromRoute]string id)
     {
         try
         {
             await logic.DeleteRoom(id);
-            return Ok();
+            return Ok("Room deleted.");
         }
         catch (Exception e)
         {
@@ -71,14 +75,13 @@ public class RoomController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult> EditRoom([FromRoute] string id, [FromQuery] string? deviceId,
-        [FromQuery] string? name)
+    [HttpPut("{roomId}"), Authorize(Policy = "Admin")]
+    public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] RoomChangeDTO dto)
     {
         try
         {
-            await logic.EditRoom(id,name,deviceId);
-            return Ok();
+            await logic.EditRoom(roomId,dto.Name, dto.DeviceId);
+            return Ok("Room edited.");
         }
         catch (Exception e)
         {
