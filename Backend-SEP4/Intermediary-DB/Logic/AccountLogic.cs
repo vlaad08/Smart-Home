@@ -119,6 +119,7 @@ public class AccountLogic : IAccountLogic
             {
                 await _repository.EditUsername(oldUsername, newUsername);
             }
+            
         }
         catch (Exception e)
         {

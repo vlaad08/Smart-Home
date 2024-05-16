@@ -16,13 +16,13 @@ public class NotificationController : ControllerBase
     {
         this._notificationLogic = notificationLogic;
     }
-
-    [HttpGet]
-    public async Task<ActionResult<List<Notification>>> GetNotifications()
+    //An endpoint to get all the notifications of the house (request with homeId, returns all the  notifications (limit?? idk )) - limit 1 day
+    [HttpGet, Route("{houseId}")]
+    public async Task<ActionResult<List<Notification>>> GetNotifications([FromRoute] string houseId)
     {
         try
         {
-            List<Notification>? notifications = await _notificationLogic.GetNotifications();
+            List<Notification>? notifications = await _notificationLogic.GetNotifications(houseId);
             return Ok(notifications);
         }
         catch (Exception e)

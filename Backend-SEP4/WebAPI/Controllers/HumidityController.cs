@@ -16,7 +16,7 @@ public class HumidityController : ControllerBase
     {
         this._humidityLogic = humidityLogic;
     }
-
+    
     [HttpGet("{hardwareId}/latest")]
     public async Task<ActionResult> GetLatestHumidity([FromRoute]string hardwareId)
     {
@@ -31,6 +31,7 @@ public class HumidityController : ControllerBase
             throw;
         }
     }
+    //An endpoint to get the humidity history of a specific room based on id of that room (request with room id, returns a list of readings of humidity)
     [HttpGet, Route("{hardwareId}/history")]
     public async Task<ActionResult<ICollection<LightReading>>> GetHumidityHistory([FromRoute] string hardwareId,
         [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)

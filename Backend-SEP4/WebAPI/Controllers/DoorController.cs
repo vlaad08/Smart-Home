@@ -15,13 +15,13 @@ public class DoorController : ControllerBase
     {
         _logic = logic;
     }
-
-    [HttpPost, Route("doors/switch")]
-    public async Task<IActionResult> SwitchDoor([FromBody] string password)
+    //An endpoint to toggle the door for locking and unlocking (we send an object (houseId, boolean value))
+    [HttpPost, Route("houses/{houseId}/doors/switch")]
+    public async Task<IActionResult> SwitchDoor([FromRoute]string houseId, [FromBody] string password, [FromBody] bool state)
     {
         try
         {
-            await _logic.SwitchDoor(password);
+            await _logic.SwitchDoor(houseId, password, state);
             return Ok("Door unlocked.");
         }
         catch (Exception e)
@@ -30,6 +30,7 @@ public class DoorController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    //An endpoint to change the password of the lock of the house (we send you house Id and the new password)
     [HttpPut, Route("houses/{houseId}/doors/password"), Authorize(Policy = "Admin")]
     public async Task<IActionResult> ChangePassword([FromRoute] string houseId, [FromBody] string newPassword)
     {
