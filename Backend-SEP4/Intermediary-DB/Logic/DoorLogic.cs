@@ -35,7 +35,7 @@ public class DoorLogic : IDoorLogic
         }
     }
 
-    public async Task ChangeLockPassword(string homeId, int password)
+    public async Task ChangeLockPassword(string homeId, string password)
     {
         if (string.IsNullOrEmpty(homeId))
         {
