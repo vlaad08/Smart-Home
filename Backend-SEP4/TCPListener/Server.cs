@@ -21,6 +21,7 @@ public class Server
         listener.Start();
         serverThread = new Thread(() => ListenForClients());
         serverThread.Start();
+        SaveTemperatureAsync(20);
     }
 
     private async void ListenForClients()
@@ -67,13 +68,13 @@ public class Server
                             if (double.TryParse(tempString, out double tempValue))
                             {
                                 Console.WriteLine(tempValue);
-                                await SaveTemperatureAsync(tempValue);
+                                SaveTemperatureAsync(tempValue);
                                 Console.WriteLine("after in switch");
                             }
                             break;
 
                         default:
-                            await SaveTemperatureAsync(40);
+                            SaveTemperatureAsync(40);
                             break;
                     }
                 }
@@ -93,7 +94,7 @@ public class Server
         {
             string id = "1";
             string valuestring = value.ToString();
-            HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:5084/temperature/devices/1/20", null);
+            HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:5084/temperature/devices/1/{value}", null);
             //HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5084/temperature/1");
 
             Console.WriteLine(response.ToString());

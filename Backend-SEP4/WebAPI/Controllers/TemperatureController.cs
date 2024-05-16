@@ -16,6 +16,7 @@ public class TemperatureController : ControllerBase
     public TemperatureController(ITemperatureLogic temperatureLogic)
     {
         this._temperatureLogic = temperatureLogic;
+        
     }
 
     [HttpGet("{hardwareId}")]
@@ -81,6 +82,38 @@ public class TemperatureController : ControllerBase
         {
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpPost, Route("test")]
+    public async Task<ActionResult> CallSaveTemperature()
+    {
+        
+        try
+        {
+            HttpClient httpClient = new HttpClient();
+            string deviceId = "1";
+            double value = 20.0;
+
+            string url = $"http://localhost:5084/temperature/devices/{deviceId}/{value}";
+
+            HttpResponseMessage response = await httpClient.PostAsync(url, null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Temperature saved successfully.");
+                return Ok("Temperature saved successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Failed to save temperature.");
+                return StatusCode((int)response.StatusCode, "Failed to save temperature.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception occurred while saving temperature: {ex.Message}");
+            return StatusCode(500, $"Exception occurred while saving temperature: {ex.Message}");
         }
     }
     
