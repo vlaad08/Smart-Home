@@ -15,7 +15,7 @@ public class Server
 
     public Server(int port)
     {
-        IPAddress localAddr = IPAddress.Parse("172.20.10.4");
+        IPAddress localAddr = IPAddress.Parse("192.168.0.220");
         listener = new TcpListener(localAddr, port);
         isRunning = true;
         listener.Start();
@@ -63,12 +63,12 @@ public class Server
                     // Save data based on the received message
                     switch (receivedMessage)
                     {
-                        case var message when message.StartsWith("T:"): // received temperature reading starts with T: and has for example a number like this 21.21
-                            string tempString = message.Substring(2); // Extract temperature value
+                        case var message when message.StartsWith("T:"): // received temperature reading starts with T:
+                            string tempString = message.Substring(2).Split(' ')[0]; // Extract temperature value before the first space
                             if (double.TryParse(tempString, out double tempValue))
                             {
                                 Console.WriteLine(tempValue);
-                                SaveTemperatureAsync(tempValue);
+                                await SaveTemperatureAsync(tempValue); // Call the method with the parsed temperature value
                                 Console.WriteLine("after in switch");
                             }
                             break;
