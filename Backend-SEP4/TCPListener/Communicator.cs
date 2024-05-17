@@ -71,10 +71,10 @@ public class Communicator : ICommunicator
     private void Send(string message)
     {
         // Encrypt message before sending it
-        // string encMsg = Encryption.EncryptMessage(message);
+        string encMsg = Encryption.EncryptMessage(message);
         
         // Convert to byte[] before sending it
-        byte[] data = Encoding.UTF8.GetBytes(message);
+        byte[] data = Encoding.UTF8.GetBytes(encMsg);
         
         Send(data);
     }

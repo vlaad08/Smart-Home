@@ -86,8 +86,10 @@ namespace ECC.Encryption
         {
             using (Aes aesAlg = Aes.Create())
             {
-                aesAlg.Key = DeriveSymmetricKey();
+                // aesAlg.Key = DeriveSymmetricKey();
                 // aesAlg.Key = symmKey;
+                byte[] key = Encoding.UTF8.GetBytes("RaT‰ëòçÇRQqBèºQ|{ŽnÎA");
+                aesAlg.Key = key;
                 aesAlg.GenerateIV();
 
                 ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
@@ -109,6 +111,7 @@ namespace ECC.Encryption
         // shared secret same shared secret thus the same symmetric key 
         public static string DecryptMessage(string cipherText)
         {
+            
             byte[] fullCipher = Convert.FromBase64String(cipherText);
 
             using (Aes aesAlg = Aes.Create())
@@ -119,7 +122,9 @@ namespace ECC.Encryption
                 Array.Copy(fullCipher, iv, iv.Length);
                 Array.Copy(fullCipher, iv.Length, cipher, 0, cipher.Length);
 
-                aesAlg.Key = DeriveSymmetricKey();
+                // aesAlg.Key = DeriveSymmetricKey();
+                byte[] key = Encoding.UTF8.GetBytes("RaT‰ëòçÇRQqBèºQ|{ŽnÎA");
+                aesAlg.Key = key;
                 // aesAlg.Key = symmKey;
                 aesAlg.IV = iv;
 
