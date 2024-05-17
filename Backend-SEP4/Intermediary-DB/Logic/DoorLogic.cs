@@ -16,7 +16,7 @@ public class DoorLogic : IDoorLogic
         _communicator = Communicator.Instance;
     }
 
-    public async Task SwitchDoor(string password)
+    public async Task SwitchDoor(string houseId, string password, bool state)
     {
         byte[] inputBytes = Encoding.UTF8.GetBytes(password);
         string hashedString = "";
@@ -25,9 +25,10 @@ public class DoorLogic : IDoorLogic
             byte[] hashBytes = sha256.ComputeHash(inputBytes);
             hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
         }
-        if (hashedString.Equals(await _repository.CheckPassword(password)))
+       if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) && _repository.CheckDoorState(houseId).Result != state)
         {
             await _communicator.SwitchDoor();
+            await _repository.SaveDoorState(houseId, state);
         }
         else
         {
@@ -41,6 +42,7 @@ public class DoorLogic : IDoorLogic
         {
             throw new Exception("House Id can not be empty");
         }
+        
         try
         {
             if (await _repository.CheckIfDoorExist(homeId))
@@ -54,4 +56,5 @@ public class DoorLogic : IDoorLogic
             throw new Exception(e.Message);
         }
     }
+    
 }

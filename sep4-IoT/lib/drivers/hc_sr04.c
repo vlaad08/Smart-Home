@@ -1,3 +1,5 @@
+#ifndef WIN_TEST
+
 #include "includes.h"
 
 #include <inttypes.h>
@@ -103,3 +105,5 @@ TCNT1 = 0;
     cnt = cnt * 343UL / 125UL;
     return cnt;
 }
+
+#endif

@@ -12,7 +12,7 @@ public class NotificationRepository : INotificationRepository
     {
         this.context = context;
     }
-    public async Task<List<Notification>> GetNotifications()
+    public async Task<List<Notification>> GetNotifications(string houseId)
     {
         try
         {
@@ -21,7 +21,7 @@ public class NotificationRepository : INotificationRepository
             var tomorrowUtc = todayUtc.AddDays(1);
 
             IQueryable<Notification> notificationReadings = context.notification
-                .Where(nr => nr.SendAt >= todayUtc && nr.SendAt < tomorrowUtc);
+                .Where(nr => nr.SendAt >= todayUtc && nr.SendAt < tomorrowUtc && nr.Home.Id.Equals(houseId));
 
             List<Notification> result = await notificationReadings.ToListAsync();
             return result;

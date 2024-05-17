@@ -1,3 +1,5 @@
+#ifndef WIN_TEST
+
 #include "buzzer.h"
 #include "includes.h"
 
@@ -21,3 +23,5 @@ void buzzer_beep(){
     BUZ_DDR = DDR_state;
     BUZ_PORT = PORT_state;
 }
+
+#endif

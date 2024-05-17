@@ -24,8 +24,6 @@ builder.Services.AddScoped<ILightLogic, LightLogic>();
 builder.Services.AddScoped<INotificationLogic, NotificationLogic>();
 builder.Services.AddScoped<IDoorLogic, DoorLogic>();
 builder.Services.AddScoped<IRoomLogic, RoomLogic>();
-
-builder.Services.AddScoped<IWindowLogic, WindowLogic>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ILigthRepository, LightRepository>();
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
