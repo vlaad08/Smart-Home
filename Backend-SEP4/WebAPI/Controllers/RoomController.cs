@@ -33,20 +33,20 @@ public class RoomController : ControllerBase
         }
     }
     //n endpoint to get all room informations based on a specific deviceId (returns id, name, current temperature, humidity, light level)
-    [HttpGet("{deviceId}")]
-    public async Task<ActionResult<RoomDataTransferDTO>> GetRoomData([FromRoute] string homeId, [FromRoute] string deviceId, [FromQuery] bool temp,
-        [FromQuery] bool humi, [FromQuery] bool light)
-    {
-        try
-        {
-            var data = await logic.GetRoomData(homeId, deviceId,temp,humi,light);
-            return Ok(data);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
+    // [HttpGet("{deviceId}")]
+    // public async Task<ActionResult<RoomDataTransferDTO>> GetRoomData([FromRoute] string homeId, [FromRoute] string deviceId, [FromQuery] bool temp,
+    //     [FromQuery] bool humi, [FromQuery] bool light)
+    // {
+    //     try
+    //     {
+    //         var data = await logic.GetRoomData(homeId, deviceId,temp,humi,light);
+    //         return Ok(data);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         return BadRequest(e.Message);
+    //     }
+    // }
     //An endpoint to create a room (we send an object (roomName, hardwareId, default room temperature (number), default room humidity (number))
     [HttpPost, Authorize(Policy = "Admin")]
     public async Task<ActionResult> AddRoom( [FromBody] RoomCreationDTO dto)
