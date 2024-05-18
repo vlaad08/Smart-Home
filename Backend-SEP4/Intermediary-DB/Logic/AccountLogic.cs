@@ -170,31 +170,7 @@ public class AccountLogic : IAccountLogic
 
 
 
-    public async Task RemoveMemberFromHouse(string username)
-    {
-        if (string.IsNullOrEmpty(username))
-        {
-            throw new ValidationException("Username cannot be null");
-        }
-        try
-        {
-            if (await _repository.CheckUserExists(username))
-            {
-               await _repository.RemoveMemberFromHouse(username);
-            }
-            else
-            {
-                throw new Exception("User does not exist.");
-            }
-        }
-        catch(Exception e)
-        {
-            Console.WriteLine(e);
-            throw new Exception(e.Message);
-        }
-
-        return;
-    }
+    
 
     public async Task<Member> Login(string username, string password)
     {
@@ -221,19 +197,5 @@ public class AccountLogic : IAccountLogic
 
 
 
-    public async Task AddMemberToHouse(string username, string houseId)
-    {
-        if (string.IsNullOrEmpty(username))
-        {
-            throw new ValidationException("Username null");
-        }
-        if (await _repository.CheckUserExists(username))
-        {
-            await _repository.AddMemberToHouse(username, houseId);
-        }
-        else
-        {
-            throw new Exception("No user w that username");
-        }
-    }
+   
 }

@@ -114,35 +114,8 @@ public class AuthController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-    //An endpoint to add a house member account to the house (we send you houseId and username)
-    [HttpPatch, Route("houses/{houseId}/members"), Authorize(Policy = "Admin")]
-    public async Task<ActionResult> AddMemberToHouse([FromRoute]string houseId, [FromQuery] string username)
-    {
-        try
-        {
-            await _accountLogic.AddMemberToHouse(username, houseId);
-            return Ok("Member added to house.");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
-    //An endpoint to remove house member account from the house (we send you houseId and username of the user)
-    [HttpPatch, Route("houses/members/{username}"), Authorize(Policy = "Admin")]
-    public async Task<ActionResult> RemoveMemberFromHouse([FromRoute] string username)
-    {
-        try
-        {
-            await _accountLogic.RemoveMemberFromHouse(username);
-            return Ok("Member removed.");
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
+    
+   
     private string GenerateJwt(Member member)
     {
         List<Claim> claims = GenerateClaims(member);
