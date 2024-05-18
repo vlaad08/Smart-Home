@@ -2,6 +2,7 @@ using System.Text;
 using DBComm.Logic;
 using DBComm.Logic.Interfaces;
 using DBComm.Repository;
+using Intermediary_DB.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -30,6 +31,8 @@ builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IDoorRepository, DoorRepository>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IHomeRepository, HomeRepository>();
+builder.Services.AddScoped<IHomeLogic, HomeLogic>();
 
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ILigthRepository, LightRepository>();

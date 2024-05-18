@@ -32,6 +32,8 @@ public class RoomController : ControllerBase
            return BadRequest(e.Message);
         }
     }
+
+    //TODO: Implement the following endpoints
     //n endpoint to get all room informations based on a specific deviceId (returns id, name, current temperature, humidity, light level)
     // [HttpGet("{deviceId}")]
     // public async Task<ActionResult<RoomDataTransferDTO>> GetRoomData([FromRoute] string homeId, [FromRoute] string deviceId, [FromQuery] bool temp,

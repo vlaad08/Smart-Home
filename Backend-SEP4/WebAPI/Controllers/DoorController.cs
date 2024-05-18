@@ -15,6 +15,9 @@ public class DoorController : ControllerBase
     {
         _logic = logic;
     }
+
+
+    //TODO: Implement the following endpoints
     //An endpoint to toggle the door for locking and unlocking (we send an object (houseId, boolean value))
     // [HttpPost, Route("houses/{houseId}/doors/switch")]
     // public async Task<IActionResult> SwitchDoor([FromRoute]string houseId, [FromBody] string password, [FromBody] bool state)
