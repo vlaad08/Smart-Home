@@ -9,7 +9,8 @@ using WebAPI.DTOs;
 namespace WebAPI.Controllers;
 [ApiController]
 [Route("rooms")]
-[Authorize]
+
+ // [Authorize]
 public class RoomController : ControllerBase
 {
     private IRoomLogic logic;
@@ -50,7 +51,11 @@ public class RoomController : ControllerBase
     //     }
     // }
     //An endpoint to create a room (we send an object (roomName, hardwareId, default room temperature (number), default room humidity (number))
-    [HttpPost, Authorize(Policy = "Admin")]
+
+
+
+    //TODO: Check if the policies are set right form the authorization
+    [HttpPost] //, Authorize(Policy = "Admin") 
     public async Task<ActionResult> AddRoom( [FromBody] RoomCreationDTO dto)
     {
         try
@@ -64,7 +69,7 @@ public class RoomController : ControllerBase
         }
     }
     //An endpoint to remove a room (we send deviceId of the room to be deleted)
-    [HttpDelete("{deviceId}"), Authorize(Policy = "Admin")]
+    [HttpDelete("{deviceId}")] //, Authorize(Policy = "Admin")
     public async Task<ActionResult> DeleteRoom([FromRoute]string deviceId)
     {
         try
@@ -80,7 +85,7 @@ public class RoomController : ControllerBase
     // room id because you can change the device id in that method, so the method should be done using roomId, which can not change during this method
     //An endpoint to edit a room (we send an object (roomId, new room name, new hardware id, new default temperature, new default humidity)
 
-    [HttpPut("{roomId}"), Authorize(Policy = "Admin")]
+    [HttpPut("{roomId}")] //, Authorize(Policy = "Admin")
     public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] RoomChangeDTO dto)
     {
         try
