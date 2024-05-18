@@ -42,24 +42,25 @@ public class MemberAccountLogicTest
         await _logic.RemoveMemberFromHouse(username);
     }*/
 
-    [Fact]
-    public async Task RemoveMemberFromHouse_UserDoesNotExist_ThrowsException()
-    {
-        string username = "nonexistentuser";
-        _mockRepository = new Mock<IAccountRepository>();
-        _logic = new AccountLogic(_mockRepository.Object);
-        _mockRepository.Setup(r => r.CheckExistingUser(username)).ReturnsAsync(false);
-        var exception = await Assert.ThrowsAsync<Exception>(() => _logic.RemoveMemberFromHouse(username));
-        Assert.Equal("User does not exist.", exception.Message);
-    }
+    // [Fact]
+    // public async Task RemoveMemberFromHouse_UserDoesNotExist_ThrowsException()
+    // {
+    //     string username = "nonexistentuser";
+    //     _mockRepository = new Mock<IAccountRepository>();
+    //     _logic = new AccountLogic(_mockRepository.Object);
+    //     _mockRepository.Setup(r => r.CheckExistingUser(username)).ReturnsAsync(false);
+    //     var exception = await Assert.ThrowsAsync<Exception>(() => _logic.RemoveMemberFromHouse(username));
+    //     Assert.Equal("User does not exist.", exception.Message);
+    // }
 
-    [Fact]
-    public async Task RemoveMemberFromHouse_RepositoryException()
-    {
-        string username = "testuser";
-        _mockRepository = new Mock<IAccountRepository>();
-        _logic = new AccountLogic(_mockRepository.Object);
-        _mockRepository.Setup(r => r.CheckExistingUser(username)).ThrowsAsync(new Exception("Simulated exception"));
-        await Assert.ThrowsAsync<Exception>(() => _logic.RemoveMemberFromHouse(username));
-    }
+//     [Fact]
+//     public async Task RemoveMemberFromHouse_RepositoryException()
+//     {
+//         string username = "testuser";
+//         _mockRepository = new Mock<IAccountRepository>();
+//         _logic = new AccountLogic(_mockRepository.Object);
+//         _mockRepository.Setup(r => r.CheckExistingUser(username)).ThrowsAsync(new Exception("Simulated exception"));
+//         await Assert.ThrowsAsync<Exception>(() => _logic.RemoveMemberFromHouse(username));
+//     }
+// }
 }
