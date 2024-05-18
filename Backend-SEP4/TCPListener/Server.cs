@@ -13,7 +13,7 @@
 
         public Server(int port)
         {
-            IPAddress localAddr = IPAddress.Parse("10.154.208.96");
+            IPAddress localAddr = IPAddress.Parse("192.168.137.14");
             listener = new TcpListener(localAddr, port);
             isRunning = true;
             listener.Start();
@@ -45,12 +45,11 @@
                         // Recognize that we are receiving their PU
                         if (receivedMessage.StartsWith("Connected:"))
                         {
+                            string publicKey = receivedMessage.Substring("Connected:".Length).Trim();
                             // Generate shared secret from their PU and our PK 
-                            Encryption.GenSharedSecret(receivedMessage);
-
                             //Encryption.DeriveSymmetricKey();
                         }
-                        else
+                        else if(receivedMessage!= null)
                         {
                             // Print the decrypted received message
                             Console.WriteLine(Encryption.DecryptMessage(receivedMessage));
