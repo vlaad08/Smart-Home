@@ -45,5 +45,3 @@ int sendLight();
 int sendTempAndHumidity();
 
 void transmitData(uint8_t * data,uint16_t length);
-
-void sendReadingWrapper();

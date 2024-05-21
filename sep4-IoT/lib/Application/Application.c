@@ -14,12 +14,15 @@ struct AES_ctx my_AES_ctx;
 bool IsPKAcquired=true;
 bool UnlockingApproved=false;
 char received_message_buffer[128];
-
+    
 void transmitData(uint8_t * data,uint16_t length){
+    custom_delay_ms(3000);
     AES_ECB_encrypt(&my_AES_ctx,(uint8_t*)data);
+    
     wifi_command_TCP_transmit((uint8_t*)data,length);
 
     AES_ECB_decrypt(&my_AES_ctx,(uint8_t*)data);
+    
     pc_comm_send_array_blocking((uint8_t*)data,length);
 
     free(data);
@@ -144,73 +147,46 @@ int start(){
     //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
     wifi_command_join_AP("KBENCELT 3517","p31A05)1");
     //wifi_command_join_AP("002","zabijemsazalentilku");
-    wifi_command_create_TCP_connection("192.168.137.14",6868,Callback,received_message_buffer);
+    wifi_command_create_TCP_connection("192.168.137.1",6868,Callback,received_message_buffer);
 
     //uint8_t * PK=getIOTPublicKey(&enc);
     //char* public_key_hex = print_hex(PK, 64);
-    char* connection = (char*)malloc((sizeof("Connected:") /*+ strlen(public_key_hex)*/ + 1) * sizeof(char)); 
-    sprintf(connection, "Connected:");
- 
-    wifi_command_TCP_transmit((uint8_t*)connection,strlen(connection));
-    
-    free(connection);
-    //free(public_key_hex);
+    // char* connection = (char*)malloc((sizeof("Connected:") /*+ strlen(public_key_hex)*/ + 1) * sizeof(char)); 
+    // sprintf(connection, "Connected:");
+//  
+    // wifi_command_TCP_transmit((uint8_t*)connection,strlen(connection));
+    // 
+    // free(connection);
 
-    const char * encoded_data = "qKBL+IAOLbn+jLnFJEYp8KAmlAe4iVQVfa2K4d9huA4=";
-    unsigned char *decoded_data;
-    size_t decoded_len;
-
+    //  const char * encoded_data = "qKBL+IAOLbn+jLnFJEYp8KAmlAe4iVQVfa2K4d9huA4=";
+    //  unsigned char *decoded_data;
+    //  size_t decoded_len;
+//  
     // Calculate the length of the decoded data
-    decoded_len = b64_decoded_size((const char *)encoded_data);
-    decoded_data = malloc(decoded_len);
-
-    if (!b64_decode(encoded_data, decoded_data, decoded_len)) {
-        free(decoded_data);
-        transmitData("-2",2);
-    }
-
-    if (decoded_len > sizeof(enc.SharedKey)) {     
-        free(decoded_data);
-        transmitData("-2",2);
-    }
-    memcpy(enc.SharedKey, decoded_data, decoded_len);
-
-    free(decoded_data);
+    //  decoded_len = b64_decoded_size((const char *)encoded_data);
+    //  decoded_data = malloc(decoded_len);
+//  
+    //  if (!b64_decode(encoded_data, decoded_data, decoded_len)) {
+        // free(decoded_data);
+        // transmitData((uint8_t*)"-2",3);
+    //  }
+//  
+    // if (decoded_len > sizeof(enc.SharedKey)) {     
+        // free(decoded_data);
+        // transmitData((uint8_t*) "-2",3);
+    // }
     
-    // const char * encoded_IV = "cRooWgwV4QTvQxZkqOZRHw==";
-    // unsigned char *decoded_IV;
-    // size_t decoded_IV_len;
-// 
-    //Calculate the length of the decoded data
-    // decoded_len = b64_decoded_size((const char *)encoded_IV);
-    // decoded_data = malloc(decoded_IV_len);
-// 
-    // if (!b64_decode(encoded_IV, decoded_IV, decoded_IV_len)) {
-        // free(decoded_IV);
-        // return -2;
-    // }
-// 
-    // if (decoded_IV_len > sizeof(iv)) {     
-        // free(decoded_IV);
-        // return -2;
-    // }
-    // memcpy(iv, decoded_IV, decoded_IV_len);
-// 
-    // free(decoded_IV);
+    uint8_t key[] = "0123456789abcdef";
+   
+    AES_init_ctx(&my_AES_ctx,key);
 
 
+    custom_delay_ms(3000);
 
-void sendReadingsWrapper(void) {
-    (void)sendReadings(); // Call sendReadings and ignore the return value
-}
-
-    AES_init_ctx_iv(&my_AES_ctx,enc.SharedKey,iv);
-
-    custom_delay_ms(1000);
-
-    periodic_task_init_a(sendReadingsWrapper,15000);
+    periodic_task_init_a(sendReadings,15000);
     //periodic_task_init_b(doorApproval,30000);
     //periodic_task_init_c(breakingIn,1000);
 
     return 1;
 }
+
