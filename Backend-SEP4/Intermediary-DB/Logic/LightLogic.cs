@@ -29,4 +29,10 @@ public class LightLogic : ILightLogic
     {
         _communicator.setLight(hardwareId,level);
     }
+    
+    public async Task saveLightReading(string deviceId,double value)
+    {
+        DateTime readAt = DateTime.UtcNow;
+        await _repository.SaveLightReading(deviceId, value, readAt);
+    }
 }

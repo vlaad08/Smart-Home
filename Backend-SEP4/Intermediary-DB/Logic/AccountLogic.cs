@@ -190,6 +190,7 @@ public class AccountLogic : IAccountLogic
             return await _repository.Login(username, hash);
         }catch(Exception e)
         {
+            Console.WriteLine(e.Message);
             throw new Exception(e.Message);
         }
         return null;

@@ -18,8 +18,8 @@ public class Context : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {   
+ 
         DotNetEnv.Env.TraversePath().Load();
-        
         
         string SECRETSECTION_HOST = Environment.GetEnvironmentVariable("DATABASE_HOST");
         string SECRETSECTION_DB = Environment.GetEnvironmentVariable("DATABASE_NAME");

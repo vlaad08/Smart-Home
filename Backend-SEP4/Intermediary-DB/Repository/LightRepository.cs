@@ -50,5 +50,30 @@ public class LightRepository : ILigthRepository
             throw new Exception(e.Message);
         }
     }
+    
+    public async Task SaveLightReading(string deviceId,double value, DateTime readAt)
+    {
+        try
+        {
+            var room = await Context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId);
+            if (room == null)
+            {
+                throw new Exception($"No such room with device {deviceId}");
+            }
+            LightReading lightReading = new LightReading(value, readAt)
+            {
+                Room = room
+            };
+        
+            await Context.light_reading.AddAsync(lightReading);
+            await Context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw new Exception(e.Message);
+        }
+    }
+
 
 }
