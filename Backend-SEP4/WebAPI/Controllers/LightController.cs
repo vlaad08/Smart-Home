@@ -61,5 +61,21 @@ public class LightController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpPost, Route("devices/{deviceId}/{value}")]
+    public async Task<ActionResult> SaveCurrentLightInRoom([FromRoute] string deviceId, [FromRoute] double value)
+    {
+        try
+        {
+            Console.WriteLine("Controller");
+            await _lightLogic.saveLightReading(deviceId, value);
+            Console.WriteLine("controller 2");
+            return Ok($"Temperature saved for all rooms in house");
+        }catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
     
 }

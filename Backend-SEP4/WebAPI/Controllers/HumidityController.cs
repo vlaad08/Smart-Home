@@ -45,4 +45,23 @@ public class HumidityController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    //what happens wo async?
+    [HttpPost, Route("devices/{deviceId}/{value}")]
+    public async Task<ActionResult> SaveCurrentHumidityInRoom([FromRoute] string deviceId, [FromRoute] double value)
+    {
+        try
+        {
+            Console.WriteLine("humid 1");
+            await _humidityLogic.saveHumidityReading(deviceId, value);
+            Console.WriteLine("humid 2");
+            return Ok("Humidity saved for all rooms in house");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    
 }

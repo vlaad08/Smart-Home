@@ -85,7 +85,7 @@ public class TemperatureController : ControllerBase
         }
     }
 
-    [HttpPost, Route("test")]
+    /*[HttpPost, Route("save")]
     public async Task<ActionResult> CallSaveTemperature()
     {
         
@@ -115,7 +115,7 @@ public class TemperatureController : ControllerBase
             Console.WriteLine($"Exception occurred while saving temperature: {ex.Message}");
             return StatusCode(500, $"Exception occurred while saving temperature: {ex.Message}");
         }
-    }
+    }*/
     
 
 

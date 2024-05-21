@@ -32,4 +32,10 @@ public class HumidityLogic : IHumidityLogic
     {
         return await _repository.GetHistory(hardwareId, dateFrom, dateTo);
     }
+
+    public async Task saveHumidityReading(string deviceId, double value)
+    {
+        DateTime dateTime = DateTime.UtcNow;
+        await _repository.SaveHumidityReading(deviceId, value, dateTime);
+    }
 }
