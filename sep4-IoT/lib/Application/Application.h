@@ -19,21 +19,28 @@
 #include "AlarmDoor.h"
 #include "Door.h"
 
+#ifdef __AVR__
+  #include <util/delay.h>
+#else
+  #include <unistd.h>
+#endif
 
-void start();
+extern bool UnlockingApproved;
+
+int start();
 
 void Callback();
 
-void breakingIn();
+char * breakingIn();
 
-void doorAction(uint8_t status);
+bool doorAction(uint8_t status);
 
-void doorApproval();
+bool doorApproval();
 
-void sendReadings();
+int sendReadings();
 
-void sendLight();
+int sendLight();
 
-void sendTempAndHumidity();
+int sendTempAndHumidity();
 
 void transmitData(uint8_t * data,uint16_t length);

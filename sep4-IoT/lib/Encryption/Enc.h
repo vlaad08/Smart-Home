@@ -1,7 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include "uECC.h"
-
+ 
 typedef struct Enc
 {
     uint8_t IOTPublicKey[64];

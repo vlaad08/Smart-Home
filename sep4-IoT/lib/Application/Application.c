@@ -1,37 +1,51 @@
 #include "Application.h"
 
+void static custom_delay_ms(uint16_t milliseconds) {
+#ifdef __AVR__
+    _delay_ms(milliseconds); // Use _delay_ms() for AVR microcontroller
+#else
+    usleep(milliseconds * 1000); // Use usleep() for POSIX systems (convert milliseconds to microseconds)
+#endif
+}
+
 Enc enc;
 uint8_t iv[16];
 struct AES_ctx my_AES_ctx;
-bool IsPKAcquired=false;
+bool IsPKAcquired=true;
 bool UnlockingApproved=false;
 char received_message_buffer[128];
 
 void transmitData(uint8_t * data,uint16_t length){
-    //AES_ECB_encrypt(&my_AES_ctx,(uint8_t*)data);
+    AES_ECB_encrypt(&my_AES_ctx,(uint8_t*)data);
     wifi_command_TCP_transmit((uint8_t*)data,length);
 
-    //AES_ECB_decrypt(&my_AES_ctx,(uint8_t*)data);
+    AES_ECB_decrypt(&my_AES_ctx,(uint8_t*)data);
     pc_comm_send_array_blocking((uint8_t*)data,length);
 
     free(data);
 }
 
-void sendTempAndHumidity(){
+int sendTempAndHumidity(){
     uint8_t *data = getTempAndHum(); 
     transmitData(data, 16);
+
+    return 1;
 }
 
-void sendLight(){
+int sendLight(){
     uint8_t *data = getLightInfo(); 
     transmitData(data,16);
+
+    return 1;
 }
 
-void sendReadings()
+int sendReadings()
 {
     sendTempAndHumidity();
-    _delay_ms(1000);
+    custom_delay_ms(1000);
     sendLight();
+
+    return 1;
 }
 
 void windowAction(uint8_t status){
@@ -44,12 +58,13 @@ void windowAction(uint8_t status){
 }
 
 
-void doorApproval(){
+bool doorApproval(){
     if (UnlockingApproved)
         UnlockingApproved = false;
+    return UnlockingApproved;
 }
 
-void doorAction(uint8_t status){
+bool doorAction(uint8_t status){
      if (status){
         UnlockingApproved = true;
         openDoor();
@@ -57,16 +72,19 @@ void doorAction(uint8_t status){
     else{
         closeDoor();
         UnlockingApproved=false;
-    } 
+    }
+    return UnlockingApproved;
 }
 
 
-void breakingIn(){
+char * breakingIn(){
     char * x = alarm(UnlockingApproved);
     if (strcmp(x,"Hello, Thief! :)")==0)
     {
         transmitData((uint8_t*)x,16);
     }
+
+    return x;
 }
 
 void Callback(){
@@ -75,10 +93,12 @@ void Callback(){
         char token[65];
         strncpy(token, received_message_buffer, 64);
         token[64] = '\0';
-        createSharedKey(&enc,token);
-        uint8_t * sharedkey=getSharedKey(&enc);
-        AES_init_ctx_iv(&my_AES_ctx,sharedkey,iv);
-        wifi_command_TCP_transmit((uint8_t*)"Shared Key Created", 19);
+        //createSharedKey(&enc,token);
+        //uint8_t * sharedkey=getSharedKey(&enc);
+        // uint8_t * sharedkey=(uint8_t *) calloc(33,sizeof(uint8_t));
+        // snprintf((char *)sharedkey, 33, "RaT‰ëòçÇRQqBèºQ|{ŽnÎA");
+        // AES_init_ctx_iv(&my_AES_ctx,sharedkey,iv);
+        //wifi_command_TCP_transmit((uint8_t*)sharedkey, 32);
         IsPKAcquired=true;
     }
     else{
@@ -109,7 +129,7 @@ void Callback(){
     }
 }
 
-void start(){
+int start(){
     pc_comm_init(9600,NULL);
     wifi_init();
     dht11_init();
@@ -124,17 +144,27 @@ void start(){
     //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
     wifi_command_join_AP("KBENCELT 3517","p31A05)1");
     //wifi_command_join_AP("002","zabijemsazalentilku");
-    wifi_command_create_TCP_connection("192.168.137.1",6868,Callback,received_message_buffer);
+    wifi_command_create_TCP_connection("192.168.137.14",6868,Callback,received_message_buffer);
 
-    char* public_key_hex = print_hex(getIOTPublicKey(&enc), 64);
-    char* connection = (char*)malloc((sizeof("Connected:") + strlen(public_key_hex) + 1) * sizeof(char));
+    uint8_t * PK=getIOTPublicKey(&enc);
+    char* public_key_hex = print_hex(PK, 64);
+    char* connection = (char*)malloc((sizeof("Connected:") + strlen(public_key_hex) + 1) * sizeof(char)); 
     sprintf(connection, "Connected:%s", public_key_hex);
+ 
     wifi_command_TCP_transmit((uint8_t*)connection,strlen(connection));
+    
     free(connection);
+    //free(public_key_hex);
 
-    _delay_ms(1000);
+    uint8_t * sharedkey=(uint8_t *) calloc(33,sizeof(uint8_t));
+    snprintf((char *)sharedkey, 33, "RaT‰ëòçÇRQqBèºQ|{ŽnÎA");
+    AES_init_ctx_iv(&my_AES_ctx,sharedkey,iv);
 
-    periodic_task_init_a(sendReadings,30000);
-    periodic_task_init_b(doorApproval,30000);
-    periodic_task_init_c(breakingIn,1000);
+    custom_delay_ms(1000);
+
+    //periodic_task_init_a(sendReadings,30000);
+    //periodic_task_init_b(doorApproval,30000);
+    //periodic_task_init_c(breakingIn,1000);
+
+    return 1;
 }
