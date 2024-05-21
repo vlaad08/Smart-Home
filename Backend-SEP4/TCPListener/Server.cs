@@ -3,17 +3,19 @@
     using System.Net.Sockets;
     using System.Text;
     using System.Xml.Serialization;
-    using ECC.Encryption;
+    using ECC;
+    using ECC.Interface;
 
     public class Server
     {
         private TcpListener listener;
         private Thread serverThread;
         private bool isRunning;
+        private IEncryptionService enc = new EncryptionService(Convert.FromBase64String("qKBL+IAOLbn+jLnFJEYp8KAmlAe4iVQVfa2K4d9huA4="),Convert.FromBase64String("cRooWgwV4QTvQxZkqOZRHw=="));
 
         public Server(int port)
         {
-            IPAddress localAddr = IPAddress.Parse("192.168.137.245");
+            IPAddress localAddr = IPAddress.Parse("192.168.137.14");
             listener = new TcpListener(localAddr, port);
             isRunning = true;
             listener.Start();
@@ -39,20 +41,23 @@
                     string receivedMessage = "";
                     while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        // Convert the received data to a string
-                        receivedMessage = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                        
-                        // Recognize that we are receiving their PU
-                        if (receivedMessage.StartsWith("Connected:"))
+                        // Check if the message starts with "Connected:"
+                        string messageHeader = Encoding.ASCII.GetString(buffer, 0, Math.Min("Connected:".Length, bytesRead));
+                        if (messageHeader.StartsWith("Connected:"))
                         {
-                            string publicKey = receivedMessage.Substring("Connected:".Length).Trim();
+                            // Handle the connected message
+                            //string publicKey = Encoding.ASCII.GetString(buffer, "Connected:".Length, bytesRead - "Connected:".Length).Trim();
                             // Generate shared secret from their PU and our PK 
                             //Encryption.DeriveSymmetricKey();
                         }
-                        else if(receivedMessage!= null)
+                        else if (bytesRead > 0)
                         {
-                            // Print the decrypted received message
-                            Console.WriteLine(Encryption.DecryptMessage(receivedMessage));
+                            // Decrypt the buffer directly
+                            Console.WriteLine(messageHeader);
+                            Console.WriteLine("messageHeader");
+                            string decryptedData = enc.Decrypt(buffer.Take(bytesRead).ToArray());
+                            Console.WriteLine("RETURNED");
+                            Console.WriteLine(decryptedData);
                         }
                     }
 

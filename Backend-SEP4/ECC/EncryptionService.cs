@@ -36,18 +36,43 @@ public class EncryptionService : IEncryptionService
 
     public string Decrypt(byte[] cyphertext)
     {
-        var cyphertextBytes = cyphertext;
-        using var aes = Aes.Create();
-        var decryptor = aes.CreateDecryptor(encryptionKey, iv);
-        using (var memoryStream = new MemoryStream(cyphertextBytes))
+        try
         {
+            Console.WriteLine("Starting Decryption");
+
+            using var aes = Aes.Create();
+            aes.Key = encryptionKey;
+            aes.IV = iv;
+            aes.Mode = CipherMode.CBC;
+            aes.Padding = PaddingMode.None;
+
+            Console.WriteLine(Convert.ToBase64String(encryptionKey));
+            Console.WriteLine(Convert.ToBase64String(iv));
+            var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+
+            using var memoryStream = new MemoryStream(cyphertext);
             using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
             {
                 using (var streamReader = new StreamReader(cryptoStream))
                 {
-                    return streamReader.ReadToEnd();
+                    Console.WriteLine("Attempting to read decrypted data...");
+                    string plaintext = streamReader.ReadToEnd();
+                    Console.WriteLine("Decryption successful.");
+                    Console.WriteLine(plaintext);
+                    return plaintext;
                 }
             }
         }
+        catch (CryptographicException e)
+        {
+            Console.WriteLine($"CryptographicException: {e.Message}");
+            throw; // Re-throwing to handle it at a higher level if needed
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Exception: {e.Message}");
+            throw; // Re-throwing to handle it at a higher level if needed
+        }
     }
+
 }

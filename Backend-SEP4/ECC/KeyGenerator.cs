@@ -34,10 +34,11 @@ public class KeyGenerator
             Console.WriteLine("Shared Key: " + Convert.ToBase64String(key));
             Console.WriteLine("Initialization Vector (IV): " + Convert.ToBase64String(iv));
 
-            string p = "This is the plaintext";
+            string p = "T:25.8   H:44.0";
 
-            IEncryptionService enc = new EncryptionService(Convert.FromBase64String("qKBL+IAOLbn+jLnFJEYp8KAmlAe4iVQVfa2K4d9huA4=\n"), iv);
+            IEncryptionService enc = new EncryptionService(Convert.FromBase64String("qKBL+IAOLbn+jLnFJEYp8KAmlAe4iVQVfa2K4d9huA4="), Convert.FromBase64String("cRooWgwV4QTvQxZkqOZRHw=="));
             byte[] c = enc.Encrypt(p);
+            Console.WriteLine(Convert.ToBase64String(c));
             Console.WriteLine(c);
             string m = enc.Decrypt(c);
             Console.WriteLine(m);
