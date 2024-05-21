@@ -13,7 +13,7 @@ uint8_t * getTempAndHum(){
 
     if (status == DHT11_OK)
     {
-        sprintf(result, "T:%d.%d   H:%d.%d ", temperature_integer, temperature_decimal, humidity_integer, humidity_decimal);
+        sprintf(result, "1-T:%d.%d  H:%d.%d", temperature_integer, temperature_decimal, humidity_integer, humidity_decimal);
     }
     else
         strcpy(result, "Temp Hum Error");
