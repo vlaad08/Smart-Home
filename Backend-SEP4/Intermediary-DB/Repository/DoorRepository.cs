@@ -74,6 +74,10 @@ public class DoorRepository : IDoorRepository
             Context.door.Update(door);
             await Context.SaveChangesAsync();
         }
-        throw new Exception($"Door does not exist.");
+        else
+        {
+          throw new Exception($"Door does not exist.");  
+        }
+        
     }
 }

@@ -30,7 +30,17 @@ public class DoorLogic : IDoorLogic
             await _communicator.SwitchDoor();
             await _repository.SaveDoorState(houseId, state);
         }
-        else
+        else if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) &&
+                 _repository.CheckDoorState(houseId).Result == state && _repository.CheckDoorState(houseId).Result == true)
+       {
+           throw new Exception("Door is already open.");
+       }
+       else if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) &&
+                _repository.CheckDoorState(houseId).Result == state && _repository.CheckDoorState(houseId).Result == false)
+       {
+           throw new Exception("Door is already closed.");
+       }
+       else
         {
             throw new Exception("Password mismatch");
         }

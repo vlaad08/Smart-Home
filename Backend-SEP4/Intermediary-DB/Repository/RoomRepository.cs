@@ -183,7 +183,11 @@ public class RoomRepository : IRoomRepository
             _context.room.Update(existing);
             await _context.SaveChangesAsync();
         }
-        throw new Exception($"Room  doesn't exist in home");
+        else
+        {
+          throw new Exception($"Room  doesn't exist in home");  
+        }
+        
       
     }
 
@@ -194,12 +198,16 @@ public class RoomRepository : IRoomRepository
         {
             return existing.RadiatorState;
         }
-        throw new Exception($"Room  doesn't exist in home");
+        else
+        {
+            throw new Exception($"Room  doesn't exist in home");
+        }
+        
     }
 
     public async Task SaveWindowState(string hardwareId, bool state)
     {
-        Room? room = await _context.room.FirstOrDefaultAsync(r =>r.DeviceId.Equals(hardwareId)) ;
+        Room? room = await _context.room.FirstOrDefaultAsync(r =>r.DeviceId == hardwareId) ;
         if (room != null)
         {
             if (room.IsWindowOpen && !state) room.IsWindowOpen = false;
@@ -207,7 +215,11 @@ public class RoomRepository : IRoomRepository
             _context.room.Update(room);
             await _context.SaveChangesAsync();
         }
-        throw new Exception($"Room does not exist.");
+        else
+        {
+            throw new Exception($"Room does not exist.");
+        }
+        
     }
 
     public async Task<bool> GetWindowState(string hardwareId)
@@ -222,14 +234,18 @@ public class RoomRepository : IRoomRepository
 
     public async Task SetLightState(string hardwareId, int level)
     {
-        Room? existing = await _context.room.FirstOrDefaultAsync(r => r.DeviceId == hardwareId);
+        Room? existing = await _context.room.FirstOrDefaultAsync(r => r.DeviceId.Equals(hardwareId));
         if (existing!=null)
         {
             existing.LightLevel = level;
             _context.room.Update(existing);
             await _context.SaveChangesAsync();
         }
-        throw new Exception($"Room  doesn't exist in home");
+        else
+        {
+            throw new Exception($"Room  doesn't exist in home");  
+        }
+        
     }
 
     public async Task<int> GetLightState(string hardwareId)
@@ -239,6 +255,7 @@ public class RoomRepository : IRoomRepository
         {
             return existing.LightLevel;
         }
+        
         throw new Exception($"Room  doesn't exist in home");
     }
 }

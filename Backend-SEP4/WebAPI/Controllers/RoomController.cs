@@ -82,6 +82,7 @@ public class RoomController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+    //
     // room id because you can change the device id in that method, so the method should be done using roomId, which can not change during this method
     //An endpoint to edit a room (we send an object (roomId, new room name, new hardware id, new default temperature, new default humidity)
 
@@ -134,7 +135,7 @@ public class RoomController : ControllerBase
     {
         try
         {
-            await logic.SetRadiatorLevel(deviceId, level);
+            await logic.SetLightState(deviceId, level);
             return Ok("Light level set.");
         }catch (Exception e)
         {
