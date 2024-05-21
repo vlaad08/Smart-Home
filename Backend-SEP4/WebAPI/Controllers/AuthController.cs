@@ -54,6 +54,7 @@ public class AuthController : ControllerBase
         }
         catch (Exception e)
         {
+            Console.WriteLine(e);
             return BadRequest(e.Message);
         }
     }
@@ -146,7 +147,7 @@ public class AuthController : ControllerBase
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
             new Claim(ClaimTypes.Name, member.Username),
             new Claim(ClaimTypes.Role, member.IsAdmin ? "Admin" : "Member"),
-            new Claim("HouseId", member.Home?.Id ?? "")
+            // new Claim("HouseId", member.Home?.Id)
         };
         return claims.ToList();
     }

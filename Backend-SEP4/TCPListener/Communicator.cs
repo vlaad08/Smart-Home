@@ -39,7 +39,7 @@ public class Communicator : ICommunicator
         CloseCurrentClient();
         client = newClient;
         stream = newClient.GetStream();
-        await handshake();
+        //await handshake();
         Console.WriteLine("Communicator updated with new client.");
         return stream;
     }
@@ -79,10 +79,10 @@ public class Communicator : ICommunicator
         Send(data);
     }
 
-    public Task<string> getTemperature()
+    public async Task<double> getTemperature()
     {
         Send("Send temperature.");
-        return null;
+        return 32;
     }
 
 

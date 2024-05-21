@@ -8,7 +8,7 @@ using WebAPI.DTOs;
 namespace WebAPI.Controllers;
 
 [ApiController] [Route("temperature")]
-[Authorize]
+// [Authorize]
 public class TemperatureController : ControllerBase
 {
 
@@ -17,6 +17,7 @@ public class TemperatureController : ControllerBase
     public TemperatureController(ITemperatureLogic temperatureLogic)
     {
         this._temperatureLogic = temperatureLogic;
+        
     }
 
     [HttpGet("{deviceId}")]
@@ -24,6 +25,8 @@ public class TemperatureController : ControllerBase
     {
         try
         {
+
+            Console.WriteLine("get hardware fasz");
             TemperatureReading? temperature = await _temperatureLogic.getLatestTemperature(deviceId);
             return Ok(temperature);
         }
@@ -48,6 +51,74 @@ public class TemperatureController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpPost, Route("{hardwareId}/set")]
+    public async Task<IActionResult> SetTemperature([FromRoute] string hardwareId, [FromBody] int level)
+    {
+        if (level < 1 || level > 6)
+        {
+            return BadRequest("Level must be between 1 and 6.");
+        }
+        
+        try
+        {
+            await _temperatureLogic.setTemperature(hardwareId, level);
+            return Ok($"Light level set to {level} for hardware ID: {hardwareId}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpPost, Route("devices/{deviceId}/{value}")]
+    public async Task<ActionResult> SaveCurrentTemperatureInRoom([FromRoute] string deviceId,[FromRoute] double value)
+    {
+        try
+        {
+            Console.WriteLine("Controller");
+            await _temperatureLogic.saveTempReading(deviceId,value);
+            Console.WriteLine("controller 2");
+            return Ok($"Temperature saved for all rooms in house");
+        }catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    /*[HttpPost, Route("save")]
+    public async Task<ActionResult> CallSaveTemperature()
+    {
+        
+        try
+        {
+            HttpClient httpClient = new HttpClient();
+            string deviceId = "1";
+            double value = 20.0;
+
+            string url = $"http://localhost:5084/temperature/devices/{deviceId}/{value}";
+
+            HttpResponseMessage response = await httpClient.PostAsync(url, null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Temperature saved successfully.");
+                return Ok("Temperature saved successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Failed to save temperature.");
+                return StatusCode((int)response.StatusCode, "Failed to save temperature.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception occurred while saving temperature: {ex.Message}");
+            return StatusCode(500, $"Exception occurred while saving temperature: {ex.Message}");
+        }
+    }*/
 }
 
 

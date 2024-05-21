@@ -168,6 +168,36 @@ public class AccountRepository : IAccountRepository
         return member;
 
     }
-    
+
+    public async Task AddMemberToHouse(string username, string houseId)
+    {
+        try
+        {
+            Member? existing = await context.member.Include(m => m.Home)
+                .SingleOrDefaultAsync(m => m.Username == username);
+            
+                if (existing.Home != null)
+                {
+                    throw new Exception("Member is already assigned to a house");
+                }
+
+                Home? home = await context.home.FindAsync(houseId);
+                if (home == null)
+                {
+                    throw new Exception("No home w that id");
+                }
+
+                existing.Home = home;
+                context.member.Update(existing);
+                await context.SaveChangesAsync();
+                
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
     
 }
