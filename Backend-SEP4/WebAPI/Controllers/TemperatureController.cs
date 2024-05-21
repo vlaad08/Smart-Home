@@ -3,6 +3,7 @@ using DBComm.Logic.Interfaces;
 using DBComm.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.DTOs;
 
 namespace WebAPI.Controllers;
 
@@ -19,13 +20,14 @@ public class TemperatureController : ControllerBase
         
     }
 
-    [HttpGet("{hardwareId}")]
-    public async Task<ActionResult> GetLatestTemperature([FromRoute] string hardwareId)
+    [HttpGet("{deviceId}")]
+    public async Task<ActionResult> GetLatestTemperature([FromRoute] string deviceId)
     {
         try
         {
+
             Console.WriteLine("get hardware fasz");
-            TemperatureReading? temperature = await _temperatureLogic.getLatestTemperature(hardwareId);
+            TemperatureReading? temperature = await _temperatureLogic.getLatestTemperature(deviceId);
             return Ok(temperature);
         }
         catch (Exception e)
@@ -34,13 +36,14 @@ public class TemperatureController : ControllerBase
             throw;
         }
     }
-    [HttpGet, Route("{hardwareId}/history")]
-    public async Task<ActionResult<ICollection<LightReading>>> GetHistory([FromRoute] string hardwareId,
-        [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)
+    //An endpoint to get the temperature history of a specific room based on id of that room (request with room id, returns a list of readings of temperature)
+    [HttpGet, Route("{deviceId}/history")]
+    public async Task<ActionResult<ICollection<LightReading>>> GetHistory([FromRoute] string deviceId,
+        [FromBody] TimePeriodDTO dto)
     {
         try
         {
-            var temperatureHistory = await _temperatureLogic.getTemperatureHistory(hardwareId, dateFrom, dateTo);
+            var temperatureHistory = await _temperatureLogic.getTemperatureHistory(deviceId, dto.dateFrom, dto.dateTo);
             return Ok(temperatureHistory);
         }catch (Exception e)
         {
@@ -116,9 +119,6 @@ public class TemperatureController : ControllerBase
             return StatusCode(500, $"Exception occurred while saving temperature: {ex.Message}");
         }
     }*/
-    
-
-
 }
 
 

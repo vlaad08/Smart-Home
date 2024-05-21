@@ -15,7 +15,7 @@ public class RoomRepository : IRoomRepository
         _context = context;
     }
 
-    public async Task AddRoom(string name, string deviceId, string homeId)
+    public async Task AddRoom(string name, string deviceId, string homeId, int preferedTemperature, int preferedHumidity)
     {
         try
         {
@@ -26,6 +26,8 @@ public class RoomRepository : IRoomRepository
             }
             Room room = new Room(name, deviceId);
             room.Home = home;
+            room.PreferedTemperature = preferedTemperature;
+            room.PreferedHumidity = preferedHumidity;
             EntityEntry<Room> r = await _context.room.AddAsync(room);
             await _context.SaveChangesAsync();
         }
@@ -39,7 +41,7 @@ public class RoomRepository : IRoomRepository
 
     public async Task DeleteRoom(string id)
     {
-        Room? room = await _context.room.FirstOrDefaultAsync(r => r.Id == id);
+        Room? room = await _context.room.FirstOrDefaultAsync(r => r.DeviceId == id);
         if (room != null)
         {
             _context.room.Remove(room);
@@ -47,14 +49,16 @@ public class RoomRepository : IRoomRepository
         }
     }
 
-    public async Task EditRoom(string id, string? name=null, string? deviceId=null)
+    public async Task EditRoom(string id,string? name, string? deviceId, int? preferedTemperature, int? preferedHumidity)
     {
         Room room = await _context.room.FirstOrDefaultAsync(r => r.Id == id);
         if (room != null)
         {
-            if (name != null)
+            if (name != null && preferedTemperature != null && preferedHumidity != null)
             {
                 room.Name = name;
+                room.PreferedTemperature = preferedTemperature;
+                room.PreferedHumidity = preferedHumidity;
             }
 
             if (deviceId != null)
@@ -71,20 +75,15 @@ public class RoomRepository : IRoomRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<Room>> GetAllRooms(string homeId, string? deviceId=null)
+    public async Task<List<Room>> GetAllRooms(string homeId)
     {
         IQueryable<Room> query = _context.room.Include(r=>r.Home).Where(r => r.Home.Id == homeId);
-
-        if (deviceId != null)
-        {
-            query = query.Where(r => r.DeviceId == deviceId);
-        }
         
         List<Room> rooms = await query.ToListAsync();
         
         if (rooms.Count==0)
         {
-            throw new Exception($"No room with device {deviceId} or given wrong house ID");
+            throw new Exception($"No room were found.");
         }
         
         return rooms;
@@ -165,13 +164,98 @@ public class RoomRepository : IRoomRepository
         return true;
     }
 
-    public async Task<bool> CheckNonExistingRoom(string id)
+    public async Task<bool> CheckNonExistingRoom(string deviceId)
     {
-        Room? existing = await _context.room.FirstOrDefaultAsync(r => r.Id == id);
+        Room? existing = await _context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId);
         if (existing==null)
         {
-            throw new Exception($"Room {id} doesn't exist in home");
+            throw new Exception($"Room with device {deviceId} doesn't exist in home");
         }
         return true;
+    }
+
+    public async Task SetRadiatorLevel(string deviceId, int level)
+    {
+        Room? existing = await _context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId);
+        if (existing!=null)
+        {
+            existing.RadiatorState = level;
+            _context.room.Update(existing);
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+          throw new Exception($"Room  doesn't exist in home");  
+        }
+        
+      
+    }
+
+    public async Task<int> GetRadiatorLevel(string deviceId)
+    {
+        Room? existing = await _context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId);
+        if (existing!=null)
+        {
+            return existing.RadiatorState;
+        }
+        else
+        {
+            throw new Exception($"Room  doesn't exist in home");
+        }
+        
+    }
+
+    public async Task SaveWindowState(string hardwareId, bool state)
+    {
+        Room? room = await _context.room.FirstOrDefaultAsync(r =>r.DeviceId == hardwareId) ;
+        if (room != null)
+        {
+            if (room.IsWindowOpen && !state) room.IsWindowOpen = false;
+            if(!room.IsWindowOpen && state) room.IsWindowOpen = true;
+            _context.room.Update(room);
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            throw new Exception($"Room does not exist.");
+        }
+        
+    }
+
+    public async Task<bool> GetWindowState(string hardwareId)
+    {
+        Room? room = await _context.room.FirstOrDefaultAsync(r =>r.DeviceId.Equals(hardwareId)) ;
+        if (room != null)
+        {
+            return room.IsWindowOpen;
+        }
+        throw new Exception($"Room does not exist.");
+    }
+
+    public async Task SetLightState(string hardwareId, int level)
+    {
+        Room? existing = await _context.room.FirstOrDefaultAsync(r => r.DeviceId.Equals(hardwareId));
+        if (existing!=null)
+        {
+            existing.LightLevel = level;
+            _context.room.Update(existing);
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            throw new Exception($"Room  doesn't exist in home");  
+        }
+        
+    }
+
+    public async Task<int> GetLightState(string hardwareId)
+    {
+        Room? existing = await _context.room.FirstOrDefaultAsync(r => r.DeviceId == hardwareId);
+        if (existing!=null)
+        {
+            return existing.LightLevel;
+        }
+        
+        throw new Exception($"Room  doesn't exist in home");
     }
 }

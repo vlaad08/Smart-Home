@@ -12,10 +12,10 @@ public class RoomLogicTest
         var mock = new Mock<IRoomRepository>();
         var logic = new RoomLogic(mock.Object);
         mock.Setup(m => m.CheckExistingRoom("test", "test")).ReturnsAsync(true);
-        await logic.AddRoom("test", "test","test");
+        await logic.AddRoom("test", "test","test", 25, 25);
         
         mock.Verify(m=>m.CheckExistingRoom("test","test"));
-        mock.Verify(m=>m.AddRoom("test","test","test"));
+        mock.Verify(m=>m.AddRoom("test","test","test", 25 ,25));
     }
     
     [Fact]
@@ -26,11 +26,11 @@ public class RoomLogicTest
             .ThrowsAsync(new Exception("Room test already exists in home test"));
 
         var logic = new RoomLogic(mock.Object);
-        var exception = await Assert.ThrowsAsync<Exception>(() => logic.AddRoom("test", "test", "test"));
+        var exception = await Assert.ThrowsAsync<Exception>(() => logic.AddRoom("test", "test", "test", 25, 25));
 
         Assert.Equal("Room test already exists in home test", exception.Message);
         mock.Verify(m => m.CheckExistingRoom("test", "test"), Times.Once);
-        mock.Verify(m => m.AddRoom(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        mock.Verify(m => m.AddRoom(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 25, 25), Times.Never);
     }
 
     [Fact]
@@ -66,10 +66,10 @@ public class RoomLogicTest
         var logic = new RoomLogic(mock.Object);
         mock.Setup(m => m.CheckNonExistingRoom("test")).ReturnsAsync(true);
         
-        await logic.EditRoom("test");
+        await logic.EditRoom("test", null, null, 0, 0);
         
         mock.Verify(m=>m.CheckNonExistingRoom("test"));
-        mock.Verify(m=>m.EditRoom("test",null,null));
+        mock.Verify(m=>m.EditRoom("test",null,null, 0 ,0));
     }
     
     [Fact]
@@ -78,11 +78,11 @@ public class RoomLogicTest
         var mock = new Mock<IRoomRepository>();
         var logic = new RoomLogic(mock.Object);
         mock.Setup(m => m.CheckNonExistingRoom("test")).ThrowsAsync(new Exception("Room test doesn't exist in home"));
-        var exception = await Assert.ThrowsAsync<Exception>(() => logic.EditRoom("test"));
+        var exception = await Assert.ThrowsAsync<Exception>(() => logic.EditRoom("test", null, null, 0, 0));
         
         Assert.Equal("Room test doesn't exist in home",exception.Message);
         mock.Verify(m=>m.CheckNonExistingRoom("test"));
-        mock.Verify(m=>m.EditRoom(It.IsAny<string>(),null,null),Times.Never);
+        mock.Verify(m=>m.EditRoom(It.IsAny<string>(),null,null, 0, 0),Times.Never);
     }
     
     [Fact]
@@ -91,9 +91,9 @@ public class RoomLogicTest
         var mock = new Mock<IRoomRepository>();
         var logic = new RoomLogic(mock.Object);
         
-        await logic.GetAllRooms("Test","1");
+        await logic.GetAllRooms("Test");
         
-        mock.Verify(m=>m.GetAllRooms("Test","1"));
+        mock.Verify(m=>m.GetAllRooms("Test"));
     }
 
     [Fact]
@@ -101,11 +101,11 @@ public class RoomLogicTest
     {
         var mock = new Mock<IRoomRepository>();
         var logic = new RoomLogic(mock.Object);
-        mock.Setup(m => m.GetAllRooms("test","2")).ThrowsAsync(new Exception("No room with device 2 or given wrong house ID"));
-        var exception = await Assert.ThrowsAsync<Exception>(() => logic.GetAllRooms("test","2"));
+        mock.Setup(m => m.GetAllRooms("test")).ThrowsAsync(new Exception("No room with device 2 or given wrong house ID"));
+        var exception = await Assert.ThrowsAsync<Exception>(() => logic.GetAllRooms("test"));
         
         Assert.Equal("No room with device 2 or given wrong house ID",exception.Message);
-        mock.Verify(m=>m.GetAllRooms("test","2"));
+        mock.Verify(m=>m.GetAllRooms("test"));
     }
     
     [Fact]

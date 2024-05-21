@@ -18,18 +18,25 @@ public class Context : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {   
-        DotNetEnv.Env.Load("..\\.env");
+ 
+        DotNetEnv.Env.TraversePath().Load();
+        
+        string SECRETSECTION_HOST = Environment.GetEnvironmentVariable("DATABASE_HOST");
+        string SECRETSECTION_DB = Environment.GetEnvironmentVariable("DATABASE_NAME");
+        string SECRETSECTION_USERNAME = Environment.GetEnvironmentVariable("DATABASE_USER");
+        string SECRETSECTION_PASSWORD = Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
+
+        if (SECRETSECTION_HOST == null || SECRETSECTION_DB == null || SECRETSECTION_USERNAME == null || SECRETSECTION_PASSWORD == null)
+        {
+            DotNetEnv.Env.Load();
+        }
 
 
-        string SECRETSECTION_HOST = "smart-homel.postgres.database.azure.com";
-        string SECRETSECTION_DB = "smart_home";
-        string SECRETSECTION_USERNAME = "sep_user";
-        string SECRETSECTION_PASSWORD = "Semester4Password";
-
-
-        System.Console.WriteLine(11111111111111);
-        System.Console.WriteLine(SECRETSECTION_HOST);
-        ///cloud 
+        if(SECRETSECTION_HOST == null || SECRETSECTION_DB == null || SECRETSECTION_USERNAME == null || SECRETSECTION_PASSWORD == null)
+        {
+            throw new Exception("Environment variables not set");
+        }
+        
         optionsBuilder.UseNpgsql($"Host={SECRETSECTION_HOST};Port=5432;Database={SECRETSECTION_DB};Username={SECRETSECTION_USERNAME};Password={SECRETSECTION_PASSWORD};");
     }
 

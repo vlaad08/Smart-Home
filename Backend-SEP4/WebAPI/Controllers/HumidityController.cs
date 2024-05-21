@@ -3,6 +3,7 @@ using DBComm.Repository;
 using DBComm.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.DTOs;
 
 namespace WebAPI.Controllers;
 [Authorize]
@@ -16,7 +17,7 @@ public class HumidityController : ControllerBase
     {
         this._humidityLogic = humidityLogic;
     }
-
+    
     [HttpGet("{hardwareId}/latest")]
     public async Task<ActionResult> GetLatestHumidity([FromRoute]string hardwareId)
     {
@@ -31,13 +32,14 @@ public class HumidityController : ControllerBase
             throw;
         }
     }
+    //An endpoint to get the humidity history of a specific room based on id of that room (request with room id, returns a list of readings of humidity)
     [HttpGet, Route("{hardwareId}/history")]
     public async Task<ActionResult<ICollection<LightReading>>> GetHumidityHistory([FromRoute] string hardwareId,
-        [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)
+        [FromBody] TimePeriodDTO dto)
     {
         try
         {
-            var humidityHistory = await _humidityLogic.getHumidityHistory(hardwareId, dateFrom, dateTo);
+            var humidityHistory = await _humidityLogic.getHumidityHistory(hardwareId, dto.dateFrom, dto.dateTo);
             return Ok(humidityHistory);
         }catch (Exception e)
         {

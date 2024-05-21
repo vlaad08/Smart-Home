@@ -25,7 +25,7 @@ public class AuthController : ControllerBase
         this._accountLogic = accountService;
     }
 
-
+    //An endpoint to create a member account (we send an object (username and password), you send us 200 OK or sth else for error)
     [HttpPost, Route("register"), AllowAnonymous]
     public async Task<ActionResult> Register([FromBody] UserLoginDto dto)
     {
@@ -42,7 +42,7 @@ public class AuthController : ControllerBase
         
         
     }
-
+    //An endpoint to login (we send username and password and you gives us back the token with claims (claims: if admin or normal member, houseId) or error)
     [HttpPost, Route("login"), AllowAnonymous]
     public async Task<ActionResult> Login([FromBody] UserLoginDto userLoginDto)
     {
@@ -58,7 +58,7 @@ public class AuthController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-    
+    //An endpoint to delete a user (delete the entire account not just from the house, we send you username)
     [HttpDelete, Route("delete/users/{username}")]
     public async Task<ActionResult> Delete([FromRoute]string username, [FromBody] UserGetterDTO dto)
     {
@@ -73,7 +73,7 @@ public class AuthController : ControllerBase
         }
         
     }
-
+    //An endpoint to edit username
     [HttpPut, Route("edit/{username}/username")]
     public async Task<ActionResult> EditUsername([FromRoute]string username, [FromBody] UsernameChangeDTO dto)
     {
@@ -87,6 +87,7 @@ public class AuthController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+    //An endpoint to edit password 
     [HttpPut, Route("edit/{username}/password")]
         public async Task<ActionResult> EditPassword([FromRoute]string username,[FromBody] PasswordChangeDTO dto)
         {
@@ -100,13 +101,14 @@ public class AuthController : ControllerBase
                 return BadRequest(e.Message);
             }
         }
-    [HttpPut, Route("edit/{usernames}/admin"), Authorize(Policy = "Admin")]
+    //an endpoint to create new admin(admin can creat new admin)
+    [HttpPut, Route("edit/admin/{usernames}"), Authorize(Policy = "Admin")]
     public async Task<ActionResult> ToggleAdmin([FromRoute]string username, [FromBody] ToggleAdminDTO dto)
     {
         try
         {
             await _accountLogic.ToggleAdmin(dto.AdminUsername,dto.AdminPassword,dto.Username);
-            return Ok("Username changed.");
+            return Ok("Admin added.");
         }
         catch (Exception e)
         {
@@ -114,6 +116,7 @@ public class AuthController : ControllerBase
         }
     }
     
+   
     private string GenerateJwt(Member member)
     {
         List<Claim> claims = GenerateClaims(member);
@@ -147,34 +150,5 @@ public class AuthController : ControllerBase
             // new Claim("HouseId", member.Home?.Id)
         };
         return claims.ToList();
-    }
-
-    [HttpPatch, Route("houses/{houseId}/members"), Authorize(Policy = "Admin")]
-    public async Task<ActionResult> AddMemberToHouse([FromRoute]string houseId, [FromQuery] string username)
-    {
-        try
-        {
-            await _accountLogic.AddMemberToHouse(username, houseId);
-            return Ok("Member added to house.");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
-    
-    [HttpPatch, Route("houses/members/{username}"), Authorize(Policy = "Admin")]
-    public async Task<ActionResult> RemoveMemberFromHouse([FromRoute] string username)
-    {
-        try
-        {
-            await _accountLogic.RemoveMemberFromHouse(username);
-            return Ok("Member removed.");
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
     }
 }

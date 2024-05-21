@@ -156,24 +156,7 @@ public class AccountRepository : IAccountRepository
             throw new Exception(e.Message);
         }
     }
-    public async Task RemoveMemberFromHouse(string username)
-    {
-        try
-        {
-            Member? existing = await context.member.Include(m => m.Home)
-                .SingleOrDefaultAsync(m => m.Username == username);
-            if (existing != null)
-            {
-                existing.Home = null;
-                context.member.Update(existing);
-                await context.SaveChangesAsync();
-            }
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-    }
+    
 
     public async Task<Member> Login(string username, string hash)
     {
@@ -185,6 +168,7 @@ public class AccountRepository : IAccountRepository
         return member;
 
     }
+
     public async Task AddMemberToHouse(string username, string houseId)
     {
         try
@@ -214,5 +198,6 @@ public class AccountRepository : IAccountRepository
             throw;
         }
     }
+
     
 }

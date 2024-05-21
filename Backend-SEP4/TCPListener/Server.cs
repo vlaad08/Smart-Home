@@ -82,6 +82,19 @@ public class Server
                             break;
 
                         case var message when message.StartsWith("L:"):
+                        
+                        // Convert the received data to a string
+                        receivedMessage = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                        
+                        // Recognize that we are receiving their PU
+                        if (receivedMessage.StartsWith("Connected:"))
+                        {
+                            string publicKey = receivedMessage.Substring("Connected:".Length).Trim();
+                            // Generate shared secret from their PU and our PK 
+                            //Encryption.DeriveSymmetricKey();
+                        }
+                        else if(receivedMessage!= null)
+
                         {
                             string[] parts = message.Substring(2).Split(' ');
                             if (parts.Length > 1 && double.TryParse(parts[1], out double lightValue))
