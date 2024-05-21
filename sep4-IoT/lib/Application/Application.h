@@ -18,6 +18,7 @@
 #include "Window.h"
 #include "AlarmDoor.h"
 #include "Door.h"
+#include "Converter.h"
 
 #ifdef __AVR__
   #include <util/delay.h>
@@ -44,3 +45,5 @@ int sendLight();
 int sendTempAndHumidity();
 
 void transmitData(uint8_t * data,uint16_t length);
+
+void sendReadingWrapper();
