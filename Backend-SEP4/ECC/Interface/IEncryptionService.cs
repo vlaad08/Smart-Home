@@ -2,6 +2,6 @@ namespace ECC.Interface;
 
 public interface IEncryptionService
 {
-    string Encrypt(string plaintext);
-    string Decrypt(string cyphertext);
+    byte[] Encrypt(string plaintext);
+    string Decrypt(byte[] cyphertext);
 }

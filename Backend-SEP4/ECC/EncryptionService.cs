@@ -14,7 +14,7 @@ public class EncryptionService : IEncryptionService
         this.iv = iv;
     }
     
-    public string Encrypt(string plaintext)
+    public byte[] Encrypt(string plaintext)
     {
         byte[] cyphertextBytes;
         using var aes = Aes.Create();
@@ -29,14 +29,14 @@ public class EncryptionService : IEncryptionService
                 }
             }
             cyphertextBytes = memoryStream.ToArray();
-            
-            return Convert.ToBase64String(cyphertextBytes);
+            return cyphertextBytes;
+
         }
     }
 
-    public string Decrypt(string cyphertext)
+    public string Decrypt(byte[] cyphertext)
     {
-        var cyphertextBytes = Convert.FromBase64String(cyphertext);
+        var cyphertextBytes = cyphertext;
         using var aes = Aes.Create();
         var decryptor = aes.CreateDecryptor(encryptionKey, iv);
         using (var memoryStream = new MemoryStream(cyphertextBytes))
