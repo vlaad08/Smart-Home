@@ -134,7 +134,7 @@ public class RoomController : ControllerBase
     {
         try
         {
-            await logic.SetRadiatorLevel(deviceId, level);
+            await logic.SetLightState(deviceId, level);
             return Ok("Light level set.");
         }catch (Exception e)
         {

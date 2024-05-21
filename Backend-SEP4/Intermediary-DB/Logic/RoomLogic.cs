@@ -93,8 +93,13 @@ public class RoomLogic : IRoomLogic
         if (level >= 0 && level <= 6)
         {
            await _repository.SetRadiatorLevel(deviceId, level);
+           //_communicator.setTemperature(hardwareId, level);
         }
-        throw new Exception("Radiator level must be between 0 and 6.");
+        else
+        {
+           throw new Exception("Radiator level must be between 0 and 6."); 
+        }
+        
     }
 
     public Task<int> GetRadiatorLevel(string deviceId)
@@ -147,12 +152,16 @@ public class RoomLogic : IRoomLogic
     public async Task SetLightState(string hardwareId, int level)
     {
         try
-        {
-            _communicator.setLight(hardwareId, level);
+        { 
             if (level >= 0 && level <= 4)
-            {
+            { 
               await _repository.SetLightState(hardwareId, level);  
+             _communicator.setLight(hardwareId, level);
             } 
+            else
+            {
+                throw new Exception("Light level must be between 0 and 4."); 
+            }
         }
         catch (Exception e)
         {

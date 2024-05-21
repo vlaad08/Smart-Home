@@ -3,6 +3,7 @@ using DBComm.Logic.Interfaces;
 using DBComm.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.DTOs;
 
 namespace WebAPI.Controllers;
 
@@ -35,11 +36,11 @@ public class TemperatureController : ControllerBase
     //An endpoint to get the temperature history of a specific room based on id of that room (request with room id, returns a list of readings of temperature)
     [HttpGet, Route("{deviceId}/history")]
     public async Task<ActionResult<ICollection<LightReading>>> GetHistory([FromRoute] string deviceId,
-        [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)
+        [FromBody] TimePeriodDTO dto)
     {
         try
         {
-            var temperatureHistory = await _temperatureLogic.getTemperatureHistory(deviceId, dateFrom, dateTo);
+            var temperatureHistory = await _temperatureLogic.getTemperatureHistory(deviceId, dto.dateFrom, dto.dateTo);
             return Ok(temperatureHistory);
         }catch (Exception e)
         {
