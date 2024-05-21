@@ -35,11 +35,11 @@ public class HumidityController : ControllerBase
     //An endpoint to get the humidity history of a specific room based on id of that room (request with room id, returns a list of readings of humidity)
     [HttpGet, Route("{hardwareId}/history")]
     public async Task<ActionResult<ICollection<LightReading>>> GetHumidityHistory([FromRoute] string hardwareId,
-        [FromBody] TimePeriodDTO dto)
+        [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)
     {
         try
         {
-            var humidityHistory = await _humidityLogic.getHumidityHistory(hardwareId, dto.dateFrom, dto.dateTo);
+            var humidityHistory = await _humidityLogic.getHumidityHistory(hardwareId, dateFrom, dateTo);
             return Ok(humidityHistory);
         }catch (Exception e)
         {

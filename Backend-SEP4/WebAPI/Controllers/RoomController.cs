@@ -20,8 +20,8 @@ public class RoomController : ControllerBase
         this.logic = logic;
     }
     //An endpoint to get all rooms based on a specific houseId (request with houseId, return a list of rooms with their ids, names, current temperature, humidity, light level)
-    [HttpGet("{homeId}")]
-    public async Task<ActionResult<List<Room>>> GetAllRooms([FromRoute] string homeId)
+    [HttpGet("/houses")]
+    public async Task<ActionResult<List<RoomDataTransferDTO>>> GetAllRooms([FromQuery] string homeId)
     {
         try
         {

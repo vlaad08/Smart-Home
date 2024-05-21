@@ -26,7 +26,7 @@ public class DoorController : ControllerBase
          try
          {
              await _logic.SwitchDoor(houseId, dto.Password , dto.State);
-             return Ok("Door unlocked.");
+             return Ok("Door state changed.");
          }
          catch (Exception e)
          {
@@ -34,10 +34,23 @@ public class DoorController : ControllerBase
              return StatusCode(500, e.Message);
         }
      }
+        //an endpoint to get the door state based on haouse id
+     [HttpGet, Route("houses/{houseId}")]
+     public async Task<ActionResult<bool>> CheckDoorState([FromQuery] string houseId)
+     {
+         try
+         {
+             bool state = await _logic.GetDoorState(houseId);
+             return Ok(state);
+         }
+         catch (Exception e)
+         {
+             Console.WriteLine(e);
+             return StatusCode(500, e.Message);
+         }
+     }
+     
     //An endpoint to change the password of the lock of the house (we send you house Id and the new password)
-
-
-
     //TODO: Check if the policies are set right form the authorization
     [HttpPut, Route("houses/{houseId}/doors/password")] //, Authorize(Policy = "Admin")
     public async Task<IActionResult> ChangePassword([FromRoute] string houseId, [FromBody] string newPassword)

@@ -8,7 +8,7 @@ public interface IRoomRepository
     Task AddRoom(string name, string deviceId, string homeId, int preferedTemperature, int preferedHumidity);
     Task DeleteRoom(string id);
     Task EditRoom(string id,string? name, string? deviceId, int? preferedTemperature, int? preferedHumidity);
-    Task<List<Room>?> GetAllRooms(string homeId);
+    Task<List<RoomDataTransferDTO>?> GetAllRooms(string homeId);
     Task<RoomDataTransferDTO> GetRoomData(string homeId, string? deviceId,bool temp=false, bool humi=false, bool light=false);
 
     Task<bool> CheckExistingRoom(string deviceId, string homeId);

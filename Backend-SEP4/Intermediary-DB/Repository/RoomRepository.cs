@@ -75,19 +75,67 @@ public class RoomRepository : IRoomRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<Room>> GetAllRooms(string homeId)
+    public async Task<List<RoomDataTransferDTO>?> GetAllRooms(string homeId)
     {
-        IQueryable<Room> query = _context.room.Include(r=>r.Home).Where(r => r.Home.Id == homeId);
-        
+        IQueryable<Room> query = _context.room.Include(r => r.Home).Where(r => r.Home.Id == homeId);
+    
         List<Room> rooms = await query.ToListAsync();
-        
-        if (rooms.Count==0)
+    
+        if (rooms.Count == 0)
         {
-            throw new Exception($"No room were found.");
+            throw new Exception($"No rooms were found.");
         }
-        
-        return rooms;
+
+        List<RoomDataTransferDTO> dtos = new List<RoomDataTransferDTO>();
+        try
+        {
+            foreach (Room r in rooms)
+            {
+                RoomDataTransferDTO dto = new RoomDataTransferDTO
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    DeviceId = r.DeviceId,
+                    Home = r.Home,
+                    IsWindowOpen = r.IsWindowOpen,
+                    LightLevel = r.LightLevel,
+                    RadiatorState = r.RadiatorState,
+                    PreferedHumidity = r.PreferedHumidity,
+                    PreferedTemperature = r.PreferedTemperature,
+                };
+
+                var tempReading = _context.temperature_reading.Where(t => t.Room.Id == r.Id)
+                    .OrderByDescending(t => t.ReadAt).FirstOrDefault();
+                if (tempReading != null)
+                {
+                    dto.TempValue = tempReading.Value;
+                }
+
+                var humiReading = _context.humidity_reading.Where(h => h.Room.Id == r.Id)
+                    .OrderByDescending(h => h.ReadAt).FirstOrDefault();
+                if (humiReading != null)
+                {
+                    dto.HumiValue = humiReading.Value;
+                }
+
+                var lightReading = _context.light_reading.Where(l => l.Room.Id == r.Id)
+                    .OrderByDescending(l => l.ReadAt).FirstOrDefault();
+                if (lightReading != null)
+                {
+                    dto.LightValue = lightReading.Value;
+                }
+
+                dtos.Add(dto);
+            }
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+
+        return dtos;
     }
+
 
     public async Task<RoomDataTransferDTO> GetRoomData(string homeId, string deviceId, bool temp = false,
         bool humi = false, bool light = false)

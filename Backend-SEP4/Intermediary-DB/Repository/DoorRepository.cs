@@ -31,6 +31,17 @@ public class DoorRepository : IDoorRepository
 
         return null;
     }
+    
+    public async Task<string> CheckHashedPassword(string houseId)
+    {
+        Door? existing = await Context.door.Include(d => d.Home).SingleOrDefaultAsync(d => d.Home.Id == houseId);
+        if (existing != null)
+        {
+            return existing.LockPassword;
+        }
+
+        return null;
+    }
 
     public async Task ChangePassword(string houseId, string password)
     {
