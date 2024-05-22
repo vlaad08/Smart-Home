@@ -113,6 +113,18 @@ void Callback(){
     }
 }
 
+void sendReadingsWrapper(){
+    (void)sendReadings();
+}
+
+void doorApprovalWrapper(){
+    (void) doorApproval();
+}
+
+void breakingInWrapper(){
+    (void) breakingIn();
+}
+
 int start(){
     pc_comm_init(9600,NULL);
     wifi_init();
@@ -131,9 +143,9 @@ int start(){
 
     
 
-    periodic_task_init_a(sendReadings,15000);
-    periodic_task_init_b(doorApproval,30000);
-    periodic_task_init_c(breakingIn,1000);
+    periodic_task_init_a(sendReadingsWrapper,15000);
+    periodic_task_init_b(doorApprovalWrapper,30000);
+    periodic_task_init_c(breakingInWrapper,1000);
 
     return 1;
 }
