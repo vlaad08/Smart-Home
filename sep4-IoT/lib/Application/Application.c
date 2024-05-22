@@ -8,6 +8,8 @@ void static custom_delay_ms(uint16_t milliseconds) {
 #endif
 }
 
+#define HardwareId 1
+
 struct AES_ctx my_AES_ctx;
 bool UnlockingApproved=false;
 char received_message_buffer[128];
@@ -25,36 +27,36 @@ void transmitData(uint8_t * data,uint16_t length){
     free(data);
 }
 
-int sendTempAndHumidity(){
-    uint8_t *data = getTempAndHum(); 
+int sendTempAndHumidity(int hardwareId){
+    uint8_t *data = getTempAndHum(hardwareId); 
     transmitData(data, 16);
 
     return 1;
 }
 
-int sendLight(){
-    uint8_t *data = getLightInfo(); 
+int sendLight(int hardwareId){
+    uint8_t *data = getLightInfo(hardwareId); 
     transmitData(data,16);
 
     return 1;
 }
 
-int sendReadings()
+int sendReadings(int hardwareId)
 {
-    sendTempAndHumidity();
+    sendTempAndHumidity(hardwareId);
     custom_delay_ms(1000);
-    sendLight();
+    sendLight(hardwareId);
 
     return 1;
 }
 
-void windowAction(uint8_t status){
+void windowAction(uint8_t status,int hardwareId){
     //to indicate that we are moving the window with a servo we are going all the way up, all the way down 
     //then going to the middle and waits for a second and then if open then going up is closed going down
     if (status)
-        openWindow();
+        openWindow(hardwareId);
     else
-        closeWindow();
+        closeWindow(hardwareId);
 }
 
 
@@ -88,33 +90,36 @@ char * breakingIn(){
 }
 
 void Callback(){
-    uint8_t value;
-    switch (received_message_buffer[1]){
-    case '1':
-        value = received_message_buffer[3] - '0';
-        uint8_t * radiator= setRadiatorLevel(value);
-        free(radiator);
-        break;
-    case '2':
-        value = received_message_buffer[3] - '0';
-        windowAction(value);
-        break;
-    case '3':
-        value = received_message_buffer[3] - '0';
-        doorAction(value);
-        break;
-    case '4':
-        value = received_message_buffer[3] - '0';
-        char * light= AdjustLight(value);
-        free(light);
-        break;
-    default:
-        break;
+    uint8_t id=received_message_buffer[0]-'0';
+    if (id==HardwareId){
+        uint8_t value;
+        switch (received_message_buffer[1]){
+        case '1':
+            value = received_message_buffer[3] - '0';
+            uint8_t * radiator= setRadiatorLevel(value,HardwareId);
+            free(radiator);
+            break;
+        case '2':
+            value = received_message_buffer[3] - '0';
+            windowAction(value,HardwareId);
+            break;
+        case '3':
+            value = received_message_buffer[3] - '0';
+            doorAction(value);
+            break;
+        case '4':
+            value = received_message_buffer[3] - '0';
+            char * light= AdjustLight(value,HardwareId);
+            free(light);
+            break;
+        default:
+            break;
+        }
     }
 }
 
 void sendReadingsWrapper(){
-    (void)sendReadings();
+    (void)sendReadings(HardwareId);
 }
 
 void doorApprovalWrapper(){

@@ -8,7 +8,7 @@ void static custom_delay_ms(uint16_t milliseconds) {
 #endif
 }
 
-char* AdjustLight(uint8_t level){
+char* AdjustLight(uint8_t level,int hardwareId){
     custom_delay_ms(1000);
     leds_turnOff(1);
     leds_turnOff(2);
@@ -23,7 +23,7 @@ char* AdjustLight(uint8_t level){
         custom_delay_ms(1000);
     }
     
-    display_setValues(0,4,0,count);
+    display_setValues(hardwareId,4,0,count);
     char* x = (char *) malloc(12*sizeof(char));
     sprintf(x,"0,4,0,%d",count);
     return x;

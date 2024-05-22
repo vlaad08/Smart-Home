@@ -36,11 +36,11 @@ bool doorAction(uint8_t status);
 
 bool doorApproval();
 
-int sendReadings();
+int sendReadings(int hardwareId);
 
-int sendLight();
+int sendLight(int hardwareId);
 
-int sendTempAndHumidity();
+int sendTempAndHumidity(int hardwareid);
 
 void transmitData(uint8_t * data,uint16_t length);
 

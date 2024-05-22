@@ -1,10 +1,10 @@
 #include "RadiatorPosition.h"
 
-uint8_t* setRadiatorLevel(uint8_t level) {
+uint8_t* setRadiatorLevel(uint8_t level,int hardwareId) {
     uint8_t * values= calloc(5,sizeof(uint8_t)); // Array to hold level, angle, and display values
 
     uint8_t angle = 0;
-    display_setValues(0, 1, 0, level);
+    display_setValues(hardwareId, 1, 0, level);
     
     switch (level) {
         case 0:
