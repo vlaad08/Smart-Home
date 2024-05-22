@@ -7,8 +7,7 @@
 #include "pc_comm.h"
 #include "periodic_task.h"
 
-#include "uECC.h"
-#include "Enc.h"
+
 #include "aes.h"
 
 #include "TempAndHum.h"
@@ -37,10 +36,17 @@ bool doorAction(uint8_t status);
 
 bool doorApproval();
 
-int sendReadings();
+int sendReadings(int hardwareId);
 
-int sendLight();
+int sendLight(int hardwareId);
 
-int sendTempAndHumidity();
+int sendTempAndHumidity(int hardwareid);
 
 void transmitData(uint8_t * data,uint16_t length);
+
+
+void sendReadingsWrapper();
+
+void breakingInWrapper();
+
+void doorApprovalWrapper();

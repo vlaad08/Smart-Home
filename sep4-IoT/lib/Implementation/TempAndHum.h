@@ -6,4 +6,4 @@
 
 #include "dht11.h"
 
-uint8_t * getTempAndHum();
+uint8_t * getTempAndHum(uint8_t hardwareId);

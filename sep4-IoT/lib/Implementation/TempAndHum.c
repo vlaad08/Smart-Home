@@ -1,6 +1,6 @@
 #include "TempAndHum.h"
 
-uint8_t * getTempAndHum(){
+uint8_t * getTempAndHum(uint8_t hardwareId){
     uint8_t humidity_integer = 0; 
     uint8_t  humidity_decimal = 0; 
     uint8_t temperature_integer = 0; 
@@ -13,7 +13,7 @@ uint8_t * getTempAndHum(){
 
     if (status == DHT11_OK)
     {
-        sprintf(result, "1-T:%d.%d  H:%d.%d", temperature_integer, temperature_decimal, humidity_integer, humidity_decimal);
+        sprintf(result, "%d-T:%d.%d  H:%d.%d",hardwareId, temperature_integer, temperature_decimal, humidity_integer, humidity_decimal);
     }
     else
         strcpy(result, "Temp Hum Error");

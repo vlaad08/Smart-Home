@@ -7,4 +7,4 @@
 #include <light.h>
 
 
-uint8_t * getLightInfo();
+uint8_t * getLightInfo(uint8_t hardwareId);

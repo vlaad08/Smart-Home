@@ -14,6 +14,6 @@
 #include "display.h"
 
 
-int openWindow();
+int openWindow(int hardwareId);
 
-int closeWindow();
+int closeWindow(int hardwareId);

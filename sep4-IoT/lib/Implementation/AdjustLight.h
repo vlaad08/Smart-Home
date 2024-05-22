@@ -13,4 +13,4 @@
 #include "leds.h"
 #include "display.h"
 
-char* AdjustLight(uint8_t level);
+char* AdjustLight(uint8_t level,int hardwareId);

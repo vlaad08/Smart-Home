@@ -8,8 +8,8 @@ void custom_delay_ms(uint16_t milliseconds) {
 #endif
 }
 
-int openWindow(){
-    display_setValues(0,2,0,1);
+int openWindow(int hardwareId){
+    display_setValues(hardwareId,2,0,1);
     servo(180);
     servo(0);
     servo(90);
@@ -18,8 +18,8 @@ int openWindow(){
     return 1;
 }
 
-int  closeWindow(){
-    display_setValues(0,2,0,0);
+int  closeWindow(int hardwareId){
+    display_setValues(hardwareId,2,0,0);
     servo(180);
     servo(0);
     servo(90);
