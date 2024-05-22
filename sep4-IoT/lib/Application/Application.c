@@ -8,15 +8,14 @@ void static custom_delay_ms(uint16_t milliseconds) {
 #endif
 }
 
-Enc enc;
 uint8_t iv[16];
 struct AES_ctx my_AES_ctx;
 bool IsPKAcquired=true;
 bool UnlockingApproved=false;
 char received_message_buffer[128];
+uint8_t key[] = "S3cor3P45Sw0rD@f";
     
 void transmitData(uint8_t * data,uint16_t length){
-    custom_delay_ms(3000);
     AES_ECB_encrypt(&my_AES_ctx,(uint8_t*)data);
     
     wifi_command_TCP_transmit((uint8_t*)data,length);
@@ -91,44 +90,28 @@ char * breakingIn(){
 }
 
 void Callback(){
-    if (!IsPKAcquired)
-    {
-        char token[65];
-        strncpy(token, received_message_buffer, 64);
-        token[64] = '\0';
-        //createSharedKey(&enc,token);
-        //uint8_t * sharedkey=getSharedKey(&enc);
-        // uint8_t * sharedkey=(uint8_t *) calloc(33,sizeof(uint8_t));
-        // snprintf((char *)sharedkey, 33, "RaT‰ëòçÇRQqBèºQ|{ŽnÎA");
-        // AES_init_ctx_iv(&my_AES_ctx,sharedkey,iv);
-        //wifi_command_TCP_transmit((uint8_t*)sharedkey, 32);
-        IsPKAcquired=true;
-    }
-    else{
-        uint8_t value;
-        switch (received_message_buffer[1])
-        {
-        case '1':
-            value = received_message_buffer[3] - '0';
-            uint8_t * radiator= setRadiatorLevel(value);
-            free(radiator);
-            break;
-        case '2':
-            value = received_message_buffer[3] - '0';
-            windowAction(value);
-            break;
-        case '3':
-            value = received_message_buffer[3] - '0';
-            doorAction(value);
-            break;
-        case '4':
-            value = received_message_buffer[3] - '0';
-            char * light= AdjustLight(value);
-            free(light);
-            break;
-        default:
-            break;
-        }
+    uint8_t value;
+    switch (received_message_buffer[1]){
+    case '1':
+        value = received_message_buffer[3] - '0';
+        uint8_t * radiator= setRadiatorLevel(value);
+        free(radiator);
+        break;
+    case '2':
+        value = received_message_buffer[3] - '0';
+        windowAction(value);
+        break;
+    case '3':
+        value = received_message_buffer[3] - '0';
+        doorAction(value);
+        break;
+    case '4':
+        value = received_message_buffer[3] - '0';
+        char * light= AdjustLight(value);
+        free(light);
+        break;
+    default:
+        break;
     }
 }
 
@@ -141,51 +124,18 @@ int start(){
     leds_init();
     hc_sr04_init();
 
-    //createIOTKeys(&enc);
-    //generate_iv(iv,16);
     
     //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
     wifi_command_join_AP("KBENCELT 3517","p31A05)1");
     //wifi_command_join_AP("002","zabijemsazalentilku");
     wifi_command_create_TCP_connection("192.168.137.1",6868,Callback,received_message_buffer);
 
-    //uint8_t * PK=getIOTPublicKey(&enc);
-    //char* public_key_hex = print_hex(PK, 64);
-    // char* connection = (char*)malloc((sizeof("Connected:") /*+ strlen(public_key_hex)*/ + 1) * sizeof(char)); 
-    // sprintf(connection, "Connected:");
-//  
-    // wifi_command_TCP_transmit((uint8_t*)connection,strlen(connection));
-    // 
-    // free(connection);
-
-    //  const char * encoded_data = "qKBL+IAOLbn+jLnFJEYp8KAmlAe4iVQVfa2K4d9huA4=";
-    //  unsigned char *decoded_data;
-    //  size_t decoded_len;
-//  
-    // Calculate the length of the decoded data
-    //  decoded_len = b64_decoded_size((const char *)encoded_data);
-    //  decoded_data = malloc(decoded_len);
-//  
-    //  if (!b64_decode(encoded_data, decoded_data, decoded_len)) {
-        // free(decoded_data);
-        // transmitData((uint8_t*)"-2",3);
-    //  }
-//  
-    // if (decoded_len > sizeof(enc.SharedKey)) {     
-        // free(decoded_data);
-        // transmitData((uint8_t*) "-2",3);
-    // }
     
-    uint8_t key[] = "0123456789abcdef";
-   
     AES_init_ctx(&my_AES_ctx,key);
 
-
-    custom_delay_ms(3000);
-
     periodic_task_init_a(sendReadings,15000);
-    //periodic_task_init_b(doorApproval,30000);
-    //periodic_task_init_c(breakingIn,1000);
+    periodic_task_init_b(doorApproval,30000);
+    periodic_task_init_c(breakingIn,1000);
 
     return 1;
 }

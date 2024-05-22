@@ -7,8 +7,7 @@
 #include "pc_comm.h"
 #include "periodic_task.h"
 
-#include "uECC.h"
-#include "Enc.h"
+
 #include "aes.h"
 
 #include "TempAndHum.h"
@@ -18,7 +17,6 @@
 #include "Window.h"
 #include "AlarmDoor.h"
 #include "Door.h"
-#include "Converter.h"
 
 #ifdef __AVR__
   #include <util/delay.h>
