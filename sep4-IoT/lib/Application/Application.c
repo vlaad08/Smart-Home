@@ -8,9 +8,7 @@ void static custom_delay_ms(uint16_t milliseconds) {
 #endif
 }
 
-uint8_t iv[16];
 struct AES_ctx my_AES_ctx;
-bool IsPKAcquired=true;
 bool UnlockingApproved=false;
 char received_message_buffer[128];
 uint8_t key[] = "S3cor3P45Sw0rD@f";
@@ -123,6 +121,7 @@ int start(){
     display_init();
     leds_init();
     hc_sr04_init();
+    AES_init_ctx(&my_AES_ctx,key);
 
     
     //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
@@ -131,7 +130,6 @@ int start(){
     wifi_command_create_TCP_connection("192.168.137.1",6868,Callback,received_message_buffer);
 
     
-    AES_init_ctx(&my_AES_ctx,key);
 
     periodic_task_init_a(sendReadings,15000);
     periodic_task_init_b(doorApproval,30000);
