@@ -36,11 +36,11 @@ public class LightController : ControllerBase
     //An endpoint to get the light level history of a specific room based on id of that room (request with room id, returns a list of readings of light levels)
     [HttpGet, Route("{hardwareId}/history")]
     public async Task<ActionResult<ICollection<LightReading>>> GetLightHistory([FromRoute] string hardwareId,
-        [FromBody] TimePeriodDTO dto)
+        [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo )
     {
         try
         {
-            var lightHistory = await _lightLogic.getLightHistory(hardwareId, dto.dateFrom, dto.dateTo);
+            var lightHistory = await _lightLogic.getLightHistory(hardwareId, dateFrom, dateTo);
             return Ok(lightHistory);
         }catch (Exception e)
         {

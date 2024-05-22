@@ -19,32 +19,41 @@ public class DoorLogic : IDoorLogic
     public async Task SwitchDoor(string houseId, string password, bool state)
     {
         byte[] inputBytes = Encoding.UTF8.GetBytes(password);
-        string hashedString = "";
+        string hashedString;
         using (SHA256 sha256 = SHA256.Create())
         {
             byte[] hashBytes = sha256.ComputeHash(inputBytes);
             hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
         }
-       if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) && _repository.CheckDoorState(houseId).Result != state)
+
+        string storedHashedPassword = await _repository.CheckHashedPassword(houseId);
+
+        if (hashedString.Equals(storedHashedPassword))
         {
-            await _communicator.SwitchDoor();
-            await _repository.SaveDoorState(houseId, state);
+            bool currentState = await _repository.CheckDoorState(houseId);
+            if (currentState != state)
+            {
+                await _communicator.SwitchDoor();
+                await _repository.SaveDoorState(houseId, state);
+            }
+            else
+            {
+                if (currentState)
+                {
+                    throw new Exception("Door is already open.");
+                }
+                else
+                {
+                    throw new Exception("Door is already closed.");
+                }
+            }
         }
-        else if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) &&
-                 _repository.CheckDoorState(houseId).Result == state && _repository.CheckDoorState(houseId).Result == true)
-       {
-           throw new Exception("Door is already open.");
-       }
-       else if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) &&
-                _repository.CheckDoorState(houseId).Result == state && _repository.CheckDoorState(houseId).Result == false)
-       {
-           throw new Exception("Door is already closed.");
-       }
-       else
+        else
         {
             throw new Exception("Password mismatch");
         }
     }
+
 
     public async Task ChangeLockPassword(string homeId, string password)
     {
@@ -66,5 +75,17 @@ public class DoorLogic : IDoorLogic
             throw new Exception(e.Message);
         }
     }
-    
+
+    public async Task<bool> GetDoorState(string houseId)
+    {
+        try
+        {
+            bool state = await _repository.CheckDoorState(houseId);
+            return state;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
 }
