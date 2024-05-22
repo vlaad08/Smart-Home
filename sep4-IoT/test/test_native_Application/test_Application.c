@@ -24,12 +24,12 @@ FAKE_VALUE_FUNC(WIFI_ERROR_MESSAGE_t,wifi_command_TCP_transmit,uint8_t *,uint16_
 
 
 FAKE_VALUE_FUNC(char *,alarm,bool);
-FAKE_VALUE_FUNC(uint8_t *,getTempAndHum);
-FAKE_VALUE_FUNC(uint8_t *,getLightInfo);
-FAKE_VALUE_FUNC(int,openWindow);
-FAKE_VALUE_FUNC(int,closeWindow);
-FAKE_VALUE_FUNC(int,openDoor);
-FAKE_VALUE_FUNC(int,closeDoor);
+FAKE_VALUE_FUNC(uint8_t *,getTempAndHum,uint8_t);
+FAKE_VALUE_FUNC(uint8_t *,getLightInfo,uint8_t);
+FAKE_VALUE_FUNC(int,openWindow,int);
+FAKE_VALUE_FUNC(int,closeWindow,int);
+FAKE_VALUE_FUNC(int,openDoor,int);
+FAKE_VALUE_FUNC(int,closeDoor,int);
 FAKE_VOID_FUNC(pc_comm_send_array_blocking,uint8_t *,uint16_t );
 
 FAKE_VOID_FUNC(AES_init_ctx,struct AES_ctx *,const uint8_t *);
@@ -106,19 +106,19 @@ void test_breakingInFalse(void){
 
 void test_sendTempAndHumidity(){
 
-    int result=sendTempAndHumidity();
+    int result=sendTempAndHumidity(1);
 
     TEST_ASSERT_EQUAL_INT(1,result);
 }
 
 void test_sendLight(){
-    int result=sendLight();
+    int result=sendLight(1);
 
     TEST_ASSERT_EQUAL_INT(1,result);
 }
 
 void test_sendReadings(){
-    int result=sendReadings();
+    int result=sendReadings(1);
 
     TEST_ASSERT_EQUAL_INT(1,result);
 }

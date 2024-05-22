@@ -91,8 +91,14 @@ char * breakingIn(){
 
 void Callback(){
     uint8_t id=received_message_buffer[0]-'0';
+    uint8_t value;
+    if (received_message_buffer[1]-'0' == 3)
+    {
+        value = received_message_buffer[3] - '0';
+        doorAction(value);
+    }
+
     if (id==HardwareId){
-        uint8_t value;
         switch (received_message_buffer[1]){
         case '1':
             value = received_message_buffer[3] - '0';
@@ -102,10 +108,6 @@ void Callback(){
         case '2':
             value = received_message_buffer[3] - '0';
             windowAction(value,HardwareId);
-            break;
-        case '3':
-            value = received_message_buffer[3] - '0';
-            doorAction(value);
             break;
         case '4':
             value = received_message_buffer[3] - '0';
@@ -144,11 +146,11 @@ int start(){
     //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
     wifi_command_join_AP("KBENCELT 3517","p31A05)1");
     //wifi_command_join_AP("002","zabijemsazalentilku");
-    wifi_command_create_TCP_connection("192.168.137.1",6868,Callback,received_message_buffer);
+    wifi_command_create_TCP_connection("192.168.137.150",6868,Callback,received_message_buffer);
 
     
 
-    periodic_task_init_a(sendReadingsWrapper,15000);
+    periodic_task_init_a(sendReadingsWrapper,60000);
     periodic_task_init_b(doorApprovalWrapper,30000);
     periodic_task_init_c(breakingInWrapper,1000);
 
