@@ -1,4 +1,6 @@
-﻿using DBComm.Logic;
+﻿using System.Security.Cryptography;
+using System.Text;
+using DBComm.Logic;
 using DBComm.Repository;
 using Moq;
 
@@ -15,10 +17,16 @@ public class DoorLogicTest
         _logic = new DoorLogic(_mockRepository.Object);
         string homeId = "testHomeId";
         string newPassword = "1234";
-
         _mockRepository.Setup(r => r.CheckIfDoorExist(homeId)).ReturnsAsync(true);
         await _logic.ChangeLockPassword(homeId, newPassword);
-        _mockRepository.Verify(r => r.ChangePassword(homeId, newPassword), Times.Once);
+        byte[] inputBytes = Encoding.UTF8.GetBytes(newPassword);
+        string hashedString;
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            byte[] hashBytes = sha256.ComputeHash(inputBytes);
+            hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
+        }
+        _mockRepository.Verify(r => r.ChangePassword(homeId, hashedString), Times.Once);
     }
     [Fact]
     public async Task ChangeLockPassword_EmptyHomeId_ThrowsException()

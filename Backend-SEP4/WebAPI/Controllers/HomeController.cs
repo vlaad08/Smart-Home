@@ -8,6 +8,7 @@ namespace WebAPI.Controllers
 {
     [Route("home")]
     [ApiController]
+    [Authorize]
     public class HomeController : ControllerBase
     {
         
@@ -30,7 +31,7 @@ namespace WebAPI.Controllers
         }
 
         //An endpoint to add a house member account to the house (we send you houseId and username)
-        [HttpPatch, Route("{houseId}/members/{username}")]
+        [HttpPatch, Route("{houseId}/members/{username}"),  Authorize(Policy = "Admin")]
         public async Task<ActionResult> AddMemberToHome([FromRoute]string houseId, [FromRoute] string username)
         {
             try
@@ -46,7 +47,7 @@ namespace WebAPI.Controllers
         }
 
          //An endpoint to remove house member account from the house (we send you houseId and username of the user)
-        [HttpPatch, Route("members/{username}")]
+        [HttpPatch, Route("members/{username}"),  Authorize(Policy = "Admin")]
         public async Task<ActionResult> RemoveMemberFromHome([FromRoute] string username)
         {
             try

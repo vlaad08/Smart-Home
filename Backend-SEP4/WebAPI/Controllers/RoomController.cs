@@ -57,7 +57,7 @@ public class RoomController : ControllerBase
 
 
     //TODO: Check if the policies are set right form the authorization
-    [HttpPost] //, Authorize(Policy = "Admin") 
+    [HttpPost, Authorize(Policy = "Admin") ]
     public async Task<ActionResult> AddRoom([FromBody] RoomCreationDTO dto)
     {
         try
@@ -72,7 +72,7 @@ public class RoomController : ControllerBase
     }
 
     //An endpoint to remove a room (we send deviceId of the room to be deleted)
-    [HttpDelete("{deviceId}")] //, Authorize(Policy = "Admin")
+    [HttpDelete("{deviceId}"), Authorize(Policy = "Admin")]
     public async Task<ActionResult> DeleteRoom([FromRoute] string deviceId)
     {
         try
