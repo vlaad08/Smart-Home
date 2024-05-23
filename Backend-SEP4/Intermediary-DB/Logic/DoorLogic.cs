@@ -61,12 +61,18 @@ public class DoorLogic : IDoorLogic
         {
             throw new Exception("House Id can not be empty");
         }
-        
+        byte[] inputBytes = Encoding.UTF8.GetBytes(password);
+        string hashedString;
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            byte[] hashBytes = sha256.ComputeHash(inputBytes);
+            hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
+        }
         try
         {
             if (await _repository.CheckIfDoorExist(homeId))
             {
-               await _repository.ChangePassword(homeId, password); 
+               await _repository.ChangePassword(homeId, hashedString); 
             }
             
         }

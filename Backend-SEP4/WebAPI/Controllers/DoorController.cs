@@ -34,7 +34,7 @@ public class DoorController : ControllerBase
      }
         //an endpoint to get the door state based on haouse id
      [HttpGet, Route("houses/{houseId}")]
-     public async Task<ActionResult<bool>> CheckDoorState([FromQuery] string houseId)
+     public async Task<ActionResult<bool>> CheckDoorState([FromRoute] string houseId)
      {
          try
          {
