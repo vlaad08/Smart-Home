@@ -34,7 +34,7 @@ typedef enum{
  * @brief Type definition for WiFi TCP data received callback.
  * 
  */
-typedef void (*WIFI_TCP_Callback_t)();
+typedef int (*WIFI_TCP_Callback_t)();
 
 /**
  * @brief Initialize the WiFi module. After it have been initialized it can take up to 4 seconds before its ready. 
