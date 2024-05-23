@@ -30,7 +30,7 @@ FAKE_VALUE_FUNC(uint8_t*, setRadiatorLevel, uint8_t, int);
 FAKE_VALUE_FUNC(char*, AdjustLight,uint8_t,int)
 
 //breakingIn
-FAKE_VALUE_FUNC(char *,alarm,bool);
+FAKE_VALUE_FUNC(char *,alarm,_Bool);
 //FAKE_VALUE_FUNC(uint8_t*, transmitData,uint8_t*, uint16_t);
 
 //doorAction
