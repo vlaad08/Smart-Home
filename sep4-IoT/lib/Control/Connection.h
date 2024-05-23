@@ -10,7 +10,7 @@
 
 #include "aes.h"
 
-uint8_t* encriptionStart();
+uint8_t* encryptionStart();
 
 uint8_t* connect(WIFI_TCP_Callback_t callback_when_message_received, char *received_message_buffer);
 

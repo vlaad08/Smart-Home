@@ -3,7 +3,7 @@
 struct AES_ctx my_AES_ctx;
 uint8_t key[] = "S3cor3P45Sw0rD@f";
 
-uint8_t* encriptionStart()
+uint8_t* encryptionStart()
 {
     AES_init_ctx(&my_AES_ctx,key);
     return (uint8_t*) "Encription ready to encrypt";

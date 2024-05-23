@@ -17,14 +17,14 @@ char received_message_buffer[128];
 int sendTempAndHumidity(int hardwareId){
     uint8_t *data = getTempAndHum(hardwareId); 
     transmitData(data, 16);
-
+    free(data);
     return 1;
 }
 
 int sendLight(int hardwareId){
     uint8_t *data = getLightInfo(hardwareId); 
     transmitData(data,16);
-
+    free(data);
     return 1;
 }
 
@@ -78,7 +78,7 @@ char * breakingIn(){
     {
         transmitData((uint8_t*)x,16);
     }
-
+    free(x);
     return x;
 }
 
@@ -129,7 +129,7 @@ int start(){
     leds_init();
     hc_sr04_init();
 
-    encriptionStart();
+    encryptionStart();
     
     connect(Callback,received_message_buffer);
 
