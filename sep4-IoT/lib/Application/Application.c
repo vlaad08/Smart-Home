@@ -78,7 +78,6 @@ char * breakingIn(){
     {
         transmitData((uint8_t*)x,16);
     }
-    free(x);
     return x;
 }
 
@@ -139,4 +138,3 @@ int start(){
 
     return 1;
 }
-

@@ -9,5 +9,4 @@
 #include "display.h"
 #include "hc_sr04.h"
 
-
 char* alarm(bool isApproved);

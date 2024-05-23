@@ -1,6 +1,5 @@
 #include "Tasks.h"
 
-
 int taskSend(int (*function)(void)){
     periodic_task_init_a(function,5000);
     return 1;

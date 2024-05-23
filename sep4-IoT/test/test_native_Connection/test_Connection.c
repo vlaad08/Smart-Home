@@ -20,7 +20,7 @@ void setUp(void) {}
 void tearDown(void) {}
 
 void test_encryptionStart(){
-    uint8_t* result = encriptionStart();
+    uint8_t* result = encryptionStart();
 
     TEST_ASSERT_EQUAL_STRING("Encription ready to encrypt",result);
 }

@@ -27,4 +27,3 @@ int  closeWindow(int hardwareId){
     servo(0);
     return 0;
 }
-
