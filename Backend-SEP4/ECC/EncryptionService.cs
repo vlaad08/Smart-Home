@@ -14,11 +14,14 @@ public class EncryptionService : IEncryptionService
         this.iv = iv;
     }
     
-    public string Encrypt(string plaintext)
+    public byte[] Encrypt(string plaintext)
     {
         byte[] cyphertextBytes;
         using var aes = Aes.Create();
-        var encryptor = aes.CreateEncryptor(encryptionKey, iv);
+        aes.Key = encryptionKey;
+        aes.Mode = CipherMode.ECB;
+        aes.Padding = PaddingMode.None;
+        var encryptor = aes.CreateEncryptor(encryptionKey, null);
         using (var memoryStream = new MemoryStream())
         {
             using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
@@ -29,23 +32,30 @@ public class EncryptionService : IEncryptionService
                 }
             }
             cyphertextBytes = memoryStream.ToArray();
-            
-            return Convert.ToBase64String(cyphertextBytes);
+            return cyphertextBytes;
+
         }
     }
 
-    public string Decrypt(string cyphertext)
+    public string Decrypt(byte[] cyphertext)
     {
-        var cyphertextBytes = Convert.FromBase64String(cyphertext);
-        using var aes = Aes.Create();
-        var decryptor = aes.CreateDecryptor(encryptionKey, iv);
-        using (var memoryStream = new MemoryStream(cyphertextBytes))
         {
+            Console.WriteLine("Starting Decryption");
+
+            using var aes = Aes.Create();
+            aes.Key = encryptionKey;
+            aes.Mode = CipherMode.ECB;
+            aes.Padding = PaddingMode.None;
+            var decryptor = aes.CreateDecryptor(aes.Key, null);
+
+            using var memoryStream = new MemoryStream(cyphertext);
             using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
             {
                 using (var streamReader = new StreamReader(cryptoStream))
                 {
-                    return streamReader.ReadToEnd();
+
+                    string plaintext = streamReader.ReadToEnd();
+                    return plaintext;
                 }
             }
         }

@@ -63,7 +63,7 @@ public class LightController : ControllerBase
         }
     }
 
-    [HttpPost, Route("devices/{deviceId}/{value}")]
+    [HttpPost, Route("devices/{deviceId}/{value}"),AllowAnonymous]
     public async Task<ActionResult> SaveCurrentLightInRoom([FromRoute] string deviceId, [FromRoute] double value)
     {
         try

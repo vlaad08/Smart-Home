@@ -5,25 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Threading;
+using ECC;
 using ECC.Encryption;
+using ECC.Interface;
 
 public class Server
 {
     private TcpListener listener;
     private Thread serverThread;
     private bool isRunning;
+    private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
     private static readonly HttpClient httpClient = new HttpClient();
-
     public Server(int port)
     {
-        IPAddress localAddr = IPAddress.Parse("192.168.0.220");
+        IPAddress localAddr = IPAddress.Parse("192.168.137.14");
         listener = new TcpListener(localAddr, port);
         isRunning = true;
         listener.Start();
         serverThread = new Thread(() => ListenForClients());
         serverThread.Start();
     }
-
     private async void ListenForClients()
     {
         Console.WriteLine("Server started, listening for clients...");
@@ -50,39 +51,48 @@ public class Server
                     if (receivedMessage.StartsWith("Connected:"))
                     {
                         // Generate shared secret from their PU and our PK 
-                        Encryption.GenSharedSecret(receivedMessage);
+                        // Encryption.GenSharedSecret(receivedMessage);
                         //Encryption.DeriveSymmetricKey();
                     }
                     else
                     {
+                        string decryptedData = enc.Decrypt(buffer.Take(bytesRead).ToArray());
+                        Console.WriteLine(decryptedData);
                         // Save data based on the received message
-                        switch (receivedMessage)
+                        switch (decryptedData)
                         {
                             case var message when message.Contains("T:") && message.Contains("H:"):
                                 {
                                     string[] parts = message.Split(new[] { ' ', '-', ':', 'H' }, StringSplitOptions.RemoveEmptyEntries);
-                                    if (parts.Length >= 5)
+
+                                    if (parts.Length >= 4)
                                     {
                                         string deviceId = parts[0];
                                         string tempString = parts[2];
-                                        string humString = parts[4];
-
+                                        string humString = parts[3];
+                                        Console.WriteLine(deviceId);
+                                        Console.WriteLine(tempString);
+                                        Console.WriteLine(humString);
                                         if (double.TryParse(tempString, out double tempValue) && double.TryParse(humString, out double humValue))
                                         {
-                                            await SaveTemperatureAsync(deviceId, tempValue);
-                                            await SaveHumidityAsync(deviceId, humValue);
+                                            Console.WriteLine(deviceId);
+                                            Console.WriteLine(tempValue);
+                                            Console.WriteLine(humValue);
+                                            SaveTemperatureAsync(deviceId, tempValue);
+                                            SaveHumidityAsync(deviceId, humValue);
                                         }
                                     }
                                 }
                                 break;
 
-                            case var message when message.StartsWith("L:"):
+                            case var message when message.Contains("LIGHT:"):
                                 {
-                                    string[] parts = message.Substring(2).Split(' ');
+                                    string[] parts = message.Substring(2).Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
+
                                     if (parts.Length > 1 && double.TryParse(parts[1], out double lightValue))
                                     {
-                                        string deviceId = parts[0];
-                                        await SaveLightAsync(deviceId, lightValue);
+                                        string deviceId = message.Substring(0, 1);
+                                         SaveLightAsync(deviceId, lightValue);
                                     }
                                 }
                                 break;

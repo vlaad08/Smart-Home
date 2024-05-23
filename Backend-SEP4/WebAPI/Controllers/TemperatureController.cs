@@ -72,7 +72,7 @@ public class TemperatureController : ControllerBase
         }
     }
 
-    [HttpPost, Route("devices/{deviceId}/{value}")]
+    [HttpPost, Route("devices/{deviceId}/{value}"),AllowAnonymous]
     public async Task<ActionResult> SaveCurrentTemperatureInRoom([FromRoute] string deviceId,[FromRoute] double value)
     {
         try

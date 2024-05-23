@@ -37,7 +37,7 @@ public class KeyGenerator
             string p = "This is the plaintext";
 
             IEncryptionService enc = new EncryptionService(Convert.FromBase64String("qKBL+IAOLbn+jLnFJEYp8KAmlAe4iVQVfa2K4d9huA4=\n"), iv);
-            string c = enc.Encrypt(p);
+            byte[] c = enc.Encrypt(p);
             Console.WriteLine(c);
             string m = enc.Decrypt(c);
             Console.WriteLine(m);
