@@ -19,7 +19,7 @@
   #include <unistd.h>
 #endif
 
-extern bool UnlockingApproved;
+extern _Bool UnlockingApproved;
 extern char received_message_buffer[128];
 
 int start();
