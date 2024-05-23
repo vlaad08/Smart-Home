@@ -53,10 +53,7 @@ public class RoomLogic : IRoomLogic
     {
         try
         {
-            if (await _repository.CheckNonExistingRoom(id))
-            {
-                await _repository.EditRoom(id,name,deviceId, preferedTemperature, preferedHumidity);
-            }
+            await _repository.EditRoom(id,name,deviceId, preferedTemperature, preferedHumidity);
         }
         catch (Exception e)
         {

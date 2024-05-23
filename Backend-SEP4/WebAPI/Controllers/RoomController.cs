@@ -7,10 +7,11 @@ using Microsoft.VisualBasic.CompilerServices;
 using WebAPI.DTOs;
 
 namespace WebAPI.Controllers;
+
 [ApiController]
 [Route("rooms")]
 
- // [Authorize]
+// [Authorize]
 public class RoomController : ControllerBase
 {
     private IRoomLogic logic;
@@ -19,7 +20,7 @@ public class RoomController : ControllerBase
     {
         this.logic = logic;
     }
-    
+
     //An endpoint to get all rooms based on a specific houseId (request with houseId, return a list of rooms with their ids, names, current temperature, humidity, light level)
     [HttpGet("{houseId}")]
     public async Task<ActionResult<List<RoomDataTransferDTO>>> GetAllRooms([FromRoute] string houseId)
@@ -31,7 +32,7 @@ public class RoomController : ControllerBase
         }
         catch (Exception e)
         {
-           return BadRequest(e.Message);
+            return BadRequest(e.Message);
         }
     }
 
@@ -57,7 +58,7 @@ public class RoomController : ControllerBase
 
     //TODO: Check if the policies are set right form the authorization
     [HttpPost] //, Authorize(Policy = "Admin") 
-    public async Task<ActionResult> AddRoom( [FromBody] RoomCreationDTO dto)
+    public async Task<ActionResult> AddRoom([FromBody] RoomCreationDTO dto)
     {
         try
         {
@@ -69,9 +70,10 @@ public class RoomController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
     //An endpoint to remove a room (we send deviceId of the room to be deleted)
     [HttpDelete("{deviceId}")] //, Authorize(Policy = "Admin")
-    public async Task<ActionResult> DeleteRoom([FromRoute]string deviceId)
+    public async Task<ActionResult> DeleteRoom([FromRoute] string deviceId)
     {
         try
         {
@@ -87,8 +89,9 @@ public class RoomController : ControllerBase
     // room id because you can change the device id in that method, so the method should be done using roomId, which can not change during this method
     //An endpoint to edit a room (we send an object (roomId, new room name, new hardware id, new default temperature, new default humidity)
 
-    [HttpPut("{roomId}")] //, Authorize(Policy = "Admin")
-    public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] RoomChangeDTO dto)
+    [HttpPut("{roomId}"), Authorize(Policy = "Admin")]
+
+public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] RoomChangeDTO dto)
     {
         try
         {
