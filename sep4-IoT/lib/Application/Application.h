@@ -3,13 +3,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "wifi.h"
-#include "pc_comm.h"
-#include "periodic_task.h"
-
-
-#include "aes.h"
-
 #include "TempAndHum.h"
 #include "LightInfo.h"
 #include "AdjustLight.h"
@@ -17,6 +10,8 @@
 #include "Window.h"
 #include "AlarmDoor.h"
 #include "Door.h"
+#include "Connection.h"
+#include "Tasks.h"
 
 #ifdef __AVR__
   #include <util/delay.h>
@@ -25,28 +20,22 @@
 #endif
 
 extern bool UnlockingApproved;
+extern char received_message_buffer[128];
 
 int start();
 
-void Callback();
+int Callback();
 
-char * breakingIn();
+char* breakingIn();
 
 bool doorAction(uint8_t status);
 
-bool doorApproval();
+_Bool doorApproval();
 
-int sendReadings(int hardwareId);
+int windowAction(uint8_t status,int hardwareId);
+
+int sendReadings();
 
 int sendLight(int hardwareId);
 
 int sendTempAndHumidity(int hardwareid);
-
-void transmitData(uint8_t * data,uint16_t length);
-
-
-void sendReadingsWrapper();
-
-void breakingInWrapper();
-
-void doorApprovalWrapper();

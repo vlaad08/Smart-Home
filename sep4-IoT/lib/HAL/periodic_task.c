@@ -14,9 +14,9 @@
 #include "periodic_task.h"
 #include "includes.h"
 
-static void (*user_func_a)(void);  // Pointer to first user function
-static void (*user_func_b)(void);  // Pointer to second user function
-static void (*user_func_c)(void);  // Pointer to third user function
+static int (*user_func_a)(void);  // Pointer to first user function
+static _Bool (*user_func_b)(void);  // Pointer to second user function
+static char* (*user_func_c)(void);  // Pointer to third user function
 
 static uint16_t ocr3a_value = 0;
 static uint16_t ocr3b_value = 0;
@@ -85,7 +85,7 @@ static void init_timer3(){
 }
 
 
-void periodic_task_init_a(void (*user_function_a)(void), uint32_t interval_ms_a) {
+void periodic_task_init_a(int (*user_function_a)(void), uint32_t interval_ms_a) {
     user_func_a = user_function_a;
     init_timer3();
 
@@ -103,7 +103,7 @@ void periodic_task_init_a(void (*user_function_a)(void), uint32_t interval_ms_a)
     TIMSK3 |= (1 << OCIE3A);
 }
 
-void periodic_task_init_b(void (*user_function_b)(void), uint32_t interval_ms_b) {
+void periodic_task_init_b(_Bool (*user_function_b)(void), uint32_t interval_ms_b) {
     user_func_b = user_function_b;
     init_timer3();
 
@@ -117,7 +117,7 @@ void periodic_task_init_b(void (*user_function_b)(void), uint32_t interval_ms_b)
     TIMSK3 |= (1 << OCIE3B);
 }
 
-void periodic_task_init_c(void (*user_function_c)(void), uint32_t interval_ms_c) {
+void periodic_task_init_c(char* (*user_function_c)(void), uint32_t interval_ms_c) {
     user_func_c = user_function_c;
     init_timer3();
 

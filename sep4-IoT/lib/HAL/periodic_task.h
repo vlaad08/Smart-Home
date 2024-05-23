@@ -19,7 +19,7 @@
  * @param user_function_a Pointer to the first function to be executed
  * @param interval_ms_a Time interval in milliseconds for the first function
  */
-void periodic_task_init_a(void (*user_function_a)(void), uint32_t interval_ms_a);
+void periodic_task_init_a(int (*user_function_a)(void), uint32_t interval_ms_a);
 
 /**
  * @brief Attach the second user function
@@ -29,7 +29,7 @@ void periodic_task_init_a(void (*user_function_a)(void), uint32_t interval_ms_a)
  * @param user_function_b Pointer to the second function to be executed
  * @param interval_ms_b Time interval in milliseconds for the second function
  */
-void periodic_task_init_b(void (*user_function_b)(void), uint32_t interval_ms_b);
+void periodic_task_init_b(_Bool (*user_function_b)(void), uint32_t interval_ms_b);
 
-void periodic_task_init_c(void (*user_function_c)(void), uint32_t interval_ms_c);
+void periodic_task_init_c(char* (*user_function_c)(void), uint32_t interval_ms_c);
 

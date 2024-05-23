@@ -6,6 +6,7 @@
 
 DEFINE_FFF_GLOBALS
 
+//start
 FAKE_VOID_FUNC(pc_comm_init,uint32_t,pc_comm_callback_t);
 FAKE_VOID_FUNC(wifi_init);
 FAKE_VOID_FUNC(dht11_init);
@@ -14,39 +15,53 @@ FAKE_VOID_FUNC(display_init);
 FAKE_VOID_FUNC(leds_init);
 FAKE_VOID_FUNC(hc_sr04_init);
 
-FAKE_VALUE_FUNC(WIFI_ERROR_MESSAGE_t,wifi_command_join_AP,char *,char *);
-FAKE_VALUE_FUNC(WIFI_ERROR_MESSAGE_t,wifi_command_create_TCP_connection,char *,uint16_t,WIFI_TCP_Callback_t, char *);
-FAKE_VALUE_FUNC(WIFI_ERROR_MESSAGE_t,wifi_command_TCP_transmit,uint8_t *,uint16_t);
+//FAKE_VALUE_FUNC(uint8_t*, encriptionStart);
+//FAKE_VALUE_FUNC(uint8_t*, connect,WIFI_TCP_Callback_t,char*);
 
+typedef int (*send_t)(void);
+FAKE_VALUE_FUNC(int, taskSend,send_t);
+typedef _Bool (*door_t)(void);
+FAKE_VALUE_FUNC(int, taskDoor,door_t);
+typedef char* (*security_t)(void);
+FAKE_VALUE_FUNC(int, taskSecurity,security_t);
 
+//Callback
+FAKE_VALUE_FUNC(uint8_t*, setRadiatorLevel, uint8_t, int);
+FAKE_VALUE_FUNC(char*, AdjustLight,uint8_t,int)
 
-
-
-
+//breakingIn
 FAKE_VALUE_FUNC(char *,alarm,bool);
-FAKE_VALUE_FUNC(uint8_t *,getTempAndHum,uint8_t);
-FAKE_VALUE_FUNC(uint8_t *,getLightInfo,uint8_t);
+//FAKE_VALUE_FUNC(uint8_t*, transmitData,uint8_t*, uint16_t);
+
+//doorAction
+FAKE_VALUE_FUNC(int,openDoor);
+FAKE_VALUE_FUNC(int,closeDoor);
+
+//windowAction
 FAKE_VALUE_FUNC(int,openWindow,int);
 FAKE_VALUE_FUNC(int,closeWindow,int);
-FAKE_VALUE_FUNC(int,openDoor,int);
-FAKE_VALUE_FUNC(int,closeDoor,int);
-FAKE_VOID_FUNC(pc_comm_send_array_blocking,uint8_t *,uint16_t );
 
-FAKE_VOID_FUNC(AES_init_ctx,struct AES_ctx *,const uint8_t *);
-FAKE_VOID_FUNC(AES_ECB_encrypt,const struct AES_ctx *,uint8_t *);
-FAKE_VOID_FUNC(AES_ECB_decrypt,const struct AES_ctx *,uint8_t *);
+//sendLight
+FAKE_VALUE_FUNC(uint8_t *,getLightInfo,uint8_t);
 
+//sendTempAndHumidity
+FAKE_VALUE_FUNC(uint8_t *,getTempAndHum,uint8_t);
+
+//For adjust light idk why
 FAKE_VOID_FUNC(leds_turnOff,uint8_t);
 FAKE_VOID_FUNC(leds_turnOn,uint8_t);
 FAKE_VOID_FUNC(display_setValues,uint8_t,uint8_t,uint8_t,uint8_t);
 FAKE_VOID_FUNC(servo,uint8_t);
 
-typedef void (*user_function_a_t)(void);
+FAKE_VALUE_FUNC(WIFI_ERROR_MESSAGE_t,wifi_command_join_AP,char *,char *);//2
+FAKE_VALUE_FUNC(WIFI_ERROR_MESSAGE_t,wifi_command_create_TCP_connection,char *,uint16_t,WIFI_TCP_Callback_t, char *);//3
+FAKE_VALUE_FUNC(WIFI_ERROR_MESSAGE_t,wifi_command_TCP_transmit,uint8_t *,uint16_t);//5
 
-FAKE_VOID_FUNC(periodic_task_init_a, user_function_a_t, uint32_t);
-FAKE_VOID_FUNC(periodic_task_init_b, user_function_a_t, uint32_t);
-FAKE_VOID_FUNC(periodic_task_init_c, user_function_a_t, uint32_t);
+FAKE_VOID_FUNC(pc_comm_send_array_blocking,uint8_t *,uint16_t );//7
 
+FAKE_VOID_FUNC(AES_init_ctx,struct AES_ctx *,const uint8_t *);//1
+FAKE_VOID_FUNC(AES_ECB_encrypt,const struct AES_ctx *,uint8_t *);//4
+FAKE_VOID_FUNC(AES_ECB_decrypt,const struct AES_ctx *,uint8_t *);//6
 
 
 void setUp(void) {
@@ -56,14 +71,64 @@ void setUp(void) {
     // Reset other fakes as needed
     FFF_RESET_HISTORY();
     UnlockingApproved=false;
+    sprintf(received_message_buffer,"0000");
 }
 void tearDown(void) {}
 
 void test_start(void){
-    wifi_command_TCP_transmit_fake.return_val=WIFI_OK;
+    //connect_fake.return_val = WIFI_OK;
     int result=start();
 
     TEST_ASSERT_EQUAL_INT(1,result);
+}
+
+void test_CallbackDoor(void){
+    sprintf(received_message_buffer,"0301");
+    int result = Callback();
+
+    TEST_ASSERT_EQUAL_INT(3,result);
+}
+
+void test_CallbackRadiatorValidRoom(void){
+    sprintf(received_message_buffer,"1101");
+    int result = Callback();
+
+    TEST_ASSERT_EQUAL_INT(1,result);
+}
+
+void test_CallbackWindowsValidRoom(void){
+    sprintf(received_message_buffer,"1201");
+    int result = Callback();
+
+    TEST_ASSERT_EQUAL_INT(2,result);
+}
+
+void test_CallbackLightsValidRoom(void){
+    sprintf(received_message_buffer,"1401");
+    int result = Callback();
+
+    TEST_ASSERT_EQUAL_INT(4,result);
+}
+
+void test_CallbackRadiatorInvalidRoom(void){
+    sprintf(received_message_buffer,"0101");
+    int result = Callback();
+
+    TEST_ASSERT_EQUAL_INT(0,result);
+}
+
+void test_CallbackWindowsinvalidRoom(void){
+    sprintf(received_message_buffer,"0201");
+    int result = Callback();
+
+    TEST_ASSERT_EQUAL_INT(0,result);
+}
+
+void test_CallbackLightsInvalidRoom(void){
+    sprintf(received_message_buffer,"0401");
+    int result = Callback();
+
+    TEST_ASSERT_EQUAL_INT(0,result);
 }
 
 void test_doorApproval(void){
@@ -105,7 +170,6 @@ void test_breakingInFalse(void){
 }
 
 void test_sendTempAndHumidity(){
-
     int result=sendTempAndHumidity(1);
 
     TEST_ASSERT_EQUAL_INT(1,result);
@@ -127,6 +191,14 @@ int main(){
     UNITY_BEGIN();
 
     RUN_TEST(test_start);
+
+    RUN_TEST(test_CallbackDoor);
+    RUN_TEST(test_CallbackRadiatorValidRoom);
+    RUN_TEST(test_CallbackWindowsValidRoom);
+    RUN_TEST(test_CallbackLightsValidRoom);
+    RUN_TEST(test_CallbackRadiatorInvalidRoom);
+    RUN_TEST(test_CallbackWindowsinvalidRoom);
+    RUN_TEST(test_CallbackLightsInvalidRoom);
 
     RUN_TEST(test_doorActionClose);
     RUN_TEST(test_doorActionOpen);

@@ -13,7 +13,6 @@
 #include "servo.h"
 #include "display.h"
 
-
 int openWindow(int hardwareId);
 
 int closeWindow(int hardwareId);
