@@ -71,7 +71,12 @@ public class RoomRepository : IRoomRepository
                 room.DeviceId = deviceId;
             }
         }
+        else
+        {
+            throw new Exception("Room with given id does not exist");
+        }
 
+        _context.room.Update(room);
         await _context.SaveChangesAsync();
     }
 
