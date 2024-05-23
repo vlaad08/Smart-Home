@@ -15,8 +15,8 @@ FAKE_VOID_FUNC(display_init);
 FAKE_VOID_FUNC(leds_init);
 FAKE_VOID_FUNC(hc_sr04_init);
 
-FAKE_VALUE_FUNC(uint8_t*, encriptionStart);
-FAKE_VALUE_FUNC(uint8_t*, connect,WIFI_TCP_Callback_t,char*);
+//FAKE_VALUE_FUNC(uint8_t*, encriptionStart);
+//FAKE_VALUE_FUNC(uint8_t*, connect,WIFI_TCP_Callback_t,char*);
 
 typedef int (*send_t)(void);
 FAKE_VALUE_FUNC(int, taskSend,send_t);
@@ -31,7 +31,7 @@ FAKE_VALUE_FUNC(char*, AdjustLight,uint8_t,int)
 
 //breakingIn
 FAKE_VALUE_FUNC(char *,alarm,bool);
-FAKE_VALUE_FUNC(uint8_t*, transmitData,uint8_t*, uint16_t);
+//FAKE_VALUE_FUNC(uint8_t*, transmitData,uint8_t*, uint16_t);
 
 //doorAction
 FAKE_VALUE_FUNC(int,openDoor);
@@ -53,6 +53,15 @@ FAKE_VOID_FUNC(leds_turnOn,uint8_t);
 FAKE_VOID_FUNC(display_setValues,uint8_t,uint8_t,uint8_t,uint8_t);
 FAKE_VOID_FUNC(servo,uint8_t);
 
+FAKE_VALUE_FUNC(WIFI_ERROR_MESSAGE_t,wifi_command_join_AP,char *,char *);//2
+FAKE_VALUE_FUNC(WIFI_ERROR_MESSAGE_t,wifi_command_create_TCP_connection,char *,uint16_t,WIFI_TCP_Callback_t, char *);//3
+FAKE_VALUE_FUNC(WIFI_ERROR_MESSAGE_t,wifi_command_TCP_transmit,uint8_t *,uint16_t);//5
+
+FAKE_VOID_FUNC(pc_comm_send_array_blocking,uint8_t *,uint16_t );//7
+
+FAKE_VOID_FUNC(AES_init_ctx,struct AES_ctx *,const uint8_t *);//1
+FAKE_VOID_FUNC(AES_ECB_encrypt,const struct AES_ctx *,uint8_t *);//4
+FAKE_VOID_FUNC(AES_ECB_decrypt,const struct AES_ctx *,uint8_t *);//6
 
 
 void setUp(void) {
@@ -67,7 +76,7 @@ void setUp(void) {
 void tearDown(void) {}
 
 void test_start(void){
-    connect_fake.return_val = WIFI_OK;
+    //connect_fake.return_val = WIFI_OK;
     int result=start();
 
     TEST_ASSERT_EQUAL_INT(1,result);

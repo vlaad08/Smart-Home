@@ -44,7 +44,7 @@ void test_transmitData(){
 }
 
 void test_decryption(){
-    uint8_t* result = decrytpion("test",4);
+    uint8_t* result = decryption("test",4);
 
     TEST_ASSERT_EQUAL_STRING("test",result);
 }

@@ -16,4 +16,4 @@ uint8_t* connect(WIFI_TCP_Callback_t callback_when_message_received, char *recei
 
 uint8_t* transmitData(uint8_t * data,uint16_t length);
 
-uint8_t* decrytpion();
+uint8_t* decryption();

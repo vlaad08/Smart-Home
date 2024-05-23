@@ -28,7 +28,10 @@ uint8_t* transmitData(uint8_t * data,uint16_t length){
     return data;
 }
 
-uint8_t* decrytpion(uint8_t* data){
-    AES_ECB_decrypt(&my_AES_ctx,(uint8_t*)data);
-    return data;
+uint8_t* decryption(uint8_t* data){
+    pc_comm_send_array_blocking((uint8_t*)data,128);
+    char * msg= malloc(16*sizeof(char));
+    memcpy(msg,data,16);
+    AES_ECB_decrypt(&my_AES_ctx,(uint8_t *)msg);
+    return (uint8_t*) msg;
 }

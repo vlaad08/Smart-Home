@@ -83,8 +83,9 @@ char * breakingIn(){
 }
 
 int Callback(){
+    uint8_t* msg = decryption(received_message_buffer);
+    uint8_t id=msg[0]-'0';
     int x = 0;
-    uint8_t id=received_message_buffer[0]-'0';
     uint8_t value;
     if (received_message_buffer[1]-'0' == 3)
     {

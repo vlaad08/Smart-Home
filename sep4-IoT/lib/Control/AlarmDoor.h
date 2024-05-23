@@ -8,7 +8,6 @@
 #include "buzzer.h"
 #include "display.h"
 #include "hc_sr04.h"
-#include "periodic_task.h"
 
 
 char* alarm(bool isApproved);
