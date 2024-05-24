@@ -2,7 +2,7 @@ using DBComm.Shared;
 
 namespace WebAPI.DTOs;
 
-public class RoomDataTransferDTO
+public class RoomDataDTO
 {
     public string? Id { get; set; }
     public string? Name { get; set; }

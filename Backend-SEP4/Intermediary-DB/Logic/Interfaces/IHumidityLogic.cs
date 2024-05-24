@@ -4,8 +4,7 @@ namespace DBComm.Logic.Interfaces;
 
 public interface IHumidityLogic
 {
-    Task<HumidityReading> getHumidity(string hardwareId);
-    void saveHumidity(Humidity humidity);
-    Task<ICollection<HumidityReading>> getHumidityHistory(string hardwareId, DateTime dateFrom, DateTime dateTo);
-    Task saveHumidityReading(string deviceId, double value);
+    Task<HumidityReading> GetLatestHumidity(string hardwareId);
+    Task<ICollection<HumidityReading>> GetHumidityHistory(string hardwareId, DateTime dateFrom, DateTime dateTo);
+    Task SaveHumidityReading(string deviceId, double value);
 }

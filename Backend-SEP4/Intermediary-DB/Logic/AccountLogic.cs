@@ -11,7 +11,7 @@ public class AccountLogic : IAccountLogic
     private IAccountRepository _repository;
     public AccountLogic(IAccountRepository repository)
     {
-        this._repository = repository;
+        _repository = repository;
     }
 
     private async Task<string> _hashPassword(string password)
@@ -26,11 +26,6 @@ public class AccountLogic : IAccountLogic
 
         return hashedString;
     }
-    public Task<Member> GetAdmin(string login, string password)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<Member> RegisterMember(string username, string password)
     {
         if (string.IsNullOrEmpty(username))
@@ -75,41 +70,6 @@ public class AccountLogic : IAccountLogic
             throw new Exception(e.Message);
         }
     }
-
-    public Task<Member> GetMember(string login, string password)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task RegisterAdmin(string username, string password)
-    {
-        if (string.IsNullOrEmpty(username))
-        {
-            throw new ValidationException("Username cannot be null");
-        }
-
-        if (string.IsNullOrEmpty(password))
-        {
-            throw new ValidationException("Password cannot be null");
-        }
-        try
-        {
-            if (await _repository.CheckExistingUser(username))
-            {
-                string hash = await _hashPassword(password);
-                await _repository.RegisterAdmin(username, hash);
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw new Exception(e.Message);
-        }
-
-        return;
-    }
-
-
     public async Task EditUsername(string oldUsername, string newUsername,string password)
     {
         try
@@ -166,12 +126,6 @@ public class AccountLogic : IAccountLogic
             throw new Exception(e.Message);
         }
     }
-
-
-
-
-    
-
     public async Task<Member> Login(string username, string password)
     {
         if (string.IsNullOrEmpty(username))

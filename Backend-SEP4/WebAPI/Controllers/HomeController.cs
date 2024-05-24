@@ -12,21 +12,18 @@ namespace WebAPI.Controllers
     public class HomeController : ControllerBase
     {
         
-        private readonly IHomeLogic _homeLogic;
+        private readonly IHomeLogic _logic;
 
-        public HomeController(IHomeLogic homeLogic)
+        public HomeController(IHomeLogic logic)
         {
-            this._homeLogic = homeLogic;
+            _logic = logic;
         }
     
         // GET: home/{homeId}/members
         [HttpGet("{homeId}/members")]
         public async Task<ActionResult<IEnumerable<Member>>> GetMembers(string homeId)
         {
-            // TODO: Implement logic to retrieve members based on homeId
-            // For now, let's return a dummy list of members
-            var members = await _homeLogic.GetMembersByHomeId(homeId);
-
+            var members = await _logic.GetMembersByHomeId(homeId);
             return Ok(members);
         }
 
@@ -36,7 +33,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                await _homeLogic.AddMemberToHome(username, houseId);
+                await _logic.AddMemberToHome(username, houseId);
                 return Ok("Member added to house.");
             }
             catch (Exception e)
@@ -52,7 +49,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                await _homeLogic.RemoveMemberFromHome(username);
+                await _logic.RemoveMemberFromHome(username);
                 return Ok("Member removed.");
             }
             catch (Exception e)

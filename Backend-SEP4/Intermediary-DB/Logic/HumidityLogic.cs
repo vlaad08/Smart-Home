@@ -17,23 +17,16 @@ public class HumidityLogic : IHumidityLogic
         this._repository = repository;
     }
     
-    public async Task<HumidityReading> getHumidity(string hardwareId)
+    public async Task<HumidityReading> GetLatestHumidity(string hardwareId)
     {
-        return await _repository.GetOne(hardwareId);
+        return await _repository.GetLatestHumidity(hardwareId);
     }
-
-    public void saveHumidity(Humidity humidity)
-    {
-        //_repository.update(humidity);
-        
-    }
-
-    public async Task<ICollection<HumidityReading>> getHumidityHistory(string hardwareId, DateTime dateFrom, DateTime dateTo)
+    public async Task<ICollection<HumidityReading>> GetHumidityHistory(string hardwareId, DateTime dateFrom, DateTime dateTo)
     {
         return await _repository.GetHistory(hardwareId, dateFrom, dateTo);
     }
 
-    public async Task saveHumidityReading(string deviceId, double value)
+    public async Task SaveHumidityReading(string deviceId, double value)
     {
         DateTime dateTime = DateTime.UtcNow;
         await _repository.SaveHumidityReading(deviceId, value, dateTime);

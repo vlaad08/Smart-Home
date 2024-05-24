@@ -15,9 +15,9 @@ public class TemperatureLogic : ITemperatureLogic
         _communicator = Communicator.Instance;
         this._repository = repository;
     }
-    public async Task<TemperatureReading> getLatestTemperature(string hardwareId)
+    public async Task<TemperatureReading> GetLatestTemperature(string hardwareId)
     {
-        return await _repository.GetOne(hardwareId);
+        return await _repository.GetLatestTemperature(hardwareId);
     }
 
     public void saveTemperature(TemperatureReading temperatureReading)
@@ -26,7 +26,7 @@ public class TemperatureLogic : ITemperatureLogic
         
     }
 
-    public async Task<ICollection<TemperatureReading>> getTemperatureHistory(string hardwareId, DateTime dateFrom, DateTime dateTo)
+    public async Task<ICollection<TemperatureReading>> GetTemperatureHistory(string hardwareId, DateTime dateFrom, DateTime dateTo)
     {
         return await _repository.GetHistory(hardwareId, dateFrom, dateTo);
     }
@@ -36,7 +36,7 @@ public class TemperatureLogic : ITemperatureLogic
         _communicator.setTemperature(hardwareId, level);
     }
     
-    public async Task saveTempReading(string deviceId,double value)
+    public async Task SaveTempReading(string deviceId,double value)
     {
         DateTime dateTime = DateTime.UtcNow;
         await _repository.SaveTemperatureReading(deviceId,value, dateTime);
