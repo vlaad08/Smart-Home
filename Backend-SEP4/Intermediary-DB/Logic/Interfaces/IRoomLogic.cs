@@ -15,4 +15,5 @@ public interface IRoomLogic
     Task<bool> GetWindowState(string hardwareId);
     Task SetLightState(string hardwareId, int level);
     Task<int> GetLightState(string hardwareId);
+    Task<RoomDataDTO> GetRoomData(string homeId, string deviceId, bool temp=false, bool humi=false, bool light=false);
 }

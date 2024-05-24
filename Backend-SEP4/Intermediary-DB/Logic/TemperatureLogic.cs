@@ -39,7 +39,7 @@ public class TemperatureLogic : ITemperatureLogic
         return await _repository.GetHistory(hardwareId, dateFrom, dateTo);
     }
 
-    public async Task setTemperature(string hardwareId, int level)
+    public async Task SetTemperature(string hardwareId, int level)
     {
         string message = $"LOGIC: {hardwareId}{level}              ";
         int blockSize = 16; 

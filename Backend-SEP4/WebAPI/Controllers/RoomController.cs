@@ -44,7 +44,7 @@ public class RoomController : ControllerBase
     {
         try
         {
-            var data = await logic.GetRoomData(homeId, deviceId,temp,humi,light);
+            var data = await _logic.GetRoomData(homeId, deviceId,temp,humi,light);
             return Ok(data);
         }
         catch (Exception e)

@@ -25,7 +25,7 @@ public class TemperatureController : ControllerBase
     {
         try
         {
-            TemperatureReading? temperature = await _temperatureLogic.getLatestTemperature(deviceId);
+            TemperatureReading? temperature = await _logic.GetLatestTemperature(deviceId);
 
             return Ok(temperature);
         }
@@ -60,7 +60,7 @@ public class TemperatureController : ControllerBase
         
         try
         {
-            await _temperatureLogic.setTemperature(hardwareId, level);
+            await _logic.SetTemperature(hardwareId, level);
             return Ok($"Light level set to {level} for hardware ID: {hardwareId}");
         }
         catch (Exception e)
