@@ -9,16 +9,16 @@ namespace Intermediary_DB.Repository
     public class HomeRepository : IHomeRepository
     {
 
-        public Context context;
+        public Context _context;
         public HomeRepository(Context context)
         {
-            this.context = context;
+            this._context = context;
         }
 
         // Implement the methods from the IHomeRepository interface here
         public async Task<List<Member>> GetMembersByHomeId(string homeId)
         {
-            var members = await context.member
+            var members = await _context.member
                 .Where(m => m.Home.Id == homeId)
                 .ToListAsync();
 
@@ -31,13 +31,13 @@ namespace Intermediary_DB.Repository
         {
             try
             {
-                Member? existing = await context.member.Include(m => m.Home)
+                Member? existing = await _context.member.Include(m => m.Home)
                     .SingleOrDefaultAsync(m => m.Username == username);
                 if (existing != null)
                 {
                     existing.Home = null;
-                    context.member.Update(existing);
-                    await context.SaveChangesAsync();
+                    _context.member.Update(existing);
+                    await _context.SaveChangesAsync();
                 }
             }
             catch (Exception e)
@@ -50,7 +50,7 @@ namespace Intermediary_DB.Repository
         {
             try
             {
-                Member? existing = await context.member.Include(m => m.Home)
+                Member? existing = await _context.member.Include(m => m.Home)
                     .SingleOrDefaultAsync(m => m.Username == username);
                 
                 if (existing.Home != null)
@@ -58,15 +58,15 @@ namespace Intermediary_DB.Repository
                     throw new Exception("Member is already assigned to a house");
                 }
 
-                Home home = await context.home.FindAsync(houseId);
+                Home home = await _context.home.FindAsync(houseId);
                 if (home == null)
                 {
                     throw new Exception("No home w that id");
                 }
 
                 existing.Home = home;
-                context.member.Update(existing);
-                await context.SaveChangesAsync();
+                _context.member.Update(existing);
+                await _context.SaveChangesAsync();
                 
             }
             catch (Exception e)
@@ -78,7 +78,7 @@ namespace Intermediary_DB.Repository
 
         public async Task<bool> CheckUserExists(string username)
         {
-            Member? member = await context.member.Include(m=>m.Home).FirstOrDefaultAsync(m => m.Username == username);
+            Member? member = await _context.member.Include(m=>m.Home).FirstOrDefaultAsync(m => m.Username == username);
             if (member != null)
             {
                 return true;

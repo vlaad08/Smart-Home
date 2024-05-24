@@ -12,11 +12,11 @@ namespace WebAPI.Controllers;
 public class LightController : ControllerBase
 {
 
-    private readonly ILightLogic _lightLogic;
+    private readonly ILightLogic _logic;
 
-    public LightController(ILightLogic lightLogic)
+    public LightController(ILightLogic logic)
     {
-        _lightLogic = lightLogic;
+        _logic = logic;
     }
 
     [HttpGet("{hardwareId}/latest")]
@@ -24,7 +24,7 @@ public class LightController : ControllerBase
     {
         try
         {
-            LightReading? light = await _lightLogic.getLight(hardwareId);
+            LightReading? light = await _logic.GetLatestLight(hardwareId);
             return Ok(light);
         }
         catch (Exception e)
@@ -36,11 +36,11 @@ public class LightController : ControllerBase
     //An endpoint to get the light level history of a specific room based on id of that room (request with room id, returns a list of readings of light levels)
     [HttpGet, Route("{hardwareId}/history")]
     public async Task<ActionResult<ICollection<LightReading>>> GetLightHistory([FromRoute] string hardwareId,
-        [FromBody] TimePeriodDTO dto)
+        [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo )
     {
         try
         {
-            var lightHistory = await _lightLogic.getLightHistory(hardwareId, dto.dateFrom, dto.dateTo);
+            var lightHistory = await _logic.GetLightHistory(hardwareId, dateFrom, dateTo);
             return Ok(lightHistory);
         }catch (Exception e)
         {
@@ -68,14 +68,13 @@ public class LightController : ControllerBase
     }
 
     [HttpPost, Route("devices/{deviceId}/{value}"),AllowAnonymous]
+
     public async Task<ActionResult> SaveCurrentLightInRoom([FromRoute] string deviceId, [FromRoute] double value)
     {
         try
         {
-            Console.WriteLine("Controller");
-            await _lightLogic.saveLightReading(deviceId, value);
-            Console.WriteLine("controller 2");
-            return Ok($"Temperature saved for all rooms in house");
+            await _logic.SaveLightReading(deviceId, value);
+            return Ok($"Temperature saved");
         }catch (Exception e)
         {
             Console.WriteLine(e);

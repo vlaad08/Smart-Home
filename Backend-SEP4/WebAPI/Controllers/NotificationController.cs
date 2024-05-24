@@ -10,11 +10,11 @@ namespace WebAPI.Controllers;
 [Authorize]
 public class NotificationController : ControllerBase
 {
-    private INotificationLogic _notificationLogic;
+    private INotificationLogic _logic;
 
-    public NotificationController(INotificationLogic notificationLogic)
+    public NotificationController(INotificationLogic logic)
     {
-        this._notificationLogic = notificationLogic;
+        _logic = logic;
     }
     //An endpoint to get all the notifications of the house (request with homeId, returns all the  notifications (limit?? idk )) - limit 1 day
     [HttpGet, Route("{houseId}")]
@@ -22,7 +22,7 @@ public class NotificationController : ControllerBase
     {
         try
         {
-            List<Notification>? notifications = await _notificationLogic.GetNotifications(houseId);
+            List<Notification>? notifications = await _logic.GetNotifications(houseId);
             return Ok(notifications);
         }
         catch (Exception e)

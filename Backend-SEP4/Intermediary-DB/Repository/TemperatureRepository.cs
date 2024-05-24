@@ -12,7 +12,7 @@ public class TemperatureRepository : ITemperatureRepository
         _context = context;
     }
 
-    public async Task<TemperatureReading> GetOne(string deviceId)
+    public async Task<TemperatureReading> GetLatestTemperature(string deviceId)
     {
         try
         {

@@ -10,6 +10,14 @@ public class Notification
     public string Message { get; set; }
     public Home Home { get; set; }
 
+    public Notification(Home home, string message)
+    {
+        Id = Guid.NewGuid().ToString();
+        SendAt = DateTime.UtcNow;
+        Message = message;
+        Home = home;
+    }
+
     public Notification()
     {
         

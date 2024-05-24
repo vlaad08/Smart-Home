@@ -16,13 +16,13 @@ namespace WebAPI.Service;
 
 public class AuthController : ControllerBase
 {
-    private readonly IConfiguration config;
-    private readonly IAccountLogic _accountLogic;
+    private readonly IConfiguration _config;
+    private readonly IAccountLogic _logic;
 
     public AuthController(IConfiguration config, IAccountLogic accountService)
     {
-        this.config = config;
-        this._accountLogic = accountService;
+        this._config = config;
+        this._logic = accountService;
     }
 
     //An endpoint to create a member account (we send an object (username and password), you send us 200 OK or sth else for error)
@@ -31,7 +31,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            await _accountLogic.RegisterMember(dto.Username, dto.Password);
+            await _logic.RegisterMember(dto.Username, dto.Password);
             return Ok("User registered.");
         }
         catch (Exception e)
@@ -48,7 +48,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            Member? member = await _accountLogic.Login(userLoginDto.Username, userLoginDto.Password);
+            Member? member = await _logic.Login(userLoginDto.Username, userLoginDto.Password);
             string token = GenerateJwt(member);
             return Ok(token);
         }
@@ -64,7 +64,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            await _accountLogic.Delete(username,dto.Password);
+            await _logic.Delete(username,dto.Password);
             return Ok("Account deleted.");
         }
         catch (Exception e)
@@ -79,7 +79,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            await _accountLogic.EditUsername(username, dto.NewUsername,dto.Password);
+            await _logic.EditUsername(username, dto.NewUsername,dto.Password);
             return Ok("Username changed.");
         }
         catch (Exception e)
@@ -93,7 +93,7 @@ public class AuthController : ControllerBase
         {
             try
             {
-                await _accountLogic.EditPassword(username,dto.OldPassword, dto.NewPassword);
+                await _logic.EditPassword(username,dto.OldPassword, dto.NewPassword);
                 return Ok("Password changed.");
             }
             catch (Exception e)
@@ -107,7 +107,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            await _accountLogic.ToggleAdmin(dto.AdminUsername,dto.AdminPassword,dto.Username);
+            await _logic.ToggleAdmin(dto.AdminUsername,dto.AdminPassword,dto.Username);
             return Ok("Admin added.");
         }
         catch (Exception e)
@@ -121,14 +121,14 @@ public class AuthController : ControllerBase
     {
         List<Claim> claims = GenerateClaims(member);
         
-        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
+        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
         SigningCredentials signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
         
         JwtHeader header = new JwtHeader(signIn);
         
         JwtPayload payload = new JwtPayload(
-            config["Jwt:Issuer"],
-            config["Jwt:Audience"],
+            _config["Jwt:Issuer"],
+            _config["Jwt:Audience"],
             claims, 
             null,
             DateTime.UtcNow.AddMinutes(60));
@@ -142,7 +142,7 @@ public class AuthController : ControllerBase
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, config["Jwt:Subject"]),
+            new Claim(JwtRegisteredClaimNames.Sub, _config["Jwt:Subject"]),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
             new Claim(ClaimTypes.Name, member.Username),

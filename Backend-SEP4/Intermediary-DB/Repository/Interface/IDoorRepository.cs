@@ -9,4 +9,5 @@ public interface IDoorRepository
     Task<bool> CheckDoorState(string homeId);
     Task<string> GetFirstDeviceInHouse(string houseId);
 
+    Task<string> CheckHashedPassword(string houseId);
 }
