@@ -1,6 +1,6 @@
 #include "AlarmDoor.h"
 
-char* alarm(_Bool isApproved){
+char* Alarm(_Bool isApproved){
     uint16_t distance = hc_sr04_takeMeasurement();
 
     char * ret = (char *) malloc(16*sizeof(char));

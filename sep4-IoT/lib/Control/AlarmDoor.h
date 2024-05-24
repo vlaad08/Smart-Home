@@ -9,4 +9,4 @@
 #include "display.h"
 #include "hc_sr04.h"
 
-char* alarm(_Bool isApproved);
+char* Alarm(_Bool isApproved);
