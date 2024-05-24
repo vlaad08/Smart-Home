@@ -2,7 +2,7 @@ name: PlatformIO Build
 
 on:
   push: 
-    branches: ['IoT-TestAlarm']
+    branches: ['main']
 
 jobs:
   build:
