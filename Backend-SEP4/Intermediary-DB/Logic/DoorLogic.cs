@@ -21,6 +21,7 @@ public class DoorLogic : IDoorLogic
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
         this._repository = repository;
+    }
 
     private INotificationRepository _notificationRepository;
     public DoorLogic(IDoorRepository repository, INotificationRepository notificationRepository)
