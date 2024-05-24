@@ -7,4 +7,6 @@ public interface IDoorRepository
     Task<bool> CheckIfDoorExist(string homeId);
     Task SaveDoorState(string hardwareID, bool state);
     Task<bool> CheckDoorState(string homeId);
+    Task<string> GetFirstDeviceInHouse(string houseId);
+
 }

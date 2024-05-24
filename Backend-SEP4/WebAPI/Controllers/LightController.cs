@@ -52,6 +52,10 @@ public class LightController : ControllerBase
     [HttpPost, Route("{hardwareId}/level")]
     public async Task<ActionResult> SetLight([FromRoute] string hardwareId, [FromBody]int level)
     {
+        if (level < 0 || level > 4)
+        {
+            return BadRequest("Light level must be between 0-4");
+        }
         try
         {
             await _lightLogic.SetLight(hardwareId, level);

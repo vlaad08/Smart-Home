@@ -17,7 +17,7 @@ public class TemperatureLogic : ITemperatureLogic
 
     public TemperatureLogic(ITemperatureRepository repository)
     {
-        this.client = new TcpClient("192.168.236.1", 6868);
+        this.client = new TcpClient("192.168.137.209", 6868);
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);

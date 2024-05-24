@@ -22,7 +22,7 @@ public class Server
     
     public Server(int port)
     {
-        IPAddress localAddr = IPAddress.Parse("192.168.236.1");
+        IPAddress localAddr = IPAddress.Parse("192.168.137.209");
         listener = new TcpListener(localAddr, port);
         isRunning = true;
         listener.Start();
@@ -78,6 +78,7 @@ public class Server
             {
                 case var message when message.StartsWith("LOGIC:"):
                 {
+                    
                     string[] parts = message.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                     string newMessage = string.Join(" ", parts.Skip(1));
                     foreach (var logicClient in allClients)
@@ -90,7 +91,7 @@ public class Server
                             {
                                 newMessage = newMessage.PadRight(newMessage.Length + blockSize - extraBytes, ' ');
                             }
-                            byte[] messageBytes = enc.Encrypt(message);
+                            byte[] messageBytes = enc.Encrypt(newMessage);
                             Send(messageBytes, logicClient.Key);
                         }
                     }
@@ -129,8 +130,42 @@ public class Server
                 break;
 
                 default:
-                    Console.WriteLine("Unrecognized message format.");
                     break;
+                {
+                    Console.WriteLine("switchcase default");
+                    // The first 4 characters will be used by the receiving party
+                    string identifier = decryptedData.Substring(0, 4);
+                    Console.WriteLine("switchcase default 1");
+
+                    string remainingMessage = decryptedData.Substring(4);
+                    Console.WriteLine("switchcase default 2");
+
+                    foreach (var logicClient in allClients)
+                    {
+                        Console.WriteLine("switchcase default 3");
+
+                        if (!logicClient.Value)
+                        {                    
+                            Console.WriteLine("switchcase default4");
+
+                            int blockSize = 16;
+                            int extraBytes = remainingMessage.Length % blockSize;
+                            if (extraBytes != 0)
+                            {
+                                remainingMessage = remainingMessage.PadRight(remainingMessage.Length + blockSize - extraBytes, ' ');
+                            }
+                            byte[] messageBytes = enc.Encrypt(identifier + remainingMessage);
+                            Console.WriteLine("switchcase default 5");
+
+                            Send(messageBytes, logicClient.Key);
+                            Console.WriteLine("switchcase default 6");
+
+                        }
+                    }
+                } 
+                    break;
+                    Console.WriteLine("Unrecognized message format.");
+                    //break;
             }
         }
     }
