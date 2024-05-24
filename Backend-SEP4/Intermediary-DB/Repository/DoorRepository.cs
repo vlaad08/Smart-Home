@@ -94,7 +94,7 @@ public class DoorRepository : IDoorRepository
     
     public async Task<string> GetFirstDeviceInHouse(string houseId)
     {
-        Room? room = await Context.room.Include(r => r.Home).FirstOrDefaultAsync(r => r.Home.Id == houseId);
+        Room? room = await _context.room.Include(r => r.Home).FirstOrDefaultAsync(r => r.Home.Id == houseId);
         if (room != null)
         {
             return room.DeviceId;
