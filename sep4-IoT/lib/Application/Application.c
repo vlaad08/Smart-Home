@@ -82,8 +82,8 @@ char * breakingIn(){
 }
 
 int Callback(){
-    uint8_t* msg = decryption(received_message_buffer);
-    pc_comm_send_array_blocking((uint8_t*)msg,128);
+    uint8_t* msg = decryption((uint8_t *)received_message_buffer);
+    pc_comm_send_array_blocking((uint8_t*)msg,16);
     
      uint8_t id =msg[0]-'0';
     int x = 0;
