@@ -8,4 +8,5 @@ public interface ILightLogic
     Task<ICollection<LightReading>> GetLightHistory(string hardwareId, DateTime dateFrom, DateTime dateTo);
     Task SaveLightReading(string deviceId, double value);
 
+    Task SetLight(string hardwareId, int level);
 }
