@@ -30,7 +30,7 @@ FAKE_VALUE_FUNC(uint8_t*, setRadiatorLevel, uint8_t, int);
 FAKE_VALUE_FUNC(char*, AdjustLight,uint8_t,int)
 
 //breakingIn
-FAKE_VALUE_FUNC(char *,alarm,_Bool);
+FAKE_VALUE_FUNC(char*, alarm, _Bool);
 //FAKE_VALUE_FUNC(uint8_t*, transmitData,uint8_t*, uint16_t);
 
 //doorAction
@@ -67,7 +67,7 @@ FAKE_VOID_FUNC(AES_ECB_decrypt,const struct AES_ctx *,uint8_t *);//6
 void setUp(void) {
     RESET_FAKE(pc_comm_init);
     RESET_FAKE(wifi_init);
-    RESET_FAKE(alarm);
+    //RESET_FAKE(alarm);
     // Reset other fakes as needed
     FFF_RESET_HISTORY();
     UnlockingApproved=false;
@@ -132,20 +132,20 @@ void test_CallbackLightsInvalidRoom(void){
 }
 
 void test_doorApproval(void){
-    bool result=doorApproval();
+    _Bool result=doorApproval();
 
     TEST_ASSERT_FALSE(result);
     
 }
 
 void test_doorActionOpen(void){
-    bool result=doorAction(1);
+    _Bool result=doorAction(1);
 
     TEST_ASSERT_TRUE(result);
 }
 
 void test_doorActionClose(void){
-    bool result=doorAction(0);
+    _Bool result=doorAction(0);
 
     TEST_ASSERT_FALSE(result);
 }
