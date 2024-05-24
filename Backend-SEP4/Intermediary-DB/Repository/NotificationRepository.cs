@@ -6,11 +6,11 @@ namespace DBComm.Repository;
 
 public class NotificationRepository : INotificationRepository
 {
-    private Context context;
+    private Context _context;
 
     public NotificationRepository(Context context)
     {
-        this.context = context;
+        this._context = context;
     }
     public async Task<List<Notification>> GetNotifications(string houseId)
     {
@@ -20,7 +20,7 @@ public class NotificationRepository : INotificationRepository
             var todayUtc = DateTime.UtcNow.Date;
             var tomorrowUtc = todayUtc.AddDays(1);
 
-            IQueryable<Notification> notificationReadings = context.notification
+            IQueryable<Notification> notificationReadings = _context.notification
                 .Where(nr => nr.SendAt >= todayUtc && nr.SendAt < tomorrowUtc && nr.Home.Id.Equals(houseId));
 
             List<Notification> result = await notificationReadings.ToListAsync();

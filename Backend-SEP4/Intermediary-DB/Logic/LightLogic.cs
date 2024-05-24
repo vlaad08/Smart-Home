@@ -15,12 +15,12 @@ public class LightLogic : ILightLogic
         this._repository = repository;
         _communicator = Communicator.Instance;
     }
-    public async Task<LightReading> getLight(string hardwareId)
+    public async Task<LightReading> GetLatestLight(string hardwareId)
     {
-        return await _repository.GetOne(hardwareId);
+        return await _repository.GetLatestLight(hardwareId);
     }
 
-    public async Task<ICollection<LightReading>> getLightHistory(string hardwareId, DateTime dateFrom, DateTime dateTo)
+    public async Task<ICollection<LightReading>> GetLightHistory(string hardwareId, DateTime dateFrom, DateTime dateTo)
     {
         return await _repository.GetHistory(hardwareId, dateFrom, dateTo);
     }
@@ -30,7 +30,7 @@ public class LightLogic : ILightLogic
         _communicator.setLight(hardwareId,level);
     }
     
-    public async Task saveLightReading(string deviceId,double value)
+    public async Task SaveLightReading(string deviceId,double value)
     {
         DateTime readAt = DateTime.UtcNow;
         await _repository.SaveLightReading(deviceId, value, readAt);

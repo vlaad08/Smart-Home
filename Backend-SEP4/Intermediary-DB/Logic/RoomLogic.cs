@@ -61,7 +61,7 @@ public class RoomLogic : IRoomLogic
         }
     }
 
-    public async Task<List<RoomDataTransferDTO>?> GetAllRooms(string homeId)
+    public async Task<List<RoomDataDTO>?> GetAllRooms(string homeId)
     {
         try
         {
@@ -73,7 +73,7 @@ public class RoomLogic : IRoomLogic
         }
     }
 
-    public async Task<RoomDataTransferDTO> GetRoomData(string homeId, string deviceId, bool temp=false, bool humi=false, bool light=false)
+    public async Task<RoomDataDTO> GetRoomData(string homeId, string deviceId, bool temp=false, bool humi=false, bool light=false)
     {
         try
         {

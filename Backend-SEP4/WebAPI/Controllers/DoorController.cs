@@ -53,7 +53,7 @@ public class DoorController : ControllerBase
     //An endpoint to change the password of the lock of the house (we send you house Id and the new password)
     //TODO: Check if the policies are set right form the authorization
     [HttpPut, Route("houses/{houseId}/doors/password"), Authorize(Policy = "Admin")]
-public async Task<IActionResult> ChangePassword([FromRoute] string houseId, [FromBody] string newPassword)
+    public async Task<IActionResult> ChangePassword([FromRoute] string houseId, [FromBody] string newPassword)
     {
         try
         {

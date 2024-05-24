@@ -6,17 +6,17 @@ namespace DBComm.Repository;
 
 public class HumidityRepository : IHumidityRepository
 {
-    public Context Context;
+    public Context _context;
     public HumidityRepository(Context context)
     {
-        Context = context;
+        _context = context;
     }
 
-    public async Task<HumidityReading> GetOne(string deviceId)
+    public async Task<HumidityReading> GetLatestHumidity(string deviceId)
     {
         try
         {
-            IQueryable<HumidityReading> humidityReading = Context.humidity_reading
+            IQueryable<HumidityReading> humidityReading = _context.humidity_reading
                 .Where(hr => hr.Room.DeviceId == deviceId)  
                 .OrderByDescending(hr => hr.ReadAt);
 
@@ -33,7 +33,7 @@ public class HumidityRepository : IHumidityRepository
     {
         try
         {
-            var query = Context.humidity_reading
+            var query = _context.humidity_reading
                 .Where(lr => lr.ReadAt >= dateFrom && lr.ReadAt <= dateTo && lr.Room.DeviceId == deviceId)
                 .GroupBy(lr => lr.ReadAt.Date) // Group by date
                 .Select(group => new HumidityReading()
@@ -56,7 +56,7 @@ public class HumidityRepository : IHumidityRepository
     {
         try
         {
-            var room = await Context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId);
+            var room = await _context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId);
             if (room == null)
             {
                 throw new Exception($"No such room with device {deviceId}");
@@ -66,8 +66,8 @@ public class HumidityRepository : IHumidityRepository
                 Room = room
             };
         
-            await Context.humidity_reading.AddAsync(humidityReading);
-            await Context.SaveChangesAsync();
+            await _context.humidity_reading.AddAsync(humidityReading);
+            await _context.SaveChangesAsync();
         }
         catch (Exception e)
         {

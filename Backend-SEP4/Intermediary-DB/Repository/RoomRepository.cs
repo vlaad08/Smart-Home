@@ -80,7 +80,7 @@ public class RoomRepository : IRoomRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<RoomDataTransferDTO>?> GetAllRooms(string homeId)
+    public async Task<List<RoomDataDTO>?> GetAllRooms(string homeId)
     {
         IQueryable<Room> query = _context.room.Include(r => r.Home).Where(r => r.Home.Id == homeId);
     
@@ -91,12 +91,12 @@ public class RoomRepository : IRoomRepository
             throw new Exception($"No rooms were found.");
         }
 
-        List<RoomDataTransferDTO> dtos = new List<RoomDataTransferDTO>();
+        List<RoomDataDTO> dtos = new List<RoomDataDTO>();
         try
         {
             foreach (Room r in rooms)
             {
-                RoomDataTransferDTO dto = new RoomDataTransferDTO
+                RoomDataDTO dto = new RoomDataDTO
                 {
                     Id = r.Id,
                     Name = r.Name,
@@ -142,10 +142,10 @@ public class RoomRepository : IRoomRepository
     }
 
 
-    public async Task<RoomDataTransferDTO> GetRoomData(string homeId, string deviceId, bool temp = false,
+    public async Task<RoomDataDTO> GetRoomData(string homeId, string deviceId, bool temp = false,
         bool humi = false, bool light = false)
     {
-        RoomDataTransferDTO dto = new RoomDataTransferDTO();
+        RoomDataDTO dto = new RoomDataDTO();
         Room? room = await _context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId && r.Home.Id == homeId);
         if (room != null)
         {

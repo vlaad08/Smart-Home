@@ -12,7 +12,7 @@ public class HumidityLogicTest
     {
         var dbComm = new Mock<IHumidityRepository>();
         var logic = new HumidityLogic(dbComm.Object);
-        await logic.getHumidity("1");
-        dbComm.Verify(d=>d.GetOne("1"));
+        await logic.GetLatestHumidity("1");
+        dbComm.Verify(d=>d.GetLatestHumidity("1"));
     }
 }

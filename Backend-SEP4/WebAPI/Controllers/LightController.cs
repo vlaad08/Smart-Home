@@ -12,11 +12,11 @@ namespace WebAPI.Controllers;
 public class LightController : ControllerBase
 {
 
-    private readonly ILightLogic _lightLogic;
+    private readonly ILightLogic _logic;
 
-    public LightController(ILightLogic lightLogic)
+    public LightController(ILightLogic logic)
     {
-        _lightLogic = lightLogic;
+        _logic = logic;
     }
 
     [HttpGet("{hardwareId}/latest")]
@@ -24,7 +24,7 @@ public class LightController : ControllerBase
     {
         try
         {
-            LightReading? light = await _lightLogic.getLight(hardwareId);
+            LightReading? light = await _logic.GetLatestLight(hardwareId);
             return Ok(light);
         }
         catch (Exception e)
@@ -40,7 +40,7 @@ public class LightController : ControllerBase
     {
         try
         {
-            var lightHistory = await _lightLogic.getLightHistory(hardwareId, dateFrom, dateTo);
+            var lightHistory = await _logic.GetLightHistory(hardwareId, dateFrom, dateTo);
             return Ok(lightHistory);
         }catch (Exception e)
         {
@@ -49,29 +49,13 @@ public class LightController : ControllerBase
         }
     }
     
-    [HttpPost, Route("{hardwareId}/level")]
-    public async Task<ActionResult> SetLight([FromRoute] string hardwareId, [FromBody]int level)
-    {
-        try
-        {
-            await _lightLogic.SetLight(hardwareId, level);
-            return Ok("Light level set.");
-        }catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
-    }
-
     [HttpPost, Route("devices/{deviceId}/{value}")]
     public async Task<ActionResult> SaveCurrentLightInRoom([FromRoute] string deviceId, [FromRoute] double value)
     {
         try
         {
-            Console.WriteLine("Controller");
-            await _lightLogic.saveLightReading(deviceId, value);
-            Console.WriteLine("controller 2");
-            return Ok($"Temperature saved for all rooms in house");
+            await _logic.SaveLightReading(deviceId, value);
+            return Ok($"Temperature saved");
         }catch (Exception e)
         {
             Console.WriteLine(e);

@@ -11,11 +11,11 @@ namespace WebAPI.Controllers;
 [ApiController] [Route("humidity")]
 public class HumidityController : ControllerBase
 {
-    private readonly IHumidityLogic _humidityLogic;
+    private readonly IHumidityLogic _logic;
 
-    public HumidityController(IHumidityLogic humidityLogic)
+    public HumidityController(IHumidityLogic logic)
     {
-        this._humidityLogic = humidityLogic;
+        _logic = logic;
     }
     
     [HttpGet("{hardwareId}/latest")]
@@ -23,7 +23,7 @@ public class HumidityController : ControllerBase
     {
         try
         {
-            HumidityReading? humidityReading = await _humidityLogic.getHumidity(hardwareId);
+            HumidityReading? humidityReading = await _logic.GetLatestHumidity(hardwareId);
             return Ok(humidityReading);
         }
         catch (Exception e)
@@ -39,7 +39,7 @@ public class HumidityController : ControllerBase
     {
         try
         {
-            var humidityHistory = await _humidityLogic.getHumidityHistory(hardwareId, dateFrom, dateTo);
+            var humidityHistory = await _logic.GetHumidityHistory(hardwareId, dateFrom, dateTo);
             return Ok(humidityHistory);
         }catch (Exception e)
         {
@@ -54,7 +54,7 @@ public class HumidityController : ControllerBase
         try
         {
             Console.WriteLine("humid 1");
-            await _humidityLogic.saveHumidityReading(deviceId, value);
+            await _logic.SaveHumidityReading(deviceId, value);
             Console.WriteLine("humid 2");
             return Ok("Humidity saved for all rooms in house");
         }

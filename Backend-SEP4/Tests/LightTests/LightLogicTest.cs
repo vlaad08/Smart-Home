@@ -13,7 +13,7 @@ public class LightLogicTest
   {
     var dbComm = new Mock<ILigthRepository>();
     var logic = new LightLogic(dbComm.Object);
-    await logic.getLight("1");
-    dbComm.Verify(d=>d.GetOne("1"));
+    await logic.GetLatestLight("1");
+    dbComm.Verify(d=>d.GetLatestLight("1"));
   }
 }

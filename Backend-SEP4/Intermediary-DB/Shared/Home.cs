@@ -13,14 +13,12 @@ public class Home
     public ICollection<Room>? Rooms { get; set; }
     [JsonIgnore]
     public ICollection<Door> Doors { get; set; }
-    /// is it needed?
-    //public Admin Admin { get; set; }
     [JsonIgnore]
     public ICollection<Member> Members { get; set; }
 
     public Home(string id)
     {
-        this.Id = id;
+        Id = id;
     }
     
 }

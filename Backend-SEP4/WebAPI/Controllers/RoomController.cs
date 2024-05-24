@@ -14,20 +14,20 @@ namespace WebAPI.Controllers;
 // [Authorize]
 public class RoomController : ControllerBase
 {
-    private IRoomLogic logic;
+    private IRoomLogic _logic;
 
     public RoomController(IRoomLogic logic)
     {
-        this.logic = logic;
+        _logic = logic;
     }
 
     //An endpoint to get all rooms based on a specific houseId (request with houseId, return a list of rooms with their ids, names, current temperature, humidity, light level)
     [HttpGet("{houseId}")]
-    public async Task<ActionResult<List<RoomDataTransferDTO>>> GetAllRooms([FromRoute] string houseId)
+    public async Task<ActionResult<List<RoomDataDTO>>> GetAllRooms([FromRoute] string houseId)
     {
         try
         {
-            var rooms = await logic.GetAllRooms(houseId);
+            var rooms = await _logic.GetAllRooms(houseId);
             return Ok(rooms);
         }
         catch (Exception e)
@@ -35,34 +35,12 @@ public class RoomController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-
-    //TODO: Implement the following endpoints
-    //n endpoint to get all room informations based on a specific deviceId (returns id, name, current temperature, humidity, light level)
-    // [HttpGet("{deviceId}")]
-    // public async Task<ActionResult<RoomDataTransferDTO>> GetRoomData([FromRoute] string homeId, [FromRoute] string deviceId, [FromQuery] bool temp,
-    //     [FromQuery] bool humi, [FromQuery] bool light)
-    // {
-    //     try
-    //     {
-    //         var data = await logic.GetRoomData(homeId, deviceId,temp,humi,light);
-    //         return Ok(data);
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         return BadRequest(e.Message);
-    //     }
-    // }
-    //An endpoint to create a room (we send an object (roomName, hardwareId, default room temperature (number), default room humidity (number))
-
-
-
-    //TODO: Check if the policies are set right form the authorization
     [HttpPost, Authorize(Policy = "Admin") ]
     public async Task<ActionResult> AddRoom([FromBody] RoomCreationDTO dto)
     {
         try
         {
-            await logic.AddRoom(dto.name, dto.deviceId, dto.homeId, dto.PreferedTemperature, dto.PreferedHumidity);
+            await _logic.AddRoom(dto.name, dto.deviceId, dto.homeId, dto.PreferedTemperature, dto.PreferedHumidity);
             return Ok("Room created.");
         }
         catch (Exception e)
@@ -77,7 +55,7 @@ public class RoomController : ControllerBase
     {
         try
         {
-            await logic.DeleteRoom(deviceId);
+            await _logic.DeleteRoom(deviceId);
             return Ok("Room deleted.");
         }
         catch (Exception e)
@@ -90,12 +68,11 @@ public class RoomController : ControllerBase
     //An endpoint to edit a room (we send an object (roomId, new room name, new hardware id, new default temperature, new default humidity)
 
     [HttpPut("{roomId}"), Authorize(Policy = "Admin")]
-
 public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] RoomChangeDTO dto)
     {
         try
         {
-            await logic.EditRoom(roomId,dto.Name, dto.DeviceId, dto.PreferedTemperature, dto.PreferedHumidity);
+            await _logic.EditRoom(roomId,dto.Name, dto.DeviceId, dto.PreferedTemperature, dto.PreferedHumidity);
             return Ok("Room edited.");
         }
         catch (Exception e)
@@ -109,7 +86,7 @@ public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] R
     {
         try
         {
-            await logic.SetRadiatorLevel(deviceId, level);
+            await _logic.SetRadiatorLevel(deviceId, level);
             return Ok($"Radiator level set to {level} for hardware ID: {deviceId}");
         }
         catch (Exception e)
@@ -124,7 +101,7 @@ public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] R
     {
         try
         {
-            int level = await logic.GetRadiatorLevel(deviceId);
+            int level = await _logic.GetRadiatorLevel(deviceId);
             return Ok(level);
         }
         catch (Exception e)
@@ -139,7 +116,7 @@ public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] R
     {
         try
         {
-            await logic.SetLightState(deviceId, level);
+            await _logic.SetLightState(deviceId, level);
             return Ok("Light level set.");
         }catch (Exception e)
         {
@@ -153,7 +130,7 @@ public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] R
     {
         try
         {
-            int level = await logic.GetLightState(deviceId);
+            int level = await _logic.GetLightState(deviceId);
             return Ok(level);
         }
         catch (Exception e)
@@ -168,7 +145,7 @@ public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] R
     {
         try
         {
-            await logic.SaveWindowState(deviceId, state);
+            await _logic.SaveWindowState(deviceId, state);
             return Ok("Window state is changed.");
         }catch (Exception e)
         {
@@ -183,7 +160,7 @@ public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] R
     {
         try
         {
-            bool state = await logic.GetWindowState(deviceId);
+            bool state = await _logic.GetWindowState(deviceId);
             return Ok(state);
         }
         catch (Exception e)
