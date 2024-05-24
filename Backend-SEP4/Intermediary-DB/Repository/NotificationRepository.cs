@@ -32,6 +32,27 @@ public class NotificationRepository : INotificationRepository
             throw new Exception(e.Message);
         }
     }
+
+    public async Task AddNotification(string houseId, string message)
+    {
+        try
+        {
+            Home? home = await _context.home.FindAsync(houseId);
+            if (home == null)
+            {
+                throw new Exception("Home doesn't exist");
+            }
+
+            Notification notification = new Notification(home, message);
+            _context.Add(notification);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 }
 
 

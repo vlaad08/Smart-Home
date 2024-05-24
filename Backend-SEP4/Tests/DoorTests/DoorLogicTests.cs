@@ -10,11 +10,12 @@ public class DoorLogicTest
 {
     private DoorLogic _logic;
     private Mock<IDoorRepository> _mockRepository;
+    private Mock<INotificationRepository> _notificationRepository;
     [Fact]
     public async Task ChangeLockPassword_ValidInput()
     {
         _mockRepository = new Mock<IDoorRepository>();
-        _logic = new DoorLogic(_mockRepository.Object);
+        _logic = new DoorLogic(_mockRepository.Object, _notificationRepository.Object);
         string homeId = "testHomeId";
         string newPassword = "1234";
         _mockRepository.Setup(r => r.CheckIfDoorExist(homeId)).ReturnsAsync(true);
@@ -32,7 +33,7 @@ public class DoorLogicTest
     public async Task ChangeLockPassword_EmptyHomeId_ThrowsException()
     {
         _mockRepository = new Mock<IDoorRepository>();
-        _logic = new DoorLogic(_mockRepository.Object);
+        _logic = new DoorLogic(_mockRepository.Object, _notificationRepository.Object);
         string emptyHomeId = "";
         string newPassword = "1234";
         await Assert.ThrowsAsync<Exception>(() => _logic.ChangeLockPassword(emptyHomeId, newPassword));
@@ -41,7 +42,7 @@ public class DoorLogicTest
     public async Task ChangeLockPassword_DoorDoesNotExist()
     {
         _mockRepository = new Mock<IDoorRepository>();
-        _logic = new DoorLogic(_mockRepository.Object);
+        _logic = new DoorLogic(_mockRepository.Object, _notificationRepository.Object);
         string homeId = "nonExistentHomeId";
         string newPassword = "1234";
         _mockRepository.Setup(r => r.CheckIfDoorExist(homeId)).ThrowsAsync(new Exception("Door does not exist."));

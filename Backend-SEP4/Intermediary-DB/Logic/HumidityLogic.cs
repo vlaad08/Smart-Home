@@ -10,7 +10,6 @@ public class HumidityLogic : IHumidityLogic
     private ICommunicator communicator;
 
     private IHumidityRepository _repository;
-    //maybe private
     public HumidityLogic(IHumidityRepository repository)
     {
         communicator = Communicator.Instance;

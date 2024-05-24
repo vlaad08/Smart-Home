@@ -10,10 +10,12 @@ public class DoorLogic : IDoorLogic
 {
     private IDoorRepository _repository;
     private ICommunicator _communicator;
-    public DoorLogic(IDoorRepository repository)
+    private INotificationRepository _notificationRepository;
+    public DoorLogic(IDoorRepository repository, INotificationRepository notificationRepository)
     {
         _repository = repository;
         _communicator = Communicator.Instance;
+        _notificationRepository = notificationRepository;
     }
 
     public async Task SwitchDoor(string houseId, string password, bool state)
@@ -50,6 +52,7 @@ public class DoorLogic : IDoorLogic
         }
         else
         {
+            await _notificationRepository.AddNotification(houseId, "Someone entered wrong password to your door!");
             throw new Exception("Password mismatch");
         }
     }
