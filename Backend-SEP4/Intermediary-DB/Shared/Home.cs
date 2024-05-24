@@ -18,9 +18,9 @@ public class Home
     [JsonIgnore]
     public ICollection<Member> Members { get; set; }
 
-    public Home()
+    public Home(string id)
     {
-        
+        this.Id = id;
     }
     
 }

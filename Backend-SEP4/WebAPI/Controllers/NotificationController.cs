@@ -1,11 +1,13 @@
 using DBComm.Logic.Interfaces;
 using DBComm.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("Notifications")]
+[Route("notifications")]
+[Authorize]
 public class NotificationController : ControllerBase
 {
     private INotificationLogic _notificationLogic;
@@ -14,14 +16,14 @@ public class NotificationController : ControllerBase
     {
         this._notificationLogic = notificationLogic;
     }
-
-    [HttpGet]
-    public async Task<ActionResult<List<Notification>>> GetNotifications()
+    //An endpoint to get all the notifications of the house (request with homeId, returns all the  notifications (limit?? idk )) - limit 1 day
+    [HttpGet, Route("{houseId}")]
+    public async Task<ActionResult<List<Notification>>> GetNotifications([FromRoute] string houseId)
     {
         try
         {
-            List<Notification>? temperature = await _notificationLogic.GetNotifications();
-            return Ok(temperature);
+            List<Notification>? notifications = await _notificationLogic.GetNotifications(houseId);
+            return Ok(notifications);
         }
         catch (Exception e)
         {

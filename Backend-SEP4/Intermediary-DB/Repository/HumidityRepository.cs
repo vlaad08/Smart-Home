@@ -51,4 +51,29 @@ public class HumidityRepository : IHumidityRepository
             throw new Exception(e.Message);
         }
     }
+
+    public async Task SaveHumidityReading(string deviceId, double value, DateTime readAt)
+    {
+        try
+        {
+            var room = await Context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId);
+            if (room == null)
+            {
+                throw new Exception($"No such room with device {deviceId}");
+            }
+            HumidityReading humidityReading = new HumidityReading(value, readAt)
+            {
+                Room = room
+            };
+        
+            await Context.humidity_reading.AddAsync(humidityReading);
+            await Context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw new Exception(e.Message);
+        }
+    }
+    
 }

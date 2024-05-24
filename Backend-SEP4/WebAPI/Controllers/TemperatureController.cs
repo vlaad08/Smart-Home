@@ -1,11 +1,14 @@
 ﻿using DBComm.Logic;
 using DBComm.Logic.Interfaces;
 using DBComm.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.DTOs;
 
 namespace WebAPI.Controllers;
 
-[ApiController] [Route("Temperature")]
+[ApiController] [Route("temperature")]
+// [Authorize]
 public class TemperatureController : ControllerBase
 {
 
@@ -14,14 +17,15 @@ public class TemperatureController : ControllerBase
     public TemperatureController(ITemperatureLogic temperatureLogic)
     {
         this._temperatureLogic = temperatureLogic;
+        
     }
 
-    [HttpGet("{hardwareId}")]
-    public async Task<ActionResult> getLatestTemperature([FromRoute] string hardwareId)
+    [HttpGet("{deviceId}")]
+    public async Task<ActionResult> GetLatestTemperature([FromRoute] string deviceId)
     {
         try
         {
-            TemperatureReading? temperature = await _temperatureLogic.getLatestTemperature(hardwareId);
+            TemperatureReading? temperature = await _temperatureLogic.getLatestTemperature(deviceId);
             return Ok(temperature);
         }
         catch (Exception e)
@@ -30,14 +34,15 @@ public class TemperatureController : ControllerBase
             throw;
         }
     }
-    [HttpGet, Route("History/{hardwareId}")]
-    public async Task<ActionResult<ICollection<LightReading>>> getHistory([FromRoute] string hardwareId,
-        [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)
+    //An endpoint to get the temperature history of a specific room based on id of that room (request with room id, returns a list of readings of temperature)
+    [HttpGet, Route("{deviceId}/history")]
+    public async Task<ActionResult<ICollection<LightReading>>> GetHistory([FromRoute] string deviceId,
+        [FromBody] TimePeriodDTO dto)
     {
         try
         {
-            var lightHistory = await _temperatureLogic.getTemperatureHistory(hardwareId, dateFrom, dateTo);
-            return Ok(lightHistory);
+            var temperatureHistory = await _temperatureLogic.getTemperatureHistory(deviceId, dto.dateFrom, dto.dateTo);
+            return Ok(temperatureHistory);
         }catch (Exception e)
         {
             Console.WriteLine(e);
@@ -45,8 +50,8 @@ public class TemperatureController : ControllerBase
         }
     }
 
-    [HttpPost, Route("{hardwareId}/{level}")]
-    public async Task<IActionResult> setTemperature([FromRoute] string hardwareId, [FromRoute ] int level)
+    [HttpPost, Route("{hardwareId}/set")]
+    public async Task<IActionResult> SetTemperature([FromRoute] string hardwareId, [FromBody] int level)
     {
         if (level < 1 || level > 6)
         {
@@ -64,8 +69,54 @@ public class TemperatureController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
-    
+
+    [HttpPost, Route("devices/{deviceId}/{value}"),AllowAnonymous]
+    public async Task<ActionResult> SaveCurrentTemperatureInRoom([FromRoute] string deviceId,[FromRoute] double value)
+    {
+        try
+        {
+            Console.WriteLine("Controller");
+            await _temperatureLogic.saveTempReading(deviceId,value);
+            Console.WriteLine("controller 2");
+            return Ok($"Temperature saved for all rooms in house");
+        }catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    /*[HttpPost, Route("save")]
+    public async Task<ActionResult> CallSaveTemperature()
+    {
+        
+        try
+        {
+            HttpClient httpClient = new HttpClient();
+            string deviceId = "1";
+            double value = 20.0;
+
+            string url = $"http://localhost:5084/temperature/devices/{deviceId}/{value}";
+
+            HttpResponseMessage response = await httpClient.PostAsync(url, null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Temperature saved successfully.");
+                return Ok("Temperature saved successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Failed to save temperature.");
+                return StatusCode((int)response.StatusCode, "Failed to save temperature.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception occurred while saving temperature: {ex.Message}");
+            return StatusCode(500, $"Exception occurred while saving temperature: {ex.Message}");
+        }
+    }*/
 }
 
 

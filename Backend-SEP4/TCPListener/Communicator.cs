@@ -5,8 +5,10 @@ using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using ConsoleApp1;
+using ECC;
 using ECC.NET;
 using ECC.Encryption;
+using ECC.Interface;
 
 public class Communicator : ICommunicator
 {
@@ -14,6 +16,7 @@ public class Communicator : ICommunicator
     private static readonly object _lock = new object();
     private TcpClient client;
     private NetworkStream stream;
+    private static IEncryptionService enc;
 
     public static Communicator Instance
     {
@@ -24,6 +27,7 @@ public class Communicator : ICommunicator
                 if (_instance == null)
                 {
                     _instance = new Communicator();
+                    enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
                 }
             }
             return _instance;
@@ -39,7 +43,7 @@ public class Communicator : ICommunicator
         CloseCurrentClient();
         client = newClient;
         stream = newClient.GetStream();
-        await handshake();
+        //await handshake();
         Console.WriteLine("Communicator updated with new client.");
         return stream;
     }
@@ -51,7 +55,6 @@ public class Communicator : ICommunicator
         {
             try
             {
-                
                 stream.Write(data, 0, data.Length);
                 Console.WriteLine("Data sent successfully.");
             }
@@ -71,18 +74,15 @@ public class Communicator : ICommunicator
     private void Send(string message)
     {
         // Encrypt message before sending it
-        string encMsg = Encryption.EncryptMessage(message);
-        
-        // Convert to byte[] before sending it
-        byte[] data = Encoding.UTF8.GetBytes(encMsg);
+        byte[] data = enc.Encrypt(message);
         
         Send(data);
     }
 
-    public Task<string> getTemperature()
+    public async Task<double> getTemperature()
     {
         Send("Send temperature.");
-        return null;
+        return 32;
     }
 
 
@@ -97,10 +97,17 @@ public class Communicator : ICommunicator
     }
     
 
-    public virtual Task SwitchWindow()
+    public Task SwitchWindow()
     {
         Send("Switch window");
         Console.WriteLine("Switch window");
+        return Task.CompletedTask;
+    }
+
+    public Task SwitchDoor()
+    {
+        Send($"Switch door");
+        Console.WriteLine("Switch door");
         return Task.CompletedTask;
     }
 

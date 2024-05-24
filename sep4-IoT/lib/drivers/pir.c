@@ -1,3 +1,5 @@
+#ifndef WIN_TEST
+
 #include "pir.h"
 #include "includes.h"
 
@@ -51,3 +53,5 @@ void pir_init(pir_callback_t callback) {
     // Enable global interrupts
     sei();
 }
+
+#endif

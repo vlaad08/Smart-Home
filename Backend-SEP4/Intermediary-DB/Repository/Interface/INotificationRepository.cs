@@ -4,5 +4,5 @@ namespace DBComm.Repository;
 
 public interface INotificationRepository
 {
-    Task<List<Notification>>? GetNotifications();
+    Task<List<Notification>>? GetNotifications(string houseId);
 }

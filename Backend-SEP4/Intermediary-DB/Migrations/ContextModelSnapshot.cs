@@ -22,29 +22,6 @@ namespace DBComm.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DBComm.Shared.Admin", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("HomeId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HomeId");
-
-                    b.ToTable("admin");
-                });
-
             modelBuilder.Entity("DBComm.Shared.Door", b =>
                 {
                     b.Property<string>("Id")
@@ -53,8 +30,12 @@ namespace DBComm.Migrations
                     b.Property<string>("HomeId")
                         .HasColumnType("text");
 
-                    b.Property<int>("LockPassword")
-                        .HasColumnType("integer");
+                    b.Property<bool>("IsOpen")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LockPassword")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -120,13 +101,11 @@ namespace DBComm.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("AdminId")
-                        .IsRequired()
+                    b.Property<string>("HomeId")
                         .HasColumnType("text");
 
-                    b.Property<string>("HomeId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -137,8 +116,6 @@ namespace DBComm.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AdminId");
 
                     b.HasIndex("HomeId");
 
@@ -181,9 +158,24 @@ namespace DBComm.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsWindowOpen")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("LightLevel")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int?>("PreferedHumidity")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PreferedTemperature")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RadiatorState")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -212,15 +204,6 @@ namespace DBComm.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("temperature_reading");
-                });
-
-            modelBuilder.Entity("DBComm.Shared.Admin", b =>
-                {
-                    b.HasOne("DBComm.Shared.Home", "Home")
-                        .WithMany()
-                        .HasForeignKey("HomeId");
-
-                    b.Navigation("Home");
                 });
 
             modelBuilder.Entity("DBComm.Shared.Door", b =>
@@ -252,19 +235,9 @@ namespace DBComm.Migrations
 
             modelBuilder.Entity("DBComm.Shared.Member", b =>
                 {
-                    b.HasOne("DBComm.Shared.Admin", "Admin")
-                        .WithMany()
-                        .HasForeignKey("AdminId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DBComm.Shared.Home", "Home")
                         .WithMany("Members")
-                        .HasForeignKey("HomeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Admin");
+                        .HasForeignKey("HomeId");
 
                     b.Navigation("Home");
                 });

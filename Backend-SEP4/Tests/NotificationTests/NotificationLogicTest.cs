@@ -12,7 +12,7 @@ public class NotificationLogicTest
     {
         var mock = new Mock<INotificationRepository>();
         var logic = new NotificationLogic(mock.Object);
-        logic.GetNotifications();
-        mock.Verify(d=>d.GetNotifications());
+        logic.GetNotifications("1");
+        mock.Verify(d=>d.GetNotifications("1"));
     }
 }

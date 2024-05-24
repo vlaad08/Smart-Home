@@ -1,89 +1,230 @@
-﻿    using System.Diagnostics;
-    using System.Net;
-    using System.Net.Sockets;
-    using System.Text;
-    using System.Xml.Serialization;
-    using ECC.Encryption;
+﻿using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using ECC;
+using ECC.Interface;
 
-    public class Server
+public class Server
+{
+    private TcpListener listener;
+    private Thread serverThread;
+    private bool isRunning;
+    private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
+    private static readonly HttpClient httpClient = new HttpClient();
+    private NetworkStream stream;
+
+
+    /* A dictionary to store all connected clients and a boolean value to check if they are logic clients or not.
+     * The key is the TcpClient object and the value is a boolean value that is true if the client is a logic client and false otherwise.
+    */
+    private IDictionary<TcpClient, bool> allClients = new Dictionary<TcpClient, bool>();
+
+    
+    public Server(int port)
     {
-        private TcpListener listener;
-        private Thread serverThread;
-        private bool isRunning;
-
-        public Server(int port)
+        IPAddress localAddr = IPAddress.Parse("192.168.236.1");
+        listener = new TcpListener(localAddr, port);
+        isRunning = true;
+        listener.Start();
+        ListenForClients();
+    }
+    
+    private void ListenForClients()
+    {
+        Console.WriteLine("Server started, listening for clients...");
+        while (isRunning)
         {
-            IPAddress localAddr = IPAddress.Parse("10.154.208.96");
-            listener = new TcpListener(localAddr, port);
-            isRunning = true;
-            listener.Start();
-            serverThread = new Thread(() => ListenForClients());
-            serverThread.Start();
-        }
-
-        private async void ListenForClients()
-        {
-            Console.WriteLine("Server started, listening for clients...");
-            while (isRunning)
+            try
             {
-                try
-                {
-                    TcpClient newClient = listener.AcceptTcpClient();
-                    Console.WriteLine("Client connected.");
-                    NetworkStream stream = await Communicator.Instance.UpdateClient(newClient);
-                    
-                    byte[] buffer = new byte[1024];
-                    
-                    // Read data from the network stream
-                    int bytesRead;
-                    string receivedMessage = "";
-                    while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                    {
-                        // Convert the received data to a string
-                        receivedMessage = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                        
-                        // Recognize that we are receiving their PU
-                        if (receivedMessage.StartsWith("Connected:"))
-                        {
-                            // Generate shared secret from their PU and our PK 
-                            Encryption.GenSharedSecret(receivedMessage);
+                TcpClient newClient = listener.AcceptTcpClient();
 
-                            //Encryption.DeriveSymmetricKey();
-                        }
-                        else
-                        {
-                            // Print the decrypted received message
-                            Console.WriteLine(Encryption.DecryptMessage(receivedMessage));
-                        }
-                    }
-
-                    /*  Will be used to save data received from IoT to db 
-                    switch (receivedMessage)
-                    {
-                        case  "temperature" :
-                            //database
-                        default:
-                            break;
-                    }
-                    //Communicator.Instance.Send("Force");
-                    */
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Error accepting client: " + e.Message);
-                    isRunning = false;
-                }
+                allClients.Add(newClient, false);
+                Console.WriteLine("Client connected.");
+                Task.Run(() => HandleClient(newClient));
             }
-            listener.Stop();
+            catch (Exception e)
+            {
+                Console.WriteLine("Error accepting client: " + e.Message);
+                isRunning = false;
+            }
         }
-        
+        listener.Stop();
+    }
 
-        public void StopServer()
+    private async Task HandleClient(TcpClient client)
+    {
+        NetworkStream stream = client.GetStream();
+        byte[] buffer = new byte[1024];
+
+        // Read data from the network stream
+        int bytesRead;
+        string receivedMessage = "";
+        while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
         {
-            isRunning = false;
-            listener.Stop();
-            serverThread.Join();
-            Console.WriteLine("Server stopped.");
+            receivedMessage = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+            
+
+
+            string decryptedData = enc.Decrypt(buffer.Take(bytesRead).ToArray());
+
+            // Check if the client is a logic client and mark it as such
+            if (decryptedData.StartsWith("LOGIC CONNECTED:"))
+            {
+                Console.WriteLine("Logic client connected.");
+                allClients[client] = true;
+            }
+            // Save data based on the received message
+            switch (decryptedData)
+            {
+                case var message when message.StartsWith("LOGIC:"):
+                {
+                    string[] parts = message.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    string newMessage = string.Join(" ", parts.Skip(1));
+                    foreach (var logicClient in allClients)
+                    {
+                        if (!logicClient.Value)
+                        {
+                            int blockSize = 16; 
+                            int extraBytes = newMessage.Length % blockSize;
+                            if (extraBytes != 0)
+                            {
+                                newMessage = newMessage.PadRight(newMessage.Length + blockSize - extraBytes, ' ');
+                            }
+                            byte[] messageBytes = enc.Encrypt(message);
+                            Send(messageBytes, logicClient.Key);
+                        }
+                    }
+                }
+                break;
+
+                case var message when message.Contains("T:") && message.Contains("H:"):
+                {
+                    string[] parts = message.Split(new[] { ' ', '-', ':', 'H' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (parts.Length >= 4)
+                    {
+                        string deviceId = parts[0];
+                        string tempString = parts[2];
+                        string humString = parts[3];
+
+                        if (double.TryParse(tempString, out double tempValue) && double.TryParse(humString, out double humValue))
+                        {
+                            await SaveTemperatureAsync(deviceId, tempValue);
+                            await SaveHumidityAsync(deviceId, humValue);
+                        }
+                    }
+                }
+                break;
+
+                case var message when message.Contains("LIGHT:"):
+                {
+                    string[] parts = message.Substring(2).Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (parts.Length > 1 && double.TryParse(parts[1], out double lightValue))
+                    {
+                        string deviceId = message.Substring(0, 1);
+                        await SaveLightAsync(deviceId, lightValue);
+                    }
+                }
+                break;
+
+                default:
+                    Console.WriteLine("Unrecognized message format.");
+                    break;
+            }
+        }
+    }
+    public static void Send(byte[] data, TcpClient receiverClient)
+    {
+        if (data.Length == 0)
+        {
+            Console.WriteLine("No data to send.");
+            return;
+        }
+
+        try
+        {
+            NetworkStream stream = receiverClient.GetStream();
+            stream.Write(data, 0, data.Length);
+            Console.WriteLine("Data sent successfully.");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Error sending data: " + e.Message);
         }
     }
 
+    private async Task SaveTemperatureAsync(string deviceId, double value)
+    {
+        try
+        {
+            HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:5084/temperature/devices/{deviceId}/{value}", null);
+
+            // Console.WriteLine(response.ToString());
+            if (response.IsSuccessStatusCode)
+            {
+                // Console.WriteLine("Temperature saved successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Failed to save temperature.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception occurred while saving temperature: {ex.Message}");
+        }
+    }
+
+    private async Task SaveHumidityAsync(string deviceId, double value)
+    {
+        try
+        {
+            HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:5084/humidity/devices/{deviceId}/{value}", null);
+
+            // Console.WriteLine(response.ToString());
+            if (response.IsSuccessStatusCode)
+            {
+                // Console.WriteLine("Humidity saved successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Failed to save humidity.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception occurred while saving humidity: {ex.Message}");
+        }
+    }
+
+    private async Task SaveLightAsync(string deviceId, double value)
+    {
+        try
+        {
+            HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:5084/light/devices/{deviceId}/{value}", null);
+
+            // Console.WriteLine(response.ToString());
+            if (response.IsSuccessStatusCode)
+            {
+                // Console.WriteLine("Light level saved successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Failed to save light level.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception occurred while saving light level: {ex.Message}");
+        }
+    }
+
+    public void StopServer()
+    {
+        isRunning = false;
+        listener.Stop();
+        serverThread.Join();
+        Console.WriteLine("Server stopped.");
+    }
+}
