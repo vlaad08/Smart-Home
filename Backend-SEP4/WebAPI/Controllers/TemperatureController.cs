@@ -25,8 +25,6 @@ public class TemperatureController : ControllerBase
     {
         try
         {
-
-            Console.WriteLine("get hardware fasz");
             TemperatureReading? temperature = await _temperatureLogic.getLatestTemperature(deviceId);
             return Ok(temperature);
         }

@@ -1,4 +1,3 @@
-using ConsoleApp1;
 using DBComm.Logic.Interfaces;
 using DBComm.Repository;
 using DBComm.Shared;
@@ -9,12 +8,12 @@ namespace DBComm.Logic;
 public class RoomLogic : IRoomLogic
 {
     private IRoomRepository _repository;
-    private ICommunicator _communicator;
+    // private ICommunicator _communicator;
 
     public RoomLogic(IRoomRepository repository)
     {
         _repository = repository;
-        _communicator = Communicator.Instance;
+        // _communicator = Communicator.Instance;
     }
 
     public async Task AddRoom(string name, string deviceId, string homeId, int preferedTemperature, int preferedHumidity)
@@ -122,12 +121,12 @@ public class RoomLogic : IRoomLogic
             if (_repository.GetWindowState(hardwareId).Result && !state)
             {
                 await _repository.SaveWindowState(hardwareId, state);
-                await _communicator.SwitchWindow();
+                // await _communicator.SwitchWindow();
             }
             if(!_repository.GetWindowState(hardwareId).Result && state)
             {
               await _repository.SaveWindowState(hardwareId, state);
-              await _communicator.SwitchWindow();
+            //   await _communicator.SwitchWindow();
             }
             
         }
@@ -156,7 +155,7 @@ public class RoomLogic : IRoomLogic
             if (level >= 0 && level <= 4)
             { 
               await _repository.SetLightState(hardwareId, level);  
-             _communicator.setLight(hardwareId, level);
+            //  _communicator.setLight(hardwareId, level);
             } 
             else
             {

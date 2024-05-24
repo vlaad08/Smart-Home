@@ -1,6 +1,5 @@
 using System.Security.Cryptography;
 using System.Text;
-using ConsoleApp1;
 using DBComm.Logic.Interfaces;
 using DBComm.Repository;
 
@@ -9,11 +8,11 @@ namespace DBComm.Logic;
 public class DoorLogic : IDoorLogic
 {
     private IDoorRepository _repository;
-    private ICommunicator _communicator;
+    //private ICommunicator _communicator;
     public DoorLogic(IDoorRepository repository)
     {
         _repository = repository;
-        _communicator = Communicator.Instance;
+        // _communicator = Communicator.Instance;
     }
 
     public async Task SwitchDoor(string houseId, string password, bool state)
@@ -27,7 +26,7 @@ public class DoorLogic : IDoorLogic
         }
        if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) && _repository.CheckDoorState(houseId).Result != state)
         {
-            await _communicator.SwitchDoor();
+            // await _communicator.SwitchDoor();
             await _repository.SaveDoorState(houseId, state);
         }
         else if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) &&

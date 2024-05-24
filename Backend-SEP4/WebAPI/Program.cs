@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text;
 using DBComm.Logic;
 using DBComm.Logic.Interfaces;
@@ -84,5 +85,4 @@ app.UseCors(x => x
     .AllowCredentials());
 
 app.MapControllers();
-
 app.Run();
