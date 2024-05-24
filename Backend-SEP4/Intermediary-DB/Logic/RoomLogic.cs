@@ -18,7 +18,7 @@ public class RoomLogic : IRoomLogic
 
     public RoomLogic(IRoomRepository repository)
     {
-        this.client = new TcpClient("192.168.137.209", 6868);
+        this.client = new TcpClient("192.168.137.1", 6868);
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
