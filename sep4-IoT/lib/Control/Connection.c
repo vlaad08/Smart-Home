@@ -6,7 +6,7 @@ uint8_t key[] = "S3cor3P45Sw0rD@f";
 uint8_t* encryptionStart()
 {
     AES_init_ctx(&my_AES_ctx,key);
-    return (uint8_t*) "Encription ready to encrypt";
+    return (uint8_t*) "Encryption ready to encrypt";
 }
 
 uint8_t* connect(WIFI_TCP_Callback_t callback_when_message_received, char *received_message_buffer){
