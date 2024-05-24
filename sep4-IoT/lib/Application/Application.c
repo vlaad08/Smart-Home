@@ -83,31 +83,33 @@ char * breakingIn(){
 
 int Callback(){
     uint8_t* msg = decryption(received_message_buffer);
-    uint8_t id=msg[0]-'0';
+    pc_comm_send_array_blocking((uint8_t*)msg,128);
+    
+     uint8_t id =msg[0]-'0';
     int x = 0;
     uint8_t value;
-    if (received_message_buffer[1]-'0' == 3)
+    if (msg[1]-'0' == 3)
     {
-        value = received_message_buffer[3] - '0';
+        value = msg[3] - '0';
         doorAction(value);
         x = 3;
     }
 
     if (id==HardwareId){
-        switch (received_message_buffer[1]){
+        switch (msg[1]){
         case '1':
-            value = received_message_buffer[3] - '0';
+            value = msg[3] - '0';
             uint8_t * radiator= setRadiatorLevel(value,HardwareId);
             free(radiator);
             x = 1;
             break;
         case '2':
-            value = received_message_buffer[3] - '0';
+            value = msg[3] - '0';
             windowAction(value,HardwareId);
             x = 2;
             break;
         case '4':
-            value = received_message_buffer[3] - '0';
+            value = msg[3] - '0';
             char * light= AdjustLight(value,HardwareId);
             free(light);
             x = 4;
@@ -116,6 +118,7 @@ int Callback(){
             break;
         }
     }
+    free(msg);
     return x;
 }
 
