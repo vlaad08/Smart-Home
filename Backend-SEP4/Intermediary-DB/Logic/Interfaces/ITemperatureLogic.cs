@@ -4,10 +4,8 @@ namespace DBComm.Logic.Interfaces;
 
 public interface ITemperatureLogic
 {
-    Task<TemperatureReading> getLatestTemperature(string hardwareId);
-    Task<ICollection<TemperatureReading>> getTemperatureHistory(string hardwareId, DateTime dateFrom, DateTime dateTo);
-    Task setTemperature(string hardwareId, int level);
-
-    Task saveTempReading(string deviceId,double value);
+    Task<TemperatureReading> GetLatestTemperature(string hardwareId);
+    Task<ICollection<TemperatureReading>> GetTemperatureHistory(string hardwareId, DateTime dateFrom, DateTime dateTo);
+    Task SaveTempReading(string deviceId,double value);
 
 }

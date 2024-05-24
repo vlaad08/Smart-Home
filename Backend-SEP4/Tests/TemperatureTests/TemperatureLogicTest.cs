@@ -12,7 +12,7 @@ public class TemperatureLogicTest
   {
     var dbComm = new Mock<ITemperatureRepository>();
     var logic = new TemperatureLogic(dbComm.Object);
-    await logic.getLatestTemperature("1");
-    dbComm.Verify(d=>d.GetOne("1"));
+    await logic.GetLatestTemperature("1");
+    dbComm.Verify(d=>d.GetLatestTemperature("1"));
   }
 }

@@ -7,29 +7,31 @@ using Microsoft.VisualBasic.CompilerServices;
 using WebAPI.DTOs;
 
 namespace WebAPI.Controllers;
+
 [ApiController]
 [Route("rooms")]
 [Authorize]
 public class RoomController : ControllerBase
 {
-    private IRoomLogic logic;
+    private IRoomLogic _logic;
 
     public RoomController(IRoomLogic logic)
     {
-        this.logic = logic;
+        _logic = logic;
     }
+
     //An endpoint to get all rooms based on a specific houseId (request with houseId, return a list of rooms with their ids, names, current temperature, humidity, light level)
-    [HttpGet("{homeId}")]
-    public async Task<ActionResult<List<Room>>> GetAllRooms([FromRoute] string homeId)
+    [HttpGet("{houseId}")]
+    public async Task<ActionResult<List<RoomDataDTO>>> GetAllRooms([FromRoute] string houseId)
     {
         try
         {
-            var rooms = await logic.GetAllRooms(homeId);
+            var rooms = await _logic.GetAllRooms(houseId);
             return Ok(rooms);
         }
         catch (Exception e)
         {
-           return BadRequest(e.Message);
+            return BadRequest(e.Message);
         }
     }
 
@@ -61,7 +63,7 @@ public class RoomController : ControllerBase
     {
         try
         {
-            await logic.AddRoom(dto.name, dto.deviceId, dto.homeId, dto.PreferedTemperature, dto.PreferedHumidity);
+            await _logic.AddRoom(dto.name, dto.deviceId, dto.homeId, dto.PreferedTemperature, dto.PreferedHumidity);
             return Ok("Room created.");
         }
         catch (Exception e)
@@ -74,10 +76,11 @@ public class RoomController : ControllerBase
     [HttpDelete("{deviceId}")]
     [Authorize(Policy = "Admin")]
     public async Task<ActionResult> DeleteRoom([FromRoute]string deviceId)
+
     {
         try
         {
-            await logic.DeleteRoom(deviceId);
+            await _logic.DeleteRoom(deviceId);
             return Ok("Room deleted.");
         }
         catch (Exception e)
@@ -92,10 +95,11 @@ public class RoomController : ControllerBase
     [HttpPut("{roomId}")]
     [Authorize(Policy = "Admin")]
     public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] RoomChangeDTO dto)
+
     {
         try
         {
-            await logic.EditRoom(roomId,dto.Name, dto.DeviceId, dto.PreferedTemperature, dto.PreferedHumidity);
+            await _logic.EditRoom(roomId,dto.Name, dto.DeviceId, dto.PreferedTemperature, dto.PreferedHumidity);
             return Ok("Room edited.");
         }
         catch (Exception e)
@@ -109,7 +113,7 @@ public class RoomController : ControllerBase
     {
         try
         {
-            await logic.SetRadiatorLevel(deviceId, level);
+            await _logic.SetRadiatorLevel(deviceId, level);
             return Ok($"Radiator level set to {level} for hardware ID: {deviceId}");
         }
         catch (Exception e)
@@ -124,7 +128,7 @@ public class RoomController : ControllerBase
     {
         try
         {
-            int level = await logic.GetRadiatorLevel(deviceId);
+            int level = await _logic.GetRadiatorLevel(deviceId);
             return Ok(level);
         }
         catch (Exception e)
@@ -139,7 +143,7 @@ public class RoomController : ControllerBase
     {
         try
         {
-            await logic.SetLightState(deviceId, level);
+            await _logic.SetLightState(deviceId, level);
             return Ok("Light level set.");
         }catch (Exception e)
         {
@@ -153,7 +157,7 @@ public class RoomController : ControllerBase
     {
         try
         {
-            int level = await logic.GetLightState(deviceId);
+            int level = await _logic.GetLightState(deviceId);
             return Ok(level);
         }
         catch (Exception e)
@@ -168,7 +172,7 @@ public class RoomController : ControllerBase
     {
         try
         {
-            await logic.SaveWindowState(deviceId, state);
+            await _logic.SaveWindowState(deviceId, state);
             return Ok("Window state is changed.");
         }catch (Exception e)
         {
@@ -183,7 +187,7 @@ public class RoomController : ControllerBase
     {
         try
         {
-            bool state = await logic.GetWindowState(deviceId);
+            bool state = await _logic.GetWindowState(deviceId);
             return Ok(state);
         }
         catch (Exception e)

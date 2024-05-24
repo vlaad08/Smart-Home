@@ -61,10 +61,7 @@ public class RoomLogic : IRoomLogic
     {
         try
         {
-            if (await _repository.CheckNonExistingRoom(id))
-            {
-                await _repository.EditRoom(id,name,deviceId, preferedTemperature, preferedHumidity);
-            }
+            await _repository.EditRoom(id,name,deviceId, preferedTemperature, preferedHumidity);
         }
         catch (Exception e)
         {
@@ -72,7 +69,7 @@ public class RoomLogic : IRoomLogic
         }
     }
 
-    public async Task<List<Room>?> GetAllRooms(string homeId)
+    public async Task<List<RoomDataDTO>?> GetAllRooms(string homeId)
     {
         try
         {
@@ -84,7 +81,7 @@ public class RoomLogic : IRoomLogic
         }
     }
 
-    public async Task<RoomDataTransferDTO> GetRoomData(string homeId, string deviceId, bool temp=false, bool humi=false, bool light=false)
+    public async Task<RoomDataDTO> GetRoomData(string homeId, string deviceId, bool temp=false, bool humi=false, bool light=false)
     {
         try
         {
