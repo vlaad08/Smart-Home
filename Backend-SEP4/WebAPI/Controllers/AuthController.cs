@@ -114,7 +114,7 @@ public class AuthController : ControllerBase
         {
             return BadRequest(e.Message);
         }
-    }
+    } 
     
    
     private string GenerateJwt(Member member)

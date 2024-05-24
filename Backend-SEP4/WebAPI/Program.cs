@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text;
 using DBComm.Logic;
 using DBComm.Logic.Interfaces;
@@ -58,14 +59,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
-
 builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("Admin", policy =>
     {
-        policy.RequireRole("Admin");
+        options.AddPolicy("Admin", policy =>
+        {
+            policy.RequireRole("Admin");
+        });
     });
-});
+
 AuthorizationPolicies.AddPolicies(builder.Services);
 var app = builder.Build();
 
@@ -93,5 +94,4 @@ app.UseCors(x => x
     .AllowCredentials());
 
 app.MapControllers();
-
 app.Run();

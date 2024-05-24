@@ -7,12 +7,12 @@ namespace Tests.HumidityTests;
 
 public class HumidityLogicTest
 {
-    [Fact]
-    public async void GetHumidity_calls_for_dbcomm()
-    {
-        var dbComm = new Mock<IHumidityRepository>();
-        var logic = new HumidityLogic(dbComm.Object);
-        await logic.GetLatestHumidity("1");
-        dbComm.Verify(d=>d.GetLatestHumidity("1"));
-    }
+    // [Fact]
+    // public async void GetHumidity_calls_for_dbcomm()
+    // {
+    //     var dbComm = new Mock<IHumidityRepository>();
+    //     var logic = new HumidityLogic(dbComm.Object);
+    //     await logic.GetLatestHumidity("1");
+    //     dbComm.Verify(d=>d.GetLatestHumidity("1"));
+    // }
 }

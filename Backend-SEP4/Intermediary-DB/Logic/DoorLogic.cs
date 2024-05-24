@@ -1,21 +1,34 @@
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
-using ConsoleApp1;
 using DBComm.Logic.Interfaces;
 using DBComm.Repository;
+using ECC;
+using ECC.Interface;
 
 namespace DBComm.Logic;
 
 public class DoorLogic : IDoorLogic
 {
     private IDoorRepository _repository;
-    private ICommunicator _communicator;
+    private TcpClient client;
+    private NetworkStream stream;
+    private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
+    public DoorLogic(IDoorRepository repository)
+    {
+        this.client = new TcpClient("192.168.137.209", 6868);
+        stream = client.GetStream();
+        byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
+        stream.Write(messageBytes, 0, messageBytes.Length);
+        this._repository = repository;
+    }
+
     private INotificationRepository _notificationRepository;
     public DoorLogic(IDoorRepository repository, INotificationRepository notificationRepository)
     {
         _repository = repository;
-        _communicator = Communicator.Instance;
         _notificationRepository = notificationRepository;
+
     }
 
     public async Task SwitchDoor(string houseId, string password, bool state)
@@ -27,28 +40,31 @@ public class DoorLogic : IDoorLogic
             byte[] hashBytes = sha256.ComputeHash(inputBytes);
             hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
         }
-
-        string storedHashedPassword = await _repository.CheckHashedPassword(houseId);
-
-        if (hashedString.Equals(storedHashedPassword))
-        {
-            bool currentState = await _repository.CheckDoorState(houseId);
-            if (currentState != state)
+       if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) && _repository.CheckDoorState(houseId).Result != state)
+       {
+            string deviceId = await _repository.GetFirstDeviceInHouse(houseId);
+            // await _communicator.SwitchDoor();
+            await _repository.SaveDoorState(houseId, state);
+            int openClose = -1;
+            if (state)
             {
-                await _communicator.SwitchDoor();
-                await _repository.SaveDoorState(houseId, state);
+                openClose = 1;
             }
-            else
+            if (!state)
             {
-                if (currentState)
-                {
-                    throw new Exception("Door is already open.");
-                }
-                else
-                {
-                    throw new Exception("Door is already closed.");
-                }
+                openClose = 0;
             }
+            string message = $"LOGIC: {deviceId}30{openClose}            ";
+            int blockSize = 16;
+            int extraBytes = message.Length % blockSize;
+            if (extraBytes != 0)
+            {
+                message = message.PadRight(message.Length + blockSize - extraBytes, ' ');
+            }
+
+            byte[] messageBytes = enc.Encrypt(message);
+            await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
+
         }
         else
         {
