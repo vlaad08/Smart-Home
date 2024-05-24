@@ -30,7 +30,7 @@ FAKE_VALUE_FUNC(uint8_t*, setRadiatorLevel, uint8_t, int);
 FAKE_VALUE_FUNC(char*, AdjustLight,uint8_t,int)
 
 //breakingIn
-FAKE_VALUE_FUNC(char*, alarm, _Bool);
+FAKE_VALUE_FUNC(char*, Alarm, _Bool);
 //FAKE_VALUE_FUNC(uint8_t*, transmitData,uint8_t*, uint16_t);
 
 //doorAction
@@ -152,7 +152,7 @@ void test_doorActionClose(void){
 
 void test_breakingInTrue(void){
     UnlockingApproved=false;
-    alarm_fake.return_val = "Hello, Thief!";
+    Alarm_fake.return_val = "Hello, Thief!";
     char * result=breakingIn();
 
     TEST_ASSERT_EQUAL_CHAR_ARRAY("Hello, Thief!",result,12);
@@ -161,7 +161,7 @@ void test_breakingInTrue(void){
 
 void test_breakingInFalse(void){
     UnlockingApproved=true;
-    alarm_fake.return_val = "Approved doors! ";
+    Alarm_fake.return_val = "Approved doors! ";
 
     char * result=breakingIn();
 

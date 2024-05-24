@@ -73,7 +73,7 @@ bool doorAction(uint8_t status){
 
 
 char * breakingIn(){
-    char * x = alarm(UnlockingApproved);
+    char * x = Alarm(UnlockingApproved);
     if (strcmp(x,"Hello, Thief! :)")==0)
     {
         transmitData((uint8_t*)x,16);
