@@ -39,7 +39,7 @@ public class RoomController : ControllerBase
     //TODO: Implement the following endpoints
     //n endpoint to get all room informations based on a specific deviceId (returns id, name, current temperature, humidity, light level)
     [HttpGet("{homeId}/{deviceId}/data")]
-    public async Task<ActionResult<RoomDataTransferDTO>> GetRoomData([FromRoute] string homeId, [FromRoute] string deviceId, [FromQuery] bool temp,
+    public async Task<ActionResult<RoomDataDTO>> GetRoomData([FromRoute] string homeId, [FromRoute] string deviceId, [FromQuery] bool temp,
         [FromQuery] bool humi, [FromQuery] bool light)
     {
         try
