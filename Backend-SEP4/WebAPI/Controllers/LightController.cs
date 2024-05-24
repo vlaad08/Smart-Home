@@ -58,7 +58,7 @@ public class LightController : ControllerBase
         }
         try
         {
-            await _lightLogic.SetLight(hardwareId, level);
+            await _logic.SetLight(hardwareId, level);
             return Ok("Light level set.");
         }catch (Exception e)
         {
