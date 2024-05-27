@@ -13,7 +13,6 @@ public class LightLogic : ILightLogic
     private NetworkStream stream;
     private ILigthRepository _repository;
     private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
-    // private ICommunicator _communicator;
 
     public LightLogic(ILigthRepository repository)
     {
@@ -21,9 +20,7 @@ public class LightLogic : ILightLogic
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
-        
-        this._repository = repository;
-        // _communicator = Communicator.Instance;
+        _repository = repository;
     }
     public async Task<LightReading> GetLatestLight(string hardwareId)
     {
@@ -50,7 +47,8 @@ public class LightLogic : ILightLogic
     
     public async Task SaveLightReading(string deviceId,double value)
     {
-        DateTime readAt = DateTime.UtcNow;
-        await _repository.SaveLightReading(deviceId, value, readAt);
+        double scaledValue = (1000 - value) / 10;
+        DateTime readAt = DateTime.UtcNow.AddHours(2);
+        await _repository.SaveLightReading(deviceId, scaledValue, readAt);
     }
 }

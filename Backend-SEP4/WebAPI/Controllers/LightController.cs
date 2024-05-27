@@ -74,7 +74,7 @@ public class LightController : ControllerBase
         try
         {
             await _logic.SaveLightReading(deviceId, value);
-            return Ok($"Temperature saved");
+            return Ok($"Light level saved");
         }catch (Exception e)
         {
             Console.WriteLine(e);

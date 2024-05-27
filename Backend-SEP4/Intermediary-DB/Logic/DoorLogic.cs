@@ -14,16 +14,17 @@ public class DoorLogic : IDoorLogic
     private TcpClient client;
     private NetworkStream stream;
     private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
+    private INotificationRepository _notificationRepository;
     public DoorLogic(IDoorRepository repository)
     {
-        this.client = new TcpClient("192.168.137.209", 6868);
+        _repository = repository;
+        client = new TcpClient("192.168.137.1", 6868);
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
-        this._repository = repository;
+        
     }
-
-    private INotificationRepository _notificationRepository;
+    
     public DoorLogic(IDoorRepository repository, INotificationRepository notificationRepository)
     {
         _repository = repository;
@@ -43,7 +44,6 @@ public class DoorLogic : IDoorLogic
        if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) && _repository.CheckDoorState(houseId).Result != state)
        {
             string deviceId = await _repository.GetFirstDeviceInHouse(houseId);
-            // await _communicator.SwitchDoor();
             await _repository.SaveDoorState(houseId, state);
             int openClose = -1;
             if (state)

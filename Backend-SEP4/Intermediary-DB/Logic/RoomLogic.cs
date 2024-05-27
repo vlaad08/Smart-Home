@@ -14,15 +14,15 @@ public class RoomLogic : IRoomLogic
     private TcpClient client;
     private NetworkStream stream;
     private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
-    // private ICommunicator _communicator;
 
     public RoomLogic(IRoomRepository repository)
     {
-        this.client = new TcpClient("192.168.137.1", 6868);
+        _repository = repository;
+        client = new TcpClient("192.168.137.1", 6868);
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
-        this._repository = repository;
+        
     }
 
     public async Task AddRoom(string name, string deviceId, string homeId, int preferedTemperature, int preferedHumidity)
@@ -92,11 +92,9 @@ public class RoomLogic : IRoomLogic
             throw new Exception(e.Message);
         }
     }
-//SEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEG
-//add debug for shitty mitty wrong levels
     public async Task SetRadiatorLevel(string deviceId, int level)
     {
-        if (level >= 1 && level <= 6)
+        if (level >= 0 && level <= 6)
         {
             await _repository.SetRadiatorLevel(deviceId, level);
 

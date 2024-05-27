@@ -22,7 +22,7 @@ public class Server
     
     public Server(int port)
     {
-        IPAddress localAddr = IPAddress.Parse("192.168.137.209");
+        IPAddress localAddr = IPAddress.Parse("192.168.137.1");
         listener = new TcpListener(localAddr, port);
         isRunning = true;
         listener.Start();
