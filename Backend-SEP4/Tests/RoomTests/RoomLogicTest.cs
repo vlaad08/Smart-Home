@@ -74,8 +74,7 @@ public class RoomLogicTest
         var mock = new Mock<IRoomRepository>();
         var logic = new RoomLogic(mock.Object);
 
-        mock.Setup(m => m.EditRoom("test", null, null, 0, 0))
-            .ThrowsAsync(new Exception("Room with given id does not exist"));
+        mock.Setup(m => m.EditRoom("test", null, null, 0, 0)).ThrowsAsync(new Exception("Room with given id does not exist"));
 
         var exception = await Assert.ThrowsAsync<Exception>(() => logic.EditRoom("test", null, null, 0, 0));
         Assert.Equal("Room with given id does not exist", exception.Message);
