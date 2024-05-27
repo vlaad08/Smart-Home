@@ -17,9 +17,11 @@ public class Room
     [JsonIgnore]
     public ICollection<LightReading> LightReadings { get; set; }
 
-    public Room()
+    public Room(string name, string deviceId)
     {
-        
+        this.Id = Guid.NewGuid().ToString();
+        this.Name = name;
+        this.DeviceId = deviceId;
     }
     
 }

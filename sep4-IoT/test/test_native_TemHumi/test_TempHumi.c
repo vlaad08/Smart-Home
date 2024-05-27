@@ -1,11 +1,11 @@
-#include "TempAndHum.h"
-
 #include "unity.h"
 #include "../fff.h"
 #include <string.h>
 #include <stdlib.h>
 
 #include "dht11.h"
+
+#include "TempAndHum.h"
 
 DEFINE_FFF_GLOBALS
 
@@ -17,20 +17,22 @@ void tearDown(void) {}
 void test_getTemptAndHum_Success(void) {
     dht11_get_fake.return_val = DHT11_OK;
 
-    char* result = getTempAndHum();
+    char* result = getTempAndHum(1);
 
     TEST_ASSERT_NOT_NULL(result);
-    TEST_ASSERT_EQUAL_STRING("T:0.0   H:0.0 ", result);
+    TEST_ASSERT_EQUAL_STRING("1-T:0.0  H:0.0", result);
+
     free(result);
 }
 
 void test_getTemptAndHum_Error(void) {
     dht11_get_fake.return_val = DHT11_FAIL;
 
-    char* result = getTempAndHum();
+    char* result = getTempAndHum(1);
 
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("Temp Hum Error", result);
+    
     free(result);
 }
 

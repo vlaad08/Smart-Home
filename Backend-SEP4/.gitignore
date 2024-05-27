@@ -5,6 +5,8 @@
 *.userosscache
 *.sln.docstates
 
+.env
+
 # User-specific files (Rider/IntelliJ IDEA)
 .idea/
 *.sln.iml

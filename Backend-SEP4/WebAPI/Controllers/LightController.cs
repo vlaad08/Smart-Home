@@ -1,11 +1,13 @@
 using DBComm.Logic;
 using DBComm.Logic.Interfaces;
 using DBComm.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
-[ApiController] [Route("Light")]
+[ApiController] [Route("light")]
+[Authorize]
 public class LightController : ControllerBase
 {
 
@@ -16,8 +18,8 @@ public class LightController : ControllerBase
         _lightLogic = lightLogic;
     }
 
-    [HttpGet("{hardwareId}")]
-    public async Task<ActionResult> getLatestLight([FromRoute]string hardwareId)
+    [HttpGet("{hardwareId}/latest")]
+    public async Task<ActionResult> GetLatestLight([FromRoute]string hardwareId)
     {
         try
         {
@@ -31,8 +33,8 @@ public class LightController : ControllerBase
         }
     }
 
-    [HttpGet, Route("History/{hardwareId}")]
-    public async Task<ActionResult<ICollection<LightReading>>> getHistory([FromRoute] string hardwareId,
+    [HttpGet, Route("{hardwareId}/history")]
+    public async Task<ActionResult<ICollection<LightReading>>> GetLightHistory([FromRoute] string hardwareId,
         [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)
     {
         try
@@ -46,13 +48,13 @@ public class LightController : ControllerBase
         }
     }
 
-    [HttpPost, Route("{hardwareId}/{level}")]
-    public async Task<ActionResult> SetLight([FromRoute] string hardwareId, int level)
+    [HttpPost, Route("{hardwareId}/level")]
+    public async Task<ActionResult> SetLight([FromRoute] string hardwareId, [FromBody]int level)
     {
         try
         {
             await _lightLogic.SetLight(hardwareId, level);
-            return Ok();
+            return Ok("Light level set.");
         }catch (Exception e)
         {
             Console.WriteLine(e);
