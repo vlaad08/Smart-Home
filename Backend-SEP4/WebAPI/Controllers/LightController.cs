@@ -49,7 +49,26 @@ public class LightController : ControllerBase
         }
     }
     
-    [HttpPost, Route("devices/{deviceId}/{value}")]
+    [HttpPost, Route("{hardwareId}/level")]
+    public async Task<ActionResult> SetLight([FromRoute] string hardwareId, [FromBody]int level)
+    {
+        if (level < 0 || level > 4)
+        {
+            return BadRequest("Light level must be between 0-4");
+        }
+        try
+        {
+            await _logic.SetLight(hardwareId, level);
+            return Ok("Light level set.");
+        }catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpPost, Route("devices/{deviceId}/{value}"),AllowAnonymous]
+
     public async Task<ActionResult> SaveCurrentLightInRoom([FromRoute] string deviceId, [FromRoute] double value)
     {
         try

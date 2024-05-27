@@ -48,7 +48,7 @@ public class HumidityController : ControllerBase
         }
     }
     //what happens wo async?
-    [HttpPost, Route("devices/{deviceId}/{value}")]
+    [HttpPost, Route("devices/{deviceId}/{value}"), AllowAnonymous]
     public async Task<ActionResult> SaveCurrentHumidityInRoom([FromRoute] string deviceId, [FromRoute] double value)
     {
         try

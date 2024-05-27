@@ -1,7 +1,9 @@
-using ConsoleApp1;
+using System.Net.Sockets;
 using DBComm.Logic.Interfaces;
 using DBComm.Repository;
 using DBComm.Shared;
+using ECC;
+using ECC.Interface;
 using WebAPI.DTOs;
 
 namespace DBComm.Logic;
@@ -9,12 +11,18 @@ namespace DBComm.Logic;
 public class RoomLogic : IRoomLogic
 {
     private IRoomRepository _repository;
-    private ICommunicator _communicator;
+    private TcpClient client;
+    private NetworkStream stream;
+    private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
+    // private ICommunicator _communicator;
 
     public RoomLogic(IRoomRepository repository)
     {
-        _repository = repository;
-        _communicator = Communicator.Instance;
+        this.client = new TcpClient("192.168.137.1", 6868);
+        stream = client.GetStream();
+        byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
+        stream.Write(messageBytes, 0, messageBytes.Length);
+        this._repository = repository;
     }
 
     public async Task AddRoom(string name, string deviceId, string homeId, int preferedTemperature, int preferedHumidity)
@@ -84,19 +92,25 @@ public class RoomLogic : IRoomLogic
             throw new Exception(e.Message);
         }
     }
-
+//SEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEG
+//add debug for shitty mitty wrong levels
     public async Task SetRadiatorLevel(string deviceId, int level)
     {
-        if (level >= 0 && level <= 6)
+        if (level >= 1 && level <= 6)
         {
-           await _repository.SetRadiatorLevel(deviceId, level);
-           //_communicator.setTemperature(hardwareId, level);
+            await _repository.SetRadiatorLevel(deviceId, level);
+
+            string message = $"LOGIC: {deviceId}10{level}            ";
+            int blockSize = 16;
+            int extraBytes = message.Length % blockSize;
+            if (extraBytes != 0)
+            {
+                message = message.PadRight(message.Length + blockSize - extraBytes, ' ');
+            }
+
+            byte[] messageBytes = enc.Encrypt(message);
+            await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
         }
-        else
-        {
-           throw new Exception("Radiator level must be between 0 and 6."); 
-        }
-        
     }
 
     public Task<int> GetRadiatorLevel(string deviceId)
@@ -116,15 +130,28 @@ public class RoomLogic : IRoomLogic
     {
         try
         {
-            if (_repository.GetWindowState(hardwareId).Result && !state)
+            if ((_repository.GetWindowState(hardwareId).Result && !state) || (!_repository.GetWindowState(hardwareId).Result && state))
             {
                 await _repository.SaveWindowState(hardwareId, state);
-                await _communicator.SwitchWindow();
-            }
-            if(!_repository.GetWindowState(hardwareId).Result && state)
-            {
-              await _repository.SaveWindowState(hardwareId, state);
-              await _communicator.SwitchWindow();
+                int openClose = -1;
+                if (state)
+                {
+                    openClose = 1;
+                }
+                if (!state)
+                {
+                    openClose = 0;
+                }
+                string message = $"LOGIC: {hardwareId}20{openClose}            ";
+                int blockSize = 16;
+                int extraBytes = message.Length % blockSize;
+                if (extraBytes != 0)
+                {
+                    message = message.PadRight(message.Length + blockSize - extraBytes, ' ');
+                }
+
+                byte[] messageBytes = enc.Encrypt(message);
+                await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
             }
             
         }
@@ -148,21 +175,20 @@ public class RoomLogic : IRoomLogic
 
     public async Task SetLightState(string hardwareId, int level)
     {
-        try
-        { 
-            if (level >= 0 && level <= 4)
-            { 
-              await _repository.SetLightState(hardwareId, level);  
-             _communicator.setLight(hardwareId, level);
-            } 
-            else
-            {
-                throw new Exception("Light level must be between 0 and 4."); 
-            }
-        }
-        catch (Exception e)
+        if (level >= 0 && level <= 4)
         {
-            throw new Exception(e.Message);
+            await _repository.SetLightState(hardwareId, level);
+
+            string message = $"LOGIC: {hardwareId}40{level}              ";
+            int blockSize = 16;
+            int extraBytes = message.Length % blockSize;
+            if (extraBytes != 0)
+            {
+                message = message.PadRight(message.Length + blockSize - extraBytes, ' ');
+            }
+
+            byte[] messageBytes = enc.Encrypt(message);
+            await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
         }
     }
 

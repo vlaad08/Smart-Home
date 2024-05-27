@@ -7,6 +7,7 @@ namespace Tests.HumidityTests;
 
 public class HumidityLogicTest
 {
+
     [Fact]
     public async void GetHumidity_calls_for_dbcomm()
     {
@@ -35,4 +36,6 @@ public class HumidityLogicTest
         await logic.SaveHumidityReading("1",50);
         dbComm.Verify(d=>d.SaveHumidityReading("1",50 ,It.IsAny<DateTime>()));
     }
+
+
 }

@@ -10,8 +10,7 @@ namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("rooms")]
-
-// [Authorize]
+[Authorize]
 public class RoomController : ControllerBase
 {
     private IRoomLogic _logic;
@@ -35,8 +34,32 @@ public class RoomController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-    [HttpPost, Authorize(Policy = "Admin") ]
-    public async Task<ActionResult> AddRoom([FromBody] RoomCreationDTO dto)
+
+
+    //TODO: Implement the following endpoints
+    //n endpoint to get all room informations based on a specific deviceId (returns id, name, current temperature, humidity, light level)
+    [HttpGet("{homeId}/{deviceId}/data")]
+    public async Task<ActionResult<RoomDataDTO>> GetRoomData([FromRoute] string homeId, [FromRoute] string deviceId, [FromQuery] bool temp,
+        [FromQuery] bool humi, [FromQuery] bool light)
+    {
+        try
+        {
+            var data = await _logic.GetRoomData(homeId, deviceId,temp,humi,light);
+            return Ok(data);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+    //An endpoint to create a room (we send an object (roomName, hardwareId, default room temperature (number), default room humidity (number))
+
+
+
+    //TODO: Check if the policies are set right form the authorization
+    [HttpPost] //,
+    [Authorize(Policy = "Admin")] 
+    public async Task<ActionResult> AddRoom( [FromBody] RoomCreationDTO dto)
     {
         try
         {
@@ -48,10 +71,12 @@ public class RoomController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-
+    
     //An endpoint to remove a room (we send deviceId of the room to be deleted)
-    [HttpDelete("{deviceId}"), Authorize(Policy = "Admin")]
-    public async Task<ActionResult> DeleteRoom([FromRoute] string deviceId)
+    [HttpDelete("{deviceId}")]
+    [Authorize(Policy = "Admin")]
+    public async Task<ActionResult> DeleteRoom([FromRoute]string deviceId)
+
     {
         try
         {
@@ -67,8 +92,10 @@ public class RoomController : ControllerBase
     // room id because you can change the device id in that method, so the method should be done using roomId, which can not change during this method
     //An endpoint to edit a room (we send an object (roomId, new room name, new hardware id, new default temperature, new default humidity)
 
-    [HttpPut("{roomId}"), Authorize(Policy = "Admin")]
-public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] RoomChangeDTO dto)
+    [HttpPut("{roomId}")]
+    [Authorize(Policy = "Admin")]
+    public async Task<ActionResult> EditRoom([FromRoute] string roomId, [FromBody] RoomChangeDTO dto)
+
     {
         try
         {

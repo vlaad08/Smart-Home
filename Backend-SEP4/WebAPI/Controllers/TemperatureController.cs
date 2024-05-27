@@ -26,6 +26,7 @@ public class TemperatureController : ControllerBase
         try
         {
             TemperatureReading? temperature = await _logic.GetLatestTemperature(deviceId);
+
             return Ok(temperature);
         }
         catch (Exception e)
@@ -49,7 +50,27 @@ public class TemperatureController : ControllerBase
         }
     }
 
-    [HttpPost, Route("devices/{deviceId}/{value}")]
+    [HttpPost, Route("{hardwareId}/set")]
+    public async Task<IActionResult> SetTemperature([FromRoute] string hardwareId, [FromBody] int level)
+    {
+        if (level < 1 || level > 6)
+        {
+            return BadRequest("Level must be between 1 and 6.");
+        }
+        
+        try
+        {
+            await _logic.SetTemperature(hardwareId, level);
+            return Ok($"Light level set to {level} for hardware ID: {hardwareId}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpPost, Route("devices/{deviceId}/{value}"),AllowAnonymous]
     public async Task<ActionResult> SaveCurrentTemperatureInRoom([FromRoute] string deviceId,[FromRoute] double value)
     {
         try
