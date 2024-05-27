@@ -10,11 +10,11 @@ ARG DATABASE_USER
 ARG DATABASE_PASSWORD
 ARG SERVER_ADDRESS
 
-RUN echo "DATABASE_HOST=$DATABASE_HOST" >> .env && \
-    echo "DATABASE_NAME=$DATABASE_NAME" >> .env && \
-    echo "DATABASE_USER=$DATABASE_USER" >> .env && \
-    echo "DATABASE_PASSWORD=$DATABASE_PASSWORD" >> .env && \
-    echo "SERVER_ADDRESS=$SERVER_ADDRESS" >> .env
+RUN echo "DATABASE_HOST=$DATABASE_HOST" >> /TCPListener/.env && \
+    echo "DATABASE_NAME=$DATABASE_NAME" >> /TCPListener/.env && \
+    echo "DATABASE_USER=$DATABASE_USER" >> /TCPListener/.env && \
+    echo "DATABASE_PASSWORD=$DATABASE_PASSWORD" >> /TCPListener/.env && \
+    echo "SERVER_ADDRESS=$SERVER_ADDRESS" >> /TCPListener/.env
 
 RUN dotnet restore
 RUN dotnet publish -c Release -o /App/TCPListener/out
@@ -30,11 +30,11 @@ ARG DATABASE_USER
 ARG DATABASE_PASSWORD
 ARG SERVER_ADDRESS
 
-RUN echo "DATABASE_HOST=$DATABASE_HOST" >> .env && \
-    echo "DATABASE_NAME=$DATABASE_NAME" >> .env && \
-    echo "DATABASE_USER=$DATABASE_USER" >> .env && \
-    echo "DATABASE_PASSWORD=$DATABASE_PASSWORD" >> .env && \
-    echo "SERVER_ADDRESS=$SERVER_ADDRESS" >> .env
+RUN echo "DATABASE_HOST=$DATABASE_HOST" >> /WebAPI/.env && \
+    echo "DATABASE_NAME=$DATABASE_NAME" >> /WebAPI/.env && \
+    echo "DATABASE_USER=$DATABASE_USER" >> /WebAPI/.env && \
+    echo "DATABASE_PASSWORD=$DATABASE_PASSWORD" >> /WebAPI/.env && \
+    echo "SERVER_ADDRESS=$SERVER_ADDRESS" >> /WebAPI/.env
 
 RUN dotnet restore
 RUN dotnet publish -c Release -o /App/WebAPI/out
