@@ -147,10 +147,14 @@ public class RoomRepository : IRoomRepository
         bool humi = false, bool light = false)
     {
         RoomDataDTO dto = new RoomDataDTO();
-        Room? room = await _context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId && r.Home.Id == homeId);
+        Room? room = await _context.room.Include(r => r.Home).FirstOrDefaultAsync(r => r.DeviceId == deviceId);
         if (room != null)
         {
             string roomId = room.Id;
+            dto.Name = room.Name;
+            dto.Home = room.Home;
+            dto.PreferedTemperature = room.PreferedTemperature;
+            dto.PreferedHumidity = room.PreferedHumidity;
             if (temp)
             {
                 var tempReading = _context.temperature_reading.Where(t => t.Room.Id == roomId).OrderByDescending(t => t.ReadAt);
