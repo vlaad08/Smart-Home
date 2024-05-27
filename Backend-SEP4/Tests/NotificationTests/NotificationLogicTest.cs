@@ -15,4 +15,16 @@ public class NotificationLogicTest
         logic.GetNotifications("1");
         mock.Verify(d=>d.GetNotifications("1"));
     }
+
+    [Fact]
+    public async Task getNotifications_catches_error()
+    {
+        var mock = new Mock<INotificationRepository>();
+        var logic = new NotificationLogic(mock.Object);
+        mock.Setup(m => m.GetNotifications("1")).ThrowsAsync(new Exception("test"));
+        logic.GetNotifications("1");
+        var exception = await Assert.ThrowsAsync<Exception>(() => logic.GetNotifications("1"));
+        Assert.Equal("test",exception.Message);
+        mock.Verify(m=>m.GetNotifications("1"));
+    }
 }
