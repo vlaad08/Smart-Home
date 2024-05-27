@@ -16,7 +16,10 @@ public class DoorLogic : IDoorLogic
     private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
     public DoorLogic(IDoorRepository repository)
     {
-        this.client = new TcpClient("192.168.137.209", 6868);
+        DotNetEnv.Env.Load();
+        string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "192.168.137.209";
+
+        this.client = new TcpClient(ServerAddress, 6868);
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);

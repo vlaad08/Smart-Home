@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  tcp-listener:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: final-tcp
+    environment:
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      SERVER_ADDRESS: 127.0.0.1
+    ports:
+      - "6868:6868"
+
+  web-api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: final-web
+    environment:
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      SERVER_ADDRESS: 127.0.0.1
+    ports:
+      - "80:80"
