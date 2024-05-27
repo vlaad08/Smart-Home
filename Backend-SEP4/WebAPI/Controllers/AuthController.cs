@@ -114,7 +114,7 @@ public class AuthController : ControllerBase
         {
             return BadRequest(e.Message);
         }
-    }
+    } 
     
    
     private string GenerateJwt(Member member)
@@ -147,7 +147,7 @@ public class AuthController : ControllerBase
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
             new Claim(ClaimTypes.Name, member.Username),
             new Claim(ClaimTypes.Role, member.IsAdmin ? "Admin" : "Member"),
-            new Claim("HouseId", member.Home?.Id)
+            new Claim("HouseId", member.Home?.Id ?? "")
         };
         return claims.ToList();
     }

@@ -10,6 +10,7 @@ namespace Tests.TemperatureTests;
 public class LightLogicTest
 {
   
+
   [Fact]
   public async void GetLight_calls_for_dbcomm()
   {
@@ -54,5 +55,5 @@ public class LightLogicTest
     logic.SaveLightReading("1", 3);
     dbComm.Verify(m=>m.SaveLightReading("1",3,It.IsAny<DateTime>()));
   }
-  
+
 }

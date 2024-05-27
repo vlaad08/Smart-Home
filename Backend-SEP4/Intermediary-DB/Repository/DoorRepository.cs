@@ -91,4 +91,15 @@ public class DoorRepository : IDoorRepository
         }
         
     }
+    
+    public async Task<string> GetFirstDeviceInHouse(string houseId)
+    {
+        Room? room = await _context.room.Include(r => r.Home).FirstOrDefaultAsync(r => r.Home.Id == houseId);
+        if (room != null)
+        {
+            return room.DeviceId;
+        }
+        throw new Exception($"No devices found in the house with ID {houseId}.");
+    }
+    
 }
