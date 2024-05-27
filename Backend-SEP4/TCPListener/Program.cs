@@ -1,8 +1,10 @@
-﻿
-public class Program
+﻿namespace TCPListener
 {
-    public static void Main(string[] args)
+    public class Program
     {
-        Server server = new Server(6868);
+        public static void Main(string[] args)
+        {
+            Server server = new Server(6868);
+        }
     }
 }

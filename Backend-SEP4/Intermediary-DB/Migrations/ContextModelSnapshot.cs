@@ -30,8 +30,12 @@ namespace DBComm.Migrations
                     b.Property<string>("HomeId")
                         .HasColumnType("text");
 
-                    b.Property<int>("LockPassword")
-                        .HasColumnType("integer");
+                    b.Property<bool>("IsOpen")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LockPassword")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -154,9 +158,24 @@ namespace DBComm.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsWindowOpen")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("LightLevel")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int?>("PreferedHumidity")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PreferedTemperature")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RadiatorState")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

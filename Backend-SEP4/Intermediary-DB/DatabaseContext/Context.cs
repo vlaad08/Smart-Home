@@ -18,10 +18,8 @@ public class Context : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {   
-        using (var stream = File.OpenRead("../Intermediary-DB/.env"))
-        {
-            DotNetEnv.Env.Load(stream);
-        }
+ 
+        DotNetEnv.Env.TraversePath().Load();
         
         string SECRETSECTION_HOST = Environment.GetEnvironmentVariable("DATABASE_HOST");
         string SECRETSECTION_DB = Environment.GetEnvironmentVariable("DATABASE_NAME");
@@ -30,7 +28,13 @@ public class Context : DbContext
 
         if (SECRETSECTION_HOST == null || SECRETSECTION_DB == null || SECRETSECTION_USERNAME == null || SECRETSECTION_PASSWORD == null)
         {
-            throw new Exception("One or more environment variables are missing.");
+            DotNetEnv.Env.Load();
+        }
+
+
+        if(SECRETSECTION_HOST == null || SECRETSECTION_DB == null || SECRETSECTION_USERNAME == null || SECRETSECTION_PASSWORD == null)
+        {
+            throw new Exception("Environment variables not set");
         }
         
         optionsBuilder.UseNpgsql($"Host={SECRETSECTION_HOST};Port=5432;Database={SECRETSECTION_DB};Username={SECRETSECTION_USERNAME};Password={SECRETSECTION_PASSWORD};");

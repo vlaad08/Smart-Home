@@ -13,11 +13,11 @@ public class NotificationLogic : INotificationLogic
         this.repository = repository;
     }
 
-    public async Task<List<Notification>>? GetNotifications()
+    public async Task<List<Notification>>? GetNotifications(string houseId)
     {
         try
         {
-            return await repository.GetNotifications();
+            return await repository.GetNotifications(houseId);
         }
         catch (Exception e)
         {

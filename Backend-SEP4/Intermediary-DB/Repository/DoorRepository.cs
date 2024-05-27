@@ -8,45 +8,98 @@ namespace DBComm.Repository;
 
 public class DoorRepository : IDoorRepository
 {
-    public Context Context;
+    public Context _context;
     public DoorRepository(Context context)
     {
-        Context = context;
+        _context = context;
     }
 
-    public async Task<string> CheckPassword(string password)
+    public async Task<string> CheckPassword(string houseId, string password)
     {
-        //Hardcoded password
-        string pw = "12345678";
-        byte[] inputBytes = Encoding.UTF8.GetBytes(pw);
-        string hashedString = "";
-        using (SHA256 sha256 = SHA256.Create())
+        Door? existing = await _context.door.Include(d => d.Home).SingleOrDefaultAsync(d=>d.Home.Id == houseId);
+        if (existing != null)
         {
-            byte[] hashBytes = sha256.ComputeHash(inputBytes);
-            hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
+            byte[] inputBytes = Encoding.UTF8.GetBytes(password);
+            string hashedString = "";
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hashBytes = sha256.ComputeHash(inputBytes);
+                hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
+                return hashedString;
+            }
         }
 
-        return hashedString;
+        return null;
+    }
+    
+    public async Task<string> CheckHashedPassword(string houseId)
+    {
+        Door? existing = await _context.door.Include(d => d.Home).SingleOrDefaultAsync(d => d.Home.Id == houseId);
+        if (existing != null)
+        {
+            return existing.LockPassword;
+        }
+
+        return null;
     }
 
     public async Task ChangePassword(string houseId, string password)
     {
-        Door? existing = await Context.door.Include(d => d.Home).SingleOrDefaultAsync(d=>d.Home.Id == houseId);
+        Door? existing = await _context.door.Include(d => d.Home).SingleOrDefaultAsync(d=>d.Home.Id == houseId);
         if (existing != null)
         {
             existing.LockPassword= password;
-            Context.door.Update(existing);
-            await Context.SaveChangesAsync();
+            _context.door.Update(existing);
+            await _context.SaveChangesAsync();
         }
     }
 
     public async Task<bool> CheckIfDoorExist(string homeId)
     {
-        Door? door = await Context.door.Include(d=>d.Home).FirstOrDefaultAsync(d => d.Home.Id == homeId);
+       
+        Door? door = await _context.door.Include(d=>d.Home).FirstOrDefaultAsync(d => d.Home.Id == homeId);
         if (door == null)
         {
             throw new Exception($"Door does not exist.");
         }
         return true;
     }
+
+    public async Task<bool> CheckDoorState(string homeId)
+    {
+        Door? door = await _context.door.Include(d=>d.Home).FirstOrDefaultAsync(d => d.Home.Id == homeId);
+        if (door == null)
+        {
+            throw new Exception($"Door does not exist.");
+        }
+
+        return door.IsOpen;
+    }
+
+    public async Task SaveDoorState(string houseId, bool state)
+    {
+        Door? door = await _context.door.Include(d=>d.Home).FirstOrDefaultAsync(d => d.Home.Id == houseId);
+        if (door != null)
+        {
+            door.IsOpen = state;
+            _context.door.Update(door);
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+          throw new Exception($"Door does not exist.");  
+        }
+        
+    }
+    
+    public async Task<string> GetFirstDeviceInHouse(string houseId)
+    {
+        Room? room = await _context.room.Include(r => r.Home).FirstOrDefaultAsync(r => r.Home.Id == houseId);
+        if (room != null)
+        {
+            return room.DeviceId;
+        }
+        throw new Exception($"No devices found in the house with ID {houseId}.");
+    }
+    
 }
