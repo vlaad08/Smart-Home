@@ -18,9 +18,3 @@ spec:
         image: vlaad08/smart-home:latest
         ports:
         - containerPort: 80
-        args:
-        - "--DATABASE_HOST=  ${{ secrets.DATABASE_HOST }}"
-        - "--DATABASE_NAME= ${{ secrets.DATABASE_NAME }}"
-        - "--DATABASE_USER= ${{ secrets.DATABASE_USER }}"
-        - "--DATABASE_PASSWORD= ${{ secrets.DATABASE_PASSWORD }}"
-        - "--SERVER_ADDRESS=tcp-listener.sep4.svc.cluster.local"
