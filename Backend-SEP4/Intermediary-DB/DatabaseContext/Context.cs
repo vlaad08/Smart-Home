@@ -15,14 +15,34 @@ public class Context : DbContext
     public DbSet<Notification> notification { get; set; }
 
 
-    private string SECRETSECTION_HOST = "smart-homel.postgres.database.azure.com";
-    private string SECRETSECTION_DB = "smart_home";
-    private string SECRETSECTION_NAME = "sep_user";
-    private string SECRETSECTION_PASSWORD = "Semester4Password";
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {   
-        ///cloud 
-        optionsBuilder.UseNpgsql($"Host={SECRETSECTION_HOST};Port=5432;Database={SECRETSECTION_DB};Username={SECRETSECTION_NAME};Password={SECRETSECTION_PASSWORD};");
+ 
+        DotNetEnv.Env.TraversePath().Load();
+        
+        string SECRETSECTION_HOST = Environment.GetEnvironmentVariable("DATABASE_HOST");
+        string SECRETSECTION_DB = Environment.GetEnvironmentVariable("DATABASE_NAME");
+        string SECRETSECTION_USERNAME = Environment.GetEnvironmentVariable("DATABASE_USER");
+        string SECRETSECTION_PASSWORD = Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
+
+        if (SECRETSECTION_HOST == null || SECRETSECTION_DB == null || SECRETSECTION_USERNAME == null || SECRETSECTION_PASSWORD == null)
+        {
+            DotNetEnv.Env.Load();
+        }
+
+        SECRETSECTION_HOST = Environment.GetEnvironmentVariable("DATABASE_HOST");
+        SECRETSECTION_DB = Environment.GetEnvironmentVariable("DATABASE_NAME");
+        SECRETSECTION_USERNAME = Environment.GetEnvironmentVariable("DATABASE_USER");
+        SECRETSECTION_PASSWORD = Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
+
+
+        if(SECRETSECTION_HOST == null || SECRETSECTION_DB == null || SECRETSECTION_USERNAME == null || SECRETSECTION_PASSWORD == null)
+        {
+            throw new Exception("Environment variables not set");
+        }
+        
+        optionsBuilder.UseNpgsql($"Host={SECRETSECTION_HOST};Port=5432;Database={SECRETSECTION_DB};Username={SECRETSECTION_USERNAME};Password={SECRETSECTION_PASSWORD};");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -6,16 +6,16 @@ namespace DBComm.Repository;
 
 public class LightRepository : ILigthRepository
 {
-    private Context Context;
+    private Context _context;
     public LightRepository(Context context)
     {
-        Context = context;
+        _context = context;
     }
-    public async Task<LightReading> GetOne(string deviceId)
+    public async Task<LightReading> GetLatestLight(string deviceId)
     {
         try
         {
-            IQueryable<LightReading> lightReadings = Context.light_reading
+            IQueryable<LightReading> lightReadings = _context.light_reading
                 .Where(lr => lr.Room.DeviceId == deviceId)  
                 .OrderByDescending(lr => lr.ReadAt);
 
@@ -32,7 +32,7 @@ public class LightRepository : ILigthRepository
     {
         try
         {
-            var query = Context.light_reading
+            var query = _context.light_reading
                 .Where(lr => lr.ReadAt >= dateFrom && lr.ReadAt <= dateTo && lr.Room.DeviceId == deviceId)
                 .GroupBy(lr => lr.ReadAt.Date) // Group by date
                 .Select(group => new LightReading()
@@ -50,5 +50,30 @@ public class LightRepository : ILigthRepository
             throw new Exception(e.Message);
         }
     }
+    
+    public async Task SaveLightReading(string deviceId,double value, DateTime readAt)
+    {
+        try
+        {
+            var room = await _context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId);
+            if (room == null)
+            {
+                throw new Exception($"No such room with device {deviceId}");
+            }
+            LightReading lightReading = new LightReading(value, readAt)
+            {
+                Room = room
+            };
+        
+            await _context.light_reading.AddAsync(lightReading);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw new Exception(e.Message);
+        }
+    }
+
 
 }

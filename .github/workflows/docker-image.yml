@@ -1,9 +1,10 @@
 name: Docker build and push
 
 on:
+  pull_request:
+    branches: [ "BACKEND", "main" ]
   push:
-    branches:
-      - "BACKEND"
+    branches: [ "BACKEND", "main" ]
 
 jobs:
   build:
@@ -22,10 +23,32 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       -
-        name: Build and push
+        name: Build and push TCPListener
         uses: docker/build-push-action@v5
         with:
           context: ./Backend-SEP4
           file: ./Backend-SEP4/Dockerfile
+          target: final-tcp
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/smart-home-server:latest
+          build-args: |
+            DATABASE_HOST=${{ secrets.DATABASE_HOST }}
+            DATABASE_NAME=${{ secrets.DATABASE_NAME }}
+            DATABASE_USER=${{ secrets.DATABASE_USER }}
+            DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+            SERVER_ADDRESS= 0.0.0.0
+      -
+        name: Build and push WebAPI
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Backend-SEP4
+          file: ./Backend-SEP4/Dockerfile
+          target: final-web
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/smart-home:latest
+          build-args: |
+            DATABASE_HOST=${{ secrets.DATABASE_HOST }}
+            DATABASE_NAME=${{ secrets.DATABASE_NAME }}
+            DATABASE_USER=${{ secrets.DATABASE_USER }}
+            DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+            SERVER_ADDRESS= tcp-listener.sep4.svc.cluster.local

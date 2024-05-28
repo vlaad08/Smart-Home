@@ -11,7 +11,7 @@ public class AccountLogic : IAccountLogic
     private IAccountRepository _repository;
     public AccountLogic(IAccountRepository repository)
     {
-        this._repository = repository;
+        _repository = repository;
     }
 
     private async Task<string> _hashPassword(string password)
@@ -26,11 +26,6 @@ public class AccountLogic : IAccountLogic
 
         return hashedString;
     }
-    public Task<Member> GetAdmin(string login, string password)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<Member> RegisterMember(string username, string password)
     {
         if (string.IsNullOrEmpty(username))
@@ -48,7 +43,8 @@ public class AccountLogic : IAccountLogic
             if (await _repository.CheckExistingUser(username))
             {
                 string hash = await _hashPassword(password);
-                await _repository.RegisterMember(username, hash);
+                Member member = await _repository.RegisterMember(username, hash);
+                return member;
             }
         }catch(Exception e)
         {
@@ -74,41 +70,6 @@ public class AccountLogic : IAccountLogic
             throw new Exception(e.Message);
         }
     }
-
-    public Task<Member> GetMember(string login, string password)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task RegisterAdmin(string username, string password)
-    {
-        if (string.IsNullOrEmpty(username))
-        {
-            throw new ValidationException("Username cannot be null");
-        }
-
-        if (string.IsNullOrEmpty(password))
-        {
-            throw new ValidationException("Password cannot be null");
-        }
-        try
-        {
-            if (await _repository.CheckExistingUser(username))
-            {
-                string hash = await _hashPassword(password);
-                await _repository.RegisterAdmin(username, hash);
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw new Exception(e.Message);
-        }
-
-        return;
-    }
-
-
     public async Task EditUsername(string oldUsername, string newUsername,string password)
     {
         try
@@ -118,6 +79,7 @@ public class AccountLogic : IAccountLogic
             {
                 await _repository.EditUsername(oldUsername, newUsername);
             }
+            
         }
         catch (Exception e)
         {
@@ -164,32 +126,6 @@ public class AccountLogic : IAccountLogic
             throw new Exception(e.Message);
         }
     }
-
-
-
-
-    public async Task RemoveMemberFromHouse(string username)
-    {
-        if (string.IsNullOrEmpty(username))
-        {
-            throw new ValidationException("Username cannot be null");
-        }
-        try
-        {
-            if (await _repository.CheckExistingUser(username))
-            {
-                await _repository.RemoveMemberFromHouse(username);
-            }
-        }
-        catch(Exception e)
-        {
-            Console.WriteLine(e);
-            throw new Exception(e.Message);
-        }
-
-        return;
-    }
-
     public async Task<Member> Login(string username, string password)
     {
         if (string.IsNullOrEmpty(username))
@@ -208,6 +144,7 @@ public class AccountLogic : IAccountLogic
             return await _repository.Login(username, hash);
         }catch(Exception e)
         {
+            Console.WriteLine(e.Message);
             throw new Exception(e.Message);
         }
         return null;
@@ -215,20 +152,5 @@ public class AccountLogic : IAccountLogic
 
 
 
-    public async Task AddMemberToHouse(string username, string houseId)
-    {
-        if (string.IsNullOrEmpty(username))
-        {
-            throw new ValidationException("Username null");
-        }
-        if (await _repository.CheckUserExists(username))
-        {
-            await _repository.AddMemberToHouse(username, houseId);
-        }
-        else
-        {
-            throw new Exception("No user w that username");
-        }
-    }
+   
 }
-    

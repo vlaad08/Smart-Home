@@ -51,20 +51,7 @@ public class AccountLogicTest
         mockRepository.Verify(m => m.CheckNonExistingUser("TEST",It.IsAny<string>()), Times.Once); 
         mockRepository.Verify(m => m.DeleteAccount("TEST"), Times.Once); 
     }
-
-    [Fact]
-    public async Task RegisterAdmin_call_for_repository()
-    {
-        var mockRepository = new Mock<IAccountRepository>();
-        mockRepository.Setup(m => m.CheckExistingUser("TEST")).ReturnsAsync(true);
-        var logic = new AccountLogic(mockRepository.Object);
-        
-        await logic.RegisterAdmin("TEST", "TEST");
     
-        mockRepository.Verify(m => m.CheckExistingUser("TEST"), Times.Once); 
-        mockRepository.Verify(m => m.RegisterAdmin("TEST",It.IsAny<string>()), Times.Once);
-    }
-
     [Fact]
     public async Task EditUsername_calls_for_repository()
     {
