@@ -376,7 +376,7 @@ namespace ECC.NET
 					break;
 				case CurveName.secp256k1:
 					{
-						Name = name;
+						Name = name;	
 
 						P = BigInteger.Parse("00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F", NumberStyles.HexNumber);
 

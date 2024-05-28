@@ -16,12 +16,12 @@ public class TemperatureController : ControllerBase
         this._temperatureLogic = temperatureLogic;
     }
 
-    [HttpGet("/{hardwareId}")]
-    public async Task<ActionResult> getLatestTemperature()
+    [HttpGet("{hardwareId}")]
+    public async Task<ActionResult> getLatestTemperature([FromRoute] string hardwareId)
     {
         try
         {
-            Temperature? temperature = await _temperatureLogic.getTemperature();
+            TemperatureReading? temperature = await _temperatureLogic.getLatestTemperature(hardwareId);
             return Ok(temperature);
         }
         catch (Exception e)
@@ -30,5 +30,59 @@ public class TemperatureController : ControllerBase
             throw;
         }
     }
+    [HttpGet, Route("History/{hardwareId}")]
+    public async Task<ActionResult<ICollection<LightReading>>> getHistory([FromRoute] string hardwareId,
+        [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)
+    {
+        try
+        {
+            var lightHistory = await _temperatureLogic.getTemperatureHistory(hardwareId, dateFrom, dateTo);
+            return Ok(lightHistory);
+        }catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpPost, Route("{hardwareId}/{level}")]
+    public async Task<IActionResult> setTemperature([FromRoute] string hardwareId, [FromRoute ] int level)
+    {
+        if (level < 1 || level > 6)
+        {
+            return BadRequest("Level must be between 1 and 6.");
+        }
+        
+        try
+        {
+            await _temperatureLogic.setTemperature(hardwareId, level);
+            return Ok($"Light level set to {level} for hardware ID: {hardwareId}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
