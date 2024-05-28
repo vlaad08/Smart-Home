@@ -41,11 +41,11 @@ RUN dotnet publish -c Release -o /App/WebAPI/out
 
 # Final stage for TCPListener
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final-tcp
-WORKDIR /App
 COPY --from=build-tcp /App/TCPListener/out .
 COPY --from=build-tcp /App/.env .env
 EXPOSE 6868
 ENTRYPOINT ["dotnet", "TCPListener.dll"]
+
 
 # Final stage for WebAPI
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final-web
