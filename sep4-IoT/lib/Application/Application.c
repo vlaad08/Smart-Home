@@ -74,7 +74,8 @@ bool doorAction(uint8_t status){
 
 char * breakingIn(){
     char * x = Alarm(UnlockingApproved);
-    if (strcmp(x,"Hello, Thief! :)")==0)
+  
+    if (strcmp(x,"1-Hello, Thief! ")==0)
     {
         transmitData((uint8_t*)x,16);
     }
@@ -82,10 +83,10 @@ char * breakingIn(){
 }
 
 int Callback(){
-    uint8_t* msg = decryption(received_message_buffer);
-    pc_comm_send_array_blocking((uint8_t*)msg,128);
+    uint8_t* msg = decryption((uint8_t *)received_message_buffer);
+    pc_comm_send_array_blocking((uint8_t*)msg,16);
     
-     uint8_t id =msg[0]-'0';
+    uint8_t id =msg[0]-'0';
     int x = 0;
     uint8_t value;
     if (msg[1]-'0' == 3)
@@ -131,9 +132,12 @@ int start(){
     leds_init();
     hc_sr04_init();
 
-    encryptionStart();
+    uint8_t * x = encryptionStart();
     
-    connect(Callback,received_message_buffer);
+    uint8_t * y = connect(Callback,received_message_buffer);
+
+    free(x);
+    free(y);
 
     taskSend(sendReadings);
     taskDoor(doorApproval);
