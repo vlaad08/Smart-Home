@@ -24,4 +24,16 @@ public class NotificationLogic : INotificationLogic
             throw new Exception(e.Message);
         }
     }
+
+    public async Task SetBurglarNotification(string deviceId)
+    {
+        try
+        {
+            await repository.AddBurglarNotification(deviceId,"BURGLAR IN HOUSE");
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
 }

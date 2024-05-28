@@ -78,7 +78,7 @@ public class RoomLogic : IRoomLogic
     {
         try
         {
-            return await _repository.GetAllRooms( homeId);
+            return await _repository.GetAllRooms(homeId);
         }
         catch (Exception e)
         {

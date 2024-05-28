@@ -53,6 +53,28 @@ public class NotificationRepository : INotificationRepository
             throw;
         }
     }
+
+    public async Task AddBurglarNotification(string deviceId, string message)
+    {
+        try
+        {
+            string houseId = _context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId).Result.Home.Id;
+            Home? home = await _context.home.FindAsync(houseId);
+            if (home == null)
+            {
+                throw new Exception("Home doesn't exist");
+            }
+
+            Notification notification = new Notification(home, message);
+            _context.Add(notification);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 }
 
 

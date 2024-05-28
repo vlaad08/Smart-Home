@@ -80,7 +80,8 @@ public class RoomRepository : IRoomRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<RoomDataDTO>?> GetAllRooms(string homeId)
+    public async Task<List<RoomDataDTO>?> 
+        GetAllRooms(string homeId)
     {
         IQueryable<Room> query = _context.room.Include(r => r.Home).Where(r => r.Home.Id == homeId);
     
