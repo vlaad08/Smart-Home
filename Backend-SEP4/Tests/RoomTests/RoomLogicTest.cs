@@ -230,10 +230,10 @@ public class RoomLogicTests
             var mock = new Mock<IRoomRepository>();
             TcpClient c = new TcpClient(ServerIp, ServerPort);
             var logic = new RoomLogic(mock.Object,c);
-            mock.Setup(m => m.GetAllRooms("test")).ThrowsAsync(new Exception("No room with device 2 or given wrong house ID"));
+            mock.Setup(m => m.GetAllRooms("test")).ThrowsAsync(new Exception("No rooms were found."));
             var exception = await Assert.ThrowsAsync<Exception>(() => logic.GetAllRooms("test"));
         
-            Assert.Equal("No room with device 2 or given wrong house ID",exception.Message);
+            Assert.Equal("No rooms were found.",exception.Message);
             mock.Verify(m=>m.GetAllRooms("test"));
         }
         finally
