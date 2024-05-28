@@ -4,6 +4,7 @@ metadata:
   name: tcp-listener
   namespace: sep4
 spec:
+  type: LoadBalancer
   selector:
     app: tcp-listener
   ports:

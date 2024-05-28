@@ -18,9 +18,3 @@ spec:
         image: vlaad08/smart-home-server:latest
         ports:
         - containerPort: 6868
-        args:
-        - "--DATABASE_HOST= ${{ secrets.DATABASE_HOST }}"
-        - "--DATABASE_NAME= ${{ secrets.DATABASE_NAME }}"
-        - "--DATABASE_USER= ${{ secrets.DATABASE_USER }}"
-        - "--DATABASE_PASSWORD= ${{ secrets.DATABASE_PASSWORD }}"
-        - "--SERVER_ADDRESS=0.0.0.0"
