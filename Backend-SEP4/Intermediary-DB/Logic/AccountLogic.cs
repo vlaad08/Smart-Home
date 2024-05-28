@@ -51,7 +51,6 @@ public class AccountLogic : IAccountLogic
             Console.WriteLine(e);
             throw new Exception(e.Message);
         }
-
         return null;
     }
 

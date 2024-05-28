@@ -14,13 +14,16 @@ public class LightLogic : ILightLogic
     private ILigthRepository _repository;
     private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
     // private ICommunicator _communicator;
+    public bool writeAsyncCalled { get; set; }
 
-    public LightLogic(ILigthRepository repository)
+    public LightLogic(ILigthRepository repository,TcpClient? c = null)
     {
+
         DotNetEnv.Env.Load();
         string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "127.0.0.1";
 
-        this.client = new TcpClient(ServerAddress, 6868);
+        this.client = c ?? new TcpClient(ServerAddress, 6868);
+
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
@@ -48,7 +51,9 @@ public class LightLogic : ILightLogic
             message = message.PadRight(message.Length + blockSize - extraBytes, ' ');
         }
         byte[] messageBytes = enc.Encrypt(message);
+        writeAsyncCalled = false;
         await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
+        writeAsyncCalled = true;
     }
     
     public async Task SaveLightReading(string deviceId,double value)

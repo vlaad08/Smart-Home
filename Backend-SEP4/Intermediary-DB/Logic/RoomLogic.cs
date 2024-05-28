@@ -14,13 +14,16 @@ public class RoomLogic : IRoomLogic
     private TcpClient client;
     private NetworkStream stream;
     private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
+
+    public bool writeAsyncCalled { get; set; }
     // private ICommunicator _communicator;
 
-    public RoomLogic(IRoomRepository repository)
+    public RoomLogic(IRoomRepository repository,TcpClient? c=null)
     {
         DotNetEnv.Env.Load();
         string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "127.0.0.1";
-        this.client = new TcpClient(ServerAddress, 6868);
+        this.client = c ?? new TcpClient(ServerAddress, 6868);
+
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
@@ -94,15 +97,13 @@ public class RoomLogic : IRoomLogic
             throw new Exception(e.Message);
         }
     }
-//SEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEGGSEG
-//add debug for shitty mitty wrong levels
     public async Task SetRadiatorLevel(string deviceId, int level)
     {
-        if (level >= 1 && level <= 6)
+        if (level is >= 1 and <= 6)
         {
             await _repository.SetRadiatorLevel(deviceId, level);
 
-            string message = $"LOGIC: {deviceId}10{level}            ";
+            string message = $"LOGIC {deviceId}10{level}            ";
             int blockSize = 16;
             int extraBytes = message.Length % blockSize;
             if (extraBytes != 0)
@@ -111,7 +112,9 @@ public class RoomLogic : IRoomLogic
             }
 
             byte[] messageBytes = enc.Encrypt(message);
+            writeAsyncCalled = false;
             await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
+            writeAsyncCalled = true;
         }
     }
 
@@ -153,7 +156,9 @@ public class RoomLogic : IRoomLogic
                 }
 
                 byte[] messageBytes = enc.Encrypt(message);
+                writeAsyncCalled = false;
                 await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
+                writeAsyncCalled = true;
             }
             
         }
@@ -190,7 +195,9 @@ public class RoomLogic : IRoomLogic
             }
 
             byte[] messageBytes = enc.Encrypt(message);
+            writeAsyncCalled = false;
             await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
+            writeAsyncCalled = true;
         }
     }
 
