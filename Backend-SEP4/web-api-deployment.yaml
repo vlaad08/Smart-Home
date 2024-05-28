@@ -18,14 +18,9 @@ spec:
         image: vlaad08/smart-home:latest
         ports:
         - containerPort: 80
-        env:
-        - name: DATABASE_HOST
-          value: "smart-homel.postgres.database.azure.com"
-        - name: DATABASE_NAME
-          value: "smart_home"
-        - name: DATABASE_USER
-          value: "sep_user"
-        - name: DATABASE_PASSWORD
-          value: "Semester4Password"
-        - name: SERVER_ADDRESS
-          value: "127.0.0.1"
+        args:
+        - "--DATABASE_HOST=  ${{ secrets.DATABASE_HOST }}"
+        - "--DATABASE_NAME= ${{ secrets.DATABASE_NAME }}"
+        - "--DATABASE_USER= ${{ secrets.DATABASE_USER }}"
+        - "--DATABASE_PASSWORD= ${{ secrets.DATABASE_PASSWORD }}"
+        - "--SERVER_ADDRESS=tcp-listener.sep4.svc.cluster.local"
