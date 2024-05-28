@@ -36,6 +36,7 @@ jobs:
             DATABASE_NAME=${{ secrets.DATABASE_NAME }}
             DATABASE_USER=${{ secrets.DATABASE_USER }}
             DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+            SERVER_ADDRESS= 0.0.0.0
       -
         name: Build and push WebAPI
         uses: docker/build-push-action@v5
@@ -50,3 +51,4 @@ jobs:
             DATABASE_NAME=${{ secrets.DATABASE_NAME }}
             DATABASE_USER=${{ secrets.DATABASE_USER }}
             DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+            SERVER_ADDRESS= tcp-listener.sep4.svc.cluster.local
