@@ -52,5 +52,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final-web
 WORKDIR /App/WebAPI/out
 COPY --from=build-web /App/WebAPI/out .
 COPY --from=build-web /App/.env .env
-EXPOSE 80
+EXPOSE 8080
 ENTRYPOINT ["dotnet", "WebAPI.dll"]
