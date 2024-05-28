@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tcp-listener
+  namespace: sep4
 spec:
   replicas: 1
   selector:
@@ -14,6 +15,17 @@ spec:
     spec:
       containers:
       - name: tcp-listener
-        image: tcp-listener:latest
+        image: vlaad08/smart-home-server:latest
         ports:
         - containerPort: 6868
+        env:
+        - name: DATABASE_HOST
+          value: "smart-homel.postgres.database.azure.com"
+        - name: DATABASE_NAME
+          value: "smart_home"
+        - name: DATABASE_USER
+          value: "sep_user"
+        - name: DATABASE_PASSWORD
+          value: "Semester4Password"
+        - name: SERVER_ADDRESS
+          value: "127.0.0.1"
