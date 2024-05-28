@@ -22,7 +22,7 @@ void tearDown(void) {}
 void test_encryptionStart(){
     uint8_t* result = encryptionStart();
 
-    TEST_ASSERT_EQUAL_STRING("Encription ready to encrypt",result);
+    TEST_ASSERT_EQUAL_STRING("Encryption ready to encrypt",result);
 }
 
 int testCallback()

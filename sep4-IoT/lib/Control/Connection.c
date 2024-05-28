@@ -6,7 +6,9 @@ uint8_t key[] = "S3cor3P45Sw0rD@f";
 uint8_t* encryptionStart()
 {
     AES_init_ctx(&my_AES_ctx,key);
-    return (uint8_t*) "Encryption ready to encrypt";
+    uint8_t * msg=malloc(30*sizeof(uint8_t));
+    sprintf((char *)msg,"Encryption ready to encrypt");
+    return msg;
 }
 
 uint8_t* connect(WIFI_TCP_Callback_t callback_when_message_received, char *received_message_buffer){
@@ -14,8 +16,10 @@ uint8_t* connect(WIFI_TCP_Callback_t callback_when_message_received, char *recei
     //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
    wifi_command_join_AP("KBENCELT 3517","p31A05)1");
   //  wifi_command_join_AP("002","zabijemsazalentilku");
-    wifi_command_create_TCP_connection("192.168.137.209",6868,callback_when_message_received,received_message_buffer);
-    return (uint8_t*)"Connected";
+    wifi_command_create_TCP_connection("192.168.137.1",6868,callback_when_message_received,received_message_buffer);
+    uint8_t * msg=malloc(9*sizeof(uint8_t));
+    sprintf((char *)msg,"Connected");
+    return msg;
 }
 
 uint8_t* transmitData(uint8_t * data,uint16_t length){

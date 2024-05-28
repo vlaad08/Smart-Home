@@ -131,9 +131,12 @@ int start(){
     leds_init();
     hc_sr04_init();
 
-    encryptionStart();
+    uint8_t * x = encryptionStart();
     
-    connect(Callback,received_message_buffer);
+    uint8_t * y = connect(Callback,received_message_buffer);
+
+    free(x);
+    free(y);
 
     taskSend(sendReadings);
     taskDoor(doorApproval);
