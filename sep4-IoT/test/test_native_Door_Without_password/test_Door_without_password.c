@@ -28,7 +28,7 @@ void test_openDoorWithoutApproval(void) {
     char* alarm_message = Alarm(isApproved);
 
     TEST_ASSERT_NOT_NULL(alarm_message);
-    TEST_ASSERT_EQUAL_STRING("Hello, Thief! :)", alarm_message);
+    TEST_ASSERT_EQUAL_STRING("1-Hello, Thief! ", alarm_message);
 
     free(alarm_message);
 }

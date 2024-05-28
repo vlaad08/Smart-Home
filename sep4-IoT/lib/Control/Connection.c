@@ -15,7 +15,7 @@ uint8_t* connect(WIFI_TCP_Callback_t callback_when_message_received, char *recei
     //wifi_command_join_AP("Filip's Galaxy S21 FE 5G","jgeb6522");
     wifi_command_join_AP("KBENCELT 3517","p31A05)1");
     //wifi_command_join_AP("002","zabijemsazalentilku");
-    wifi_command_create_TCP_connection("192.168.137.1",6868,callback_when_message_received,received_message_buffer);
+    wifi_command_create_TCP_connection("192.168.137.209",6868,callback_when_message_received,received_message_buffer);
     uint8_t * msg=malloc(9*sizeof(uint8_t));
     sprintf((char *)msg,"Connected");
     return msg;

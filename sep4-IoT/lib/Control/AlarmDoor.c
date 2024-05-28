@@ -9,7 +9,7 @@ char* Alarm(_Bool isApproved){
         if (!isApproved)
         {
             display_setValues(13,14,10,13);
-            sprintf(ret,"Hello, Thief! :)");
+            sprintf(ret,"1-Hello, Thief! ");
             buzzer_beep();
         }
         else
