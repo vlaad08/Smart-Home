@@ -217,7 +217,7 @@ public class RoomRepository : IRoomRepository
         Room? existing = await _context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId);
         if (existing!=null)
         {
-            throw new Exception($"Room {deviceId} already exists in home {homeId}");
+            throw new Exception($"Room {deviceId} already exists in home");
         }
         return true;
     }
