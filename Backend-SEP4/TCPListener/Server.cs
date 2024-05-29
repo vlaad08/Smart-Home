@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Channels;
 using ECC;
 using ECC.Interface;
 
@@ -22,7 +23,7 @@ public class Server
     
     public Server(int port)
     {
-        string SERVER_ADDRESS = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "127.0.0.1";
+        string SERVER_ADDRESS = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "192.168.137.209";
         IPAddress localAddr = IPAddress.Parse(SERVER_ADDRESS);
         Console.WriteLine("Server address: " + localAddr.ToString());
         listener = new TcpListener(localAddr, port);
@@ -131,9 +132,10 @@ public class Server
                 } 
                 break;
 
-                case var message when message.Contains("HEllO"):
+                case var message when message.Contains("Thief"):
                 {
                     string deviceId = message.Substring(0, 1);
+                    Console.WriteLine("BURGLAR GECI");
                     await SendBurglarNotification(deviceId);
                 }
                     
@@ -256,6 +258,7 @@ public class Server
             }
             else
             {
+                Console.WriteLine(response);
                 Console.WriteLine("Failed to save light level.");
             }
         }
@@ -276,7 +279,7 @@ public class Server
             }
             else
             {
-                Console.WriteLine("Failed to save light level.");
+                Console.WriteLine("BULGAR SHIT DIDN'T WORK");
             }
         }
         catch (Exception ex)
