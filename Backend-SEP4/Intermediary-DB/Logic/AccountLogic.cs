@@ -38,6 +38,10 @@ public class AccountLogic : IAccountLogic
             throw new ValidationException("Password cannot be null");
         }
 
+        if (password.Length < 8)
+        {
+            throw new ValidationException("Password needs to be at least 8 characters.");
+        }
         try
         {
             if (await _repository.CheckExistingUser(username))
@@ -72,15 +76,17 @@ public class AccountLogic : IAccountLogic
     }
     public async Task EditUsername(string oldUsername, string newUsername,string password)
     {
+        
         try
         {
             string hash = await _hashPassword(password);
-            if (await _repository.CheckNonExistingUser(oldUsername,hash))
+            if (await _repository.CheckNonExistingUser(oldUsername,hash) && await _repository.CheckExistingUser(newUsername))
             {
                 await _repository.EditUsername(oldUsername, newUsername);
             }
             
         }
+        
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
@@ -90,6 +96,10 @@ public class AccountLogic : IAccountLogic
 
     public async Task EditPassword(string username,string oldPassword, string newPassword)
     {
+        if (newPassword.Length < 8)
+        {
+            throw new ValidationException("Password needs to be at least 8 characters.");
+        }
         try
         {
             string hash = await _hashPassword(oldPassword);
