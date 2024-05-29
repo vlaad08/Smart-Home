@@ -19,14 +19,19 @@ public class DoorLogic : IDoorLogic
     public DoorLogic(IDoorRepository repository )
     {
         DotNetEnv.Env.Load();
-        string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "192.168.137.209";
-
-        this.client = new TcpClient(ServerAddress, 6868);
+        string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "127.0.0.1";
+        this._repository = repository;
+        _notificationRepository = new NotificationRepository(new Context());
+       try{
+         this.client = new TcpClient(ServerAddress, 6868);
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
-        this._repository = repository;
-        _notificationRepository = new NotificationRepository(new Context());
+       }
+       catch(Exception e)
+       {
+              throw new Exception(e.Message);
+       }
     }
 
     public async Task SwitchDoor(string houseId, string password, bool state)
