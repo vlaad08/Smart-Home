@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using ECC;
@@ -21,13 +21,14 @@ public class Server
     private IDictionary<TcpClient, bool> allClients = new Dictionary<TcpClient, bool>();
 
     private string SERVER_ADDRESS;
+    private string WEB_API_ADDRESS;
 
     public Server(int port)
     {
         DotNetEnv.Env.TraversePath().Load();
 
         SERVER_ADDRESS = Environment.GetEnvironmentVariable("SERVER_ADDRESS");
-
+        WEB_API_ADDRESS = "172.28.0.3"
         if (SERVER_ADDRESS == null)
         {
             DotNetEnv.Env.Load();
@@ -208,7 +209,7 @@ public class Server
     {
         try
         {
-            HttpResponseMessage response = await httpClient.PostAsync($"http://{SERVER_ADDRESS}:80/temperature/devices/{deviceId}/{value}", null);
+            HttpResponseMessage response = await httpClient.PostAsync($"http://{WEB_API_ADDRESS}:80/temperature/devices/{deviceId}/{value}", null);
 
             // Console.WriteLine(response.ToString());
             if (response.IsSuccessStatusCode)
@@ -230,7 +231,7 @@ public class Server
     {
         try
         {
-            HttpResponseMessage response = await httpClient.PostAsync($"http://{SERVER_ADDRESS}:80/humidity/devices/{deviceId}/{value}", null);
+            HttpResponseMessage response = await httpClient.PostAsync($"http://{WEB_API_ADDRESS}:80/humidity/devices/{deviceId}/{value}", null);
 
             // Console.WriteLine(response.ToString());
             if (response.IsSuccessStatusCode)
@@ -252,7 +253,7 @@ public class Server
     {
         try
         {
-            HttpResponseMessage response = await httpClient.PostAsync($"http://{SERVER_ADDRESS}:80/light/devices/{deviceId}/{value}", null);
+            HttpResponseMessage response = await httpClient.PostAsync($"http://{WEB_API_ADDRESS}:80/light/devices/{deviceId}/{value}", null);
 
             // Console.WriteLine(response.ToString());
             if (response.IsSuccessStatusCode)
