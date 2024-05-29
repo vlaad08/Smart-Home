@@ -14,8 +14,8 @@ ARG WEB_API_ADDRESS
 RUN echo "DATABASE_HOST=$DATABASE_HOST" >> .env && \
     echo "DATABASE_NAME=$DATABASE_NAME" >> .env && \
     echo "DATABASE_USER=$DATABASE_USER" >> .env && \
-    echo "DATABASE_PASSWORD=$DATABASE_PASSWORD" >> .env && \
-	  echo "WEB_API_ADDRESS=$WEB_API_ADDRESS" >> .env && \
+    echo "DATABASE_PASSWORD=$DATABASE_PASSWORD" >> .env && \ 
+    echo "WEB_API_ADDRESS=$WEB_API_ADDRESS" >> .env && \
     echo "SERVER_ADDRESS=$SERVER_ADDRESS" >> .env
 
 RUN dotnet restore
