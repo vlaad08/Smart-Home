@@ -1,4 +1,4 @@
-name: Docker build and push
+name: Create deployable docker images
 
 on:
   push:
@@ -34,7 +34,7 @@ jobs:
             DATABASE_NAME=${{ secrets.DATABASE_NAME }}
             DATABASE_USER=${{ secrets.DATABASE_USER }}
             DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
-            SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}
+            SERVER_ADDRESS=127.0.0.1
             WEB_API_ADDRESS=${{ secrets.WEB_API_ADDRESS }}
       -
         name: Build and push WebAPI
