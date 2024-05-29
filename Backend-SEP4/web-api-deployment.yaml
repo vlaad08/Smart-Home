@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: web-api
-        image: vlaad08/smart-home:latest
+        image: vlaad08/smart-home:v1
         ports:
         - containerPort: 80

@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tcp-listener
+  name: frontend
   namespace: sep4
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tcp-listener
+      app: frontend
   template:
     metadata:
       labels:
-        app: tcp-listener
+        app: frontend
     spec:
       containers:
-      - name: tcp-listener
-        image: vlaad08/smart-home-server:v1
+      - name: frontend
+        image: oliwierwijas/smart-home-frontend:v2
+        imagePullPolicy: Always
         ports:
-        - containerPort: 6868
+        - containerPort: 3000
