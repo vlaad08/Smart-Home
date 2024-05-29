@@ -28,7 +28,7 @@ public class Server
         DotNetEnv.Env.TraversePath().Load();
 
         SERVER_ADDRESS = Environment.GetEnvironmentVariable("SERVER_ADDRESS");
-        WEB_API_ADDRESS = "172.28.0.3"
+        WEB_API_ADDRESS = "172.28.0.3";
         if (SERVER_ADDRESS == null)
         {
             DotNetEnv.Env.Load();
