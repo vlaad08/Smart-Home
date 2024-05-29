@@ -28,8 +28,7 @@ public class NotificationController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            return BadRequest(e.Message);
         }
     }
 
@@ -43,7 +42,6 @@ public class NotificationController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
             return BadRequest(e.Message);
         }
     }

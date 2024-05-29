@@ -64,7 +64,7 @@ public class RoomRepository : IRoomRepository
             if (deviceId != null)
             {
                 int sameRoomCount =  _context.room.Count(r => r.DeviceId == deviceId);
-                if (sameRoomCount > 1)
+                if (sameRoomCount > 0)
                 {
                     throw new Exception("One device can only be assigned to one room!");
                 }

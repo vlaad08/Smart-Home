@@ -40,6 +40,11 @@ public class TemperatureLogic : ITemperatureLogic
 
     public async Task SetTemperature(string hardwareId, int level)
     {
+        if (level < 0 || level > 6)
+        {
+            throw new Exception("Level must be between 1 and 6.");
+        }
+        
         string message = $"LOGIC: {hardwareId}{level}              ";
         int blockSize = 16; 
         int extraBytes = message.Length % blockSize;

@@ -31,8 +31,7 @@ public class TemperatureController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            return BadRequest(e.Message);
         }
     }
     //An endpoint to get the temperature history of a specific room based on id of that room (request with room id, returns a list of readings of temperature)
@@ -43,20 +42,17 @@ public class TemperatureController : ControllerBase
         {
             var temperatureHistory = await _logic.GetTemperatureHistory(deviceId, dateFrom, dateTo);
             return Ok(temperatureHistory);
-        }catch (Exception e)
+        }
+        catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
 
     [HttpPost, Route("{hardwareId}/set")]
     public async Task<IActionResult> SetTemperature([FromRoute] string hardwareId, [FromBody] int level)
     {
-        if (level < 1 || level > 6)
-        {
-            return BadRequest("Level must be between 1 and 6.");
-        }
+        
         
         try
         {
@@ -65,8 +61,7 @@ public class TemperatureController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
 
@@ -77,10 +72,10 @@ public class TemperatureController : ControllerBase
         {
             await _logic.SaveTempReading(deviceId,value);
             return Ok($"Temperature saved.");
-        }catch (Exception e)
+        }
+        catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
 }

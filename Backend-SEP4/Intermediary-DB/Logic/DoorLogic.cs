@@ -100,6 +100,11 @@ public class DoorLogic : IDoorLogic
         {
             throw new Exception("House Id can not be empty");
         }
+
+        if (string.IsNullOrEmpty(password))
+        {
+            throw new Exception("Password cannot be null");
+        }
         byte[] inputBytes = Encoding.UTF8.GetBytes(password);
         string hashedString;
         using (SHA256 sha256 = SHA256.Create())
