@@ -28,14 +28,14 @@ public class Server
         DotNetEnv.Env.TraversePath().Load();
 
         SERVER_ADDRESS = Environment.GetEnvironmentVariable("SERVER_ADDRESS");
-        WEB_API_ADDRESS = "172.28.0.3";
+        WEB_API_ADDRESS = Environment.GetEnvironmentVariable("WEB_API_ADDRESS") ?? "localhost";
         if (SERVER_ADDRESS == null)
         {
             DotNetEnv.Env.Load();
         }
 
         SERVER_ADDRESS = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "127.0.0.1";
-
+        WEB_API_ADDRESS = Environment.GetEnvironmentVariable("WEB_API_ADDRESS") ?? "localhost";
 
         IPAddress localAddr = IPAddress.Parse(SERVER_ADDRESS);
         Console.WriteLine("Server address: " + localAddr.ToString());

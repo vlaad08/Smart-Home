@@ -25,6 +25,7 @@ services:
         DATABASE_USER: sep_user
         DATABASE_PASSWORD: Semester4Password
         SERVER_ADDRESS: 172.28.0.2
+        WEB_API_ADDRESS: 172.28.0.3
     ports:
       - "6868:6868"
     networks:
