@@ -14,7 +14,9 @@ public class DoorLogic : IDoorLogic
     private TcpClient client;
     private NetworkStream stream;
     private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
-    public DoorLogic(IDoorRepository repository)
+
+    private INotificationRepository _notificationRepository;
+    public DoorLogic(IDoorRepository repository )
     {
         DotNetEnv.Env.Load();
         string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "192.168.137.209";
@@ -24,14 +26,7 @@ public class DoorLogic : IDoorLogic
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
         this._repository = repository;
-    }
-
-    private INotificationRepository _notificationRepository;
-    public DoorLogic(IDoorRepository repository, INotificationRepository notificationRepository)
-    {
-        _repository = repository;
-        _notificationRepository = notificationRepository;
-
+        _notificationRepository = new NotificationRepository(new Context());
     }
 
     public async Task SwitchDoor(string houseId, string password, bool state)

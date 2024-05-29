@@ -20,10 +20,10 @@ services:
       dockerfile: Dockerfile
       target: final-tcp
       args:
-        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-        DATABASE_USER: ${{ secrets.DATABASE_USER }}
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        DATABASE_HOST: smart-homel.postgres.database.azure.com
+        DATABASE_NAME: smart_home
+        DATABASE_USER: sep_user
+        DATABASE_PASSWORD: Semester4Password
         SERVER_ADDRESS: 172.28.0.2
     ports:
       - "6868:6868"
@@ -37,13 +37,13 @@ services:
       dockerfile: Dockerfile
       target: final-web
       args:
-        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-        DATABASE_USER: ${{ secrets.DATABASE_USER }}
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        DATABASE_HOST: smart-homel.postgres.database.azure.com
+        DATABASE_NAME: smart_home
+        DATABASE_USER: sep_user
+        DATABASE_PASSWORD: Semester4Password
         SERVER_ADDRESS: 172.28.0.2
     ports:
-      - "8080:8080"
+      - "8080:80"
     networks:
       sep4-network:
         ipv4_address: 172.28.0.3
