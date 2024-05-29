@@ -87,6 +87,11 @@ public class DoorLogic : IDoorLogic
             byte[] hashBytes = sha256.ComputeHash(inputBytes);
             hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
         }
+
+        if (password.Length == 0)
+        {
+            throw new Exception("Password can not be empty");
+        }
         try
         {
             if (await _repository.CheckIfDoorExist(homeId))
