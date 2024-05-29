@@ -19,11 +19,18 @@ public class TemperatureLogic : ITemperatureLogic
     {
         DotNetEnv.Env.Load();
         string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "127.0.0.1";
-        this.client = new TcpClient(ServerAddress, 6868);
+      
+        this._repository = repository;
+        try{
+              this.client = new TcpClient(ServerAddress, 6868);
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
-        this._repository = repository;
+        }
+        catch(Exception e)
+        {
+               throw new Exception(e.Message);
+        }
     }
     public async Task<TemperatureReading> GetLatestTemperature(string hardwareId)
     {
