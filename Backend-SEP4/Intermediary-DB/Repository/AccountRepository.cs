@@ -160,7 +160,7 @@ public class AccountRepository : IAccountRepository
 
     public async Task<Member> Login(string username, string hash)
     {
-        Member? member = await _context.member.Include(m => m.Home).FirstOrDefaultAsync(m => m.Username == username && m.Password == hash);
+        Member? member = await _context.member.Include(m=> m.Home).FirstOrDefaultAsync(m => m.Username == username && m.Password == hash);
         if (member == null)
         {
             throw new Exception("Invalid username or password");
