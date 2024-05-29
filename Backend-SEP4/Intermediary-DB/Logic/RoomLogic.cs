@@ -29,6 +29,23 @@ public class RoomLogic : IRoomLogic
     {
         try
         {
+            if (preferedTemperature < 0 || preferedTemperature > 35)
+            {
+                throw new Exception("Temperature must be between 0 and 35 degrees.");
+            }
+            if (preferedHumidity < 0 || preferedHumidity > 100)
+            {
+                throw new Exception("Humidity must be between 0 and 100%.");
+            } 
+            if (string.IsNullOrEmpty(deviceId))
+            {
+                throw new Exception("Device id can not be empty.");
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new Exception("Name can not be empty.");
+            }
             if (await _repository.CheckExistingRoom(deviceId, homeId))
             {
                 await _repository.AddRoom(name, deviceId, homeId, preferedTemperature, preferedHumidity);
@@ -61,6 +78,23 @@ public class RoomLogic : IRoomLogic
     {
         try
         {
+            if (preferedTemperature < 0 || preferedTemperature > 35)
+            {
+                throw new Exception("Temperature must be between 0 and 35 degrees.");
+            }
+            if (preferedHumidity < 0 || preferedHumidity > 100)
+            {
+                throw new Exception("Humidity must be between 0 and 100%.");
+            } 
+            if (string.IsNullOrEmpty(deviceId))
+            {
+                throw new Exception("Device id can not be empty.");
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new Exception("Name can not be empty.");
+            }
             if (await _repository.CheckExistingRoom(deviceId, "0"))
             {
                 await _repository.EditRoom(id,name,deviceId, preferedTemperature, preferedHumidity);
@@ -112,6 +146,10 @@ public class RoomLogic : IRoomLogic
 
             byte[] messageBytes = enc.Encrypt(message);
             await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
+        }
+        else
+        {
+            throw new Exception("Radiator level must be between 0 and 6.");
         }
     }
 
@@ -191,6 +229,9 @@ public class RoomLogic : IRoomLogic
 
             byte[] messageBytes = enc.Encrypt(message);
             await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
+        }else
+        {
+            throw new Exception("Light level must be between 0 and 4.");
         }
     }
 
