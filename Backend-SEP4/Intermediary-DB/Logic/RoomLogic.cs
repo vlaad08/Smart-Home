@@ -99,7 +99,7 @@ public class RoomLogic : IRoomLogic
     }
     public async Task SetRadiatorLevel(string deviceId, int level)
     {
-        if (level is >= 1 and <= 6)
+        if (level is >= 0 and <= 6)
         {
             await _repository.SetRadiatorLevel(deviceId, level);
 
