@@ -20,7 +20,7 @@ public class DoorLogic : IDoorLogic
     public DoorLogic(IDoorRepository repository, TcpClient? c = null)
     {
         DotNetEnv.Env.Load();
-        string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "127.0.0.1";
+        string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "0.0.0.0";
 
         this.client = c ?? new TcpClient(ServerAddress, 6868);
 
