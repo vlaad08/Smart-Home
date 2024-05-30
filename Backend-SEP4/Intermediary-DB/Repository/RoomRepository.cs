@@ -63,7 +63,11 @@ public class RoomRepository : IRoomRepository
 
             if (deviceId != null)
             {
-            
+                int sameRoomCount =  _context.room.Count(r => r.DeviceId == deviceId);
+                if (sameRoomCount > 0)
+                {
+                    throw new Exception("One device can only be assigned to one room!");
+                }
                 room.DeviceId = deviceId;
             }
         }
@@ -148,8 +152,6 @@ public class RoomRepository : IRoomRepository
         if (room != null)
         {
             string roomId = room.Id;
-            dto.DeviceId = room.DeviceId;
-            dto.Id = room.Id;
             dto.Name = room.Name;
             dto.Home = room.Home;
             dto.PreferedTemperature = room.PreferedTemperature;

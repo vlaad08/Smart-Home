@@ -8,11 +8,6 @@
         <RootNamespace>ConsoleApp1</RootNamespace>
     </PropertyGroup>
 
-
-    <ItemGroup>
-      <PackageReference Include="DotNetEnv" Version="3.0.0" />
-    </ItemGroup>
-
     <ItemGroup>
       <ProjectReference Include="..\Encryption\Encryption.csproj" />
     </ItemGroup>

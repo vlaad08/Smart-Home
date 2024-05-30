@@ -17,10 +17,10 @@ void tearDown(void) {}
 void test_lightLevel_Darkness(void){
     light_read_fake.return_val = 1000; 
 
-    uint8_t * result = getLightInfo(1);
+    uint8_t * result = getLightInfo();
     
     TEST_ASSERT_NOT_NULL(result);
-    TEST_ASSERT_EQUAL_STRING("1-LIGHT: 1000    ", result);
+    TEST_ASSERT_EQUAL_STRING("LIGHT: 1000      ", result);
 
     free(result);
 }
@@ -28,10 +28,10 @@ void test_lightLevel_Darkness(void){
 void test_lightLevel_Lightness(void){
     light_read_fake.return_val = 200; 
 
-    uint8_t * result = getLightInfo(1);
+    uint8_t * result = getLightInfo();
     
     TEST_ASSERT_NOT_NULL(result);
-    TEST_ASSERT_EQUAL_STRING("1-LIGHT: 200    ", result);
+    TEST_ASSERT_EQUAL_STRING("LIGHT: 200      ", result);
 
     free(result);
 }
