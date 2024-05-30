@@ -137,13 +137,21 @@ public class Server
                     {
                         string[] parts = message.Substring(2).Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
 
-                        if (parts.Length > 1 && double.TryParse(parts[1], out double lightValue))
-                        {
-                            string deviceId = message.Substring(0, 1);
-                            await SaveLightAsync(deviceId, lightValue);
-                        }
+                    if (parts.Length > 1 && double.TryParse(parts[1], out double lightValue))
+                    {
+                        string deviceId = message.Substring(0, 1);
+                        await SaveLightAsync(deviceId, lightValue);
                     }
-                    break;
+                } 
+                break;
+
+                case var message when message.Contains("HEllO"):
+                {
+                    string deviceId = message.Substring(0, 1);
+                    await SendBurglarNotification(deviceId);
+                }
+                    
+                break;
 
                 default:
                     break;
@@ -259,6 +267,26 @@ public class Server
             if (response.IsSuccessStatusCode)
             {
                 // Console.WriteLine("Light level saved successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Failed to save light level.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception occurred while saving light level: {ex.Message}");
+        }
+    }
+
+    private async Task SendBurglarNotification(string deviceId)
+    {
+        try
+        {
+            HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:5084/notifications/burglar/{deviceId}", null);
+
+            if (response.IsSuccessStatusCode)
+            {
             }
             else
             {

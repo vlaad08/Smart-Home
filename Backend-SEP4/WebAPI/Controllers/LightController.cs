@@ -29,8 +29,7 @@ public class LightController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            return BadRequest(e.Message);
         }
     }
     //An endpoint to get the light level history of a specific room based on id of that room (request with room id, returns a list of readings of light levels)
@@ -42,10 +41,10 @@ public class LightController : ControllerBase
         {
             var lightHistory = await _logic.GetLightHistory(hardwareId, dateFrom, dateTo);
             return Ok(lightHistory);
-        }catch (Exception e)
+        }
+        catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
     
@@ -60,10 +59,10 @@ public class LightController : ControllerBase
         {
             await _logic.SetLight(hardwareId, level);
             return Ok("Light level set.");
-        }catch (Exception e)
+        }
+        catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
 
@@ -74,11 +73,11 @@ public class LightController : ControllerBase
         try
         {
             await _logic.SaveLightReading(deviceId, value);
-            return Ok($"Temperature saved");
-        }catch (Exception e)
+            return Ok($"Light level saved");
+        }
+        catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
     

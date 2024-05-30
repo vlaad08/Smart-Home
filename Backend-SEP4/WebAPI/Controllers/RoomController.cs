@@ -118,8 +118,7 @@ public class RoomController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
     //An endpoint to get the current radiator level based on deviceId(returns level of radiator (number 0-6))
@@ -133,8 +132,7 @@ public class RoomController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
     //An endpoint to set the light level 
@@ -145,10 +143,10 @@ public class RoomController : ControllerBase
         {
             await _logic.SetLightState(deviceId, level);
             return Ok("Light level set.");
-        }catch (Exception e)
+        }
+        catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
     //An endpoint to get current light level (request with device, returns number 0-4)
@@ -162,8 +160,7 @@ public class RoomController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
     //An endpoint to set the window state (we send an deviceId and true or false indicating if the windows are set to be open or close)
@@ -174,10 +171,10 @@ public class RoomController : ControllerBase
         {
             await _logic.SaveWindowState(deviceId, state);
             return Ok("Window state is changed.");
-        }catch (Exception e)
+        }
+        catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
     
@@ -192,8 +189,7 @@ public class RoomController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
 

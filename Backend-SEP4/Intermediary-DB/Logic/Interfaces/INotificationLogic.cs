@@ -5,4 +5,5 @@ namespace DBComm.Logic.Interfaces;
 public interface INotificationLogic
 {
     public Task<List<Notification>>? GetNotifications(string houseId);
+    public Task SetBurglarNotification(string deviceId);
 }

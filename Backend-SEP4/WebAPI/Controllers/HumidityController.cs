@@ -28,8 +28,7 @@ public class HumidityController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            return BadRequest(e.Message);
         }
     }
     //An endpoint to get the humidity history of a specific room based on id of that room (request with room id, returns a list of readings of humidity)
@@ -41,10 +40,10 @@ public class HumidityController : ControllerBase
         {
             var humidityHistory = await _logic.GetHumidityHistory(hardwareId, dateFrom, dateTo);
             return Ok(humidityHistory);
-        }catch (Exception e)
+        }
+        catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
     //what happens wo async?
@@ -60,8 +59,7 @@ public class HumidityController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+            return BadRequest(e.Message);
         }
     }
     
