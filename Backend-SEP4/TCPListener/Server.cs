@@ -145,7 +145,7 @@ public class Server
                 } 
                 break;
 
-                case var message when message.Contains("HEllO"):
+                case var message when message.Contains("Hello"):
                 {
                     string deviceId = message.Substring(0, 1);
                     await SendBurglarNotification(deviceId);
@@ -290,12 +290,12 @@ public class Server
             }
             else
             {
-                Console.WriteLine("Failed to save light level.");
+                Console.WriteLine("Failed to save notification.");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception occurred while saving light level: {ex.Message}");
+            Console.WriteLine($"Exception occurred while saving notification: {ex.Message}");
         }
     }
 

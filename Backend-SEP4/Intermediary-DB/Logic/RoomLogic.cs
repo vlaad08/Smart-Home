@@ -83,6 +83,7 @@ public class RoomLogic : IRoomLogic
     {
         try
         {
+            RoomDataDTO dataDTO = await _repository.GetRoomData(null, deviceId);
             if (preferedTemperature < 0 || preferedTemperature > 35)
             {
                 throw new Exception("Temperature must be between 0 and 35 degrees.");
@@ -100,8 +101,10 @@ public class RoomLogic : IRoomLogic
             {
                 throw new Exception("Name can not be empty.");
             }
-
-            if (await _repository.CheckExistingRoom(deviceId, "0"))
+            if(dataDTO.DeviceId == deviceId){
+                await _repository.EditRoom(id,name,deviceId, preferedTemperature, preferedHumidity);
+            }
+            else if (await _repository.CheckExistingRoom(deviceId, "0"))
             {
                 await _repository.EditRoom(id,name,deviceId, preferedTemperature, preferedHumidity);
             }
