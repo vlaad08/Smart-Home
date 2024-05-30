@@ -17,8 +17,13 @@ public class DoorLogic : IDoorLogic
     private INotificationRepository _notificationRepository;
 
     public bool writeAsyncCalled { get; set; }
-    public DoorLogic(IDoorRepository repository, TcpClient? c = null)
+     public DoorLogic(IDoorRepository repository, TcpClient? c = null)
     {
+
+        DotNetEnv.Env.Load();
+        string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "192.168.137.209";
+
+        this.client = c ?? new TcpClient(ServerAddress, 6868);
          stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
@@ -42,6 +47,7 @@ public class DoorLogic : IDoorLogic
         stream.Write(messageBytes, 0, messageBytes.Length);
         this._repository = repository;
     }
+
 
     public async Task SwitchDoor(string houseId, string password, bool state)
     {
@@ -106,7 +112,6 @@ public class DoorLogic : IDoorLogic
             Console.WriteLine(e);
             throw;
         }
-        
     }
 
 
