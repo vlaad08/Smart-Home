@@ -55,7 +55,7 @@ public class DoorLogic : IDoorLogic
                 hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
             }
             
-            if (await _repository.CheckDoorState(houseId) != state)
+            if (await _repository.CheckDoorState(houseId) == state)
             {
                 if (state)
                 {
