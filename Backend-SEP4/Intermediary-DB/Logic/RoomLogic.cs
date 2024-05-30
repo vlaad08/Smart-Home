@@ -141,7 +141,7 @@ public class RoomLogic : IRoomLogic
         {
             await _repository.SetRadiatorLevel(deviceId, level);
 
-            string message = $"LOGIC {deviceId}10{level}            ";
+            string message = $"LOGIC: {deviceId}10{level}            ";
             int blockSize = 16;
             int extraBytes = message.Length % blockSize;
             if (extraBytes != 0)
