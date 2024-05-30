@@ -24,8 +24,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Encryption\Encryption.csproj" />
+      <ProjectReference Include="..\ECC\ECC.csproj" />
       <ProjectReference Include="..\Intermediary-DB\Intermediary-DB.csproj" />
+      <ProjectReference Include="..\TCPListenerDemo\TCPListenerDemo.csproj" />
       <ProjectReference Include="..\TCPListener\TCPListener.csproj" />
       <ProjectReference Include="..\WebAPI\WebAPI.csproj" />
     </ItemGroup>

@@ -6,6 +6,8 @@ using System.Security.Cryptography;
 using System.Text;
 using ConsoleApp1;
 using ECC;
+using ECC.NET;
+using ECC.Encryption;
 using ECC.Interface;
 
 public class Communicator : ICommunicator
@@ -111,20 +113,20 @@ public class Communicator : ICommunicator
 
 
     //Sending PU to IoT
-    // private async Task handshake()
-    // {
-    //     Curve curve = new Curve(Curve.CurveName.secp256r1);
-    //     BigInteger r = Numerics.GetNumberFromGroup(curve.N, curve.Length);
-    //     Point multipliedG = Point.Multiply(r, curve.G);
-    //     Point addedPoints = Point.Add(multipliedG, curve.G);
-    //     //keyPair = Cryptography.GetKeyPair(curve);
-    //     
-    //     Encryption.SaveKeyPair(Cryptography.GetKeyPair(curve));
-    //     
-    //     //Converting hex PK to uint8_[64] for IoT and sending it
-    //     string hexKey = Encryption.GetKeyPair().PublicKey.ToString();
-    //     Send(Encryption.HexStringToByteArray(hexKey));
-    // }
+    private async Task handshake()
+    {
+        Curve curve = new Curve(Curve.CurveName.secp256r1);
+        BigInteger r = Numerics.GetNumberFromGroup(curve.N, curve.Length);
+        Point multipliedG = Point.Multiply(r, curve.G);
+        Point addedPoints = Point.Add(multipliedG, curve.G);
+        //keyPair = Cryptography.GetKeyPair(curve);
+        
+        Encryption.SaveKeyPair(Cryptography.GetKeyPair(curve));
+        
+        //Converting hex PK to uint8_[64] for IoT and sending it
+        string hexKey = Encryption.GetKeyPair().PublicKey.ToString();
+        Send(Encryption.HexStringToByteArray(hexKey));
+    }
 
     // Close the current client connection
     private void CloseCurrentClient()
