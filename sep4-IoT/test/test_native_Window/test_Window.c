@@ -17,13 +17,13 @@ void setUp(void) {}
 void tearDown(void) {}
 
 void test_openWindow(void){
-    int result=openWindow(1);
+    int result=openWindow();
     
     TEST_ASSERT_EQUAL_UINT8(1,result);
 }
 
 void test_closeWindow(void){
-    int result=closeWindow(1);
+    int result=closeWindow();
 
     TEST_ASSERT_EQUAL_UINT8(0,result);
 }

@@ -32,7 +32,7 @@ public class NotificationController : ControllerBase
         }
     }
 
-    [HttpPost,Route("burglar/{deviceId}"),AllowAnonymous]
+    [HttpPost,Route("burglar/{deviceId}")]
     public async Task<ActionResult> SetBurglarNotification([FromRoute] string deviceId)
     {
         try
