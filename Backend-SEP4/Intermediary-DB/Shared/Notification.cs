@@ -13,7 +13,7 @@ public class Notification
     public Notification(Home home, string message)
     {
         Id = Guid.NewGuid().ToString();
-        SendAt = DateTime.UtcNow;
+        SendAt = DateTime.UtcNow.AddHours(2);
         Message = message;
         Home = home;
     }

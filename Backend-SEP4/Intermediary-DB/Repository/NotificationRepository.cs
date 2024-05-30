@@ -16,8 +16,7 @@ public class NotificationRepository : INotificationRepository
     {
         try
         {
-            // Convert DateTime.Today to UTC
-            var todayUtc = DateTime.UtcNow.Date;
+            var todayUtc = DateTime.UtcNow.Date.AddHours(2);
             var tomorrowUtc = todayUtc.AddDays(1);
 
             IQueryable<Notification> notificationReadings = _context.notification

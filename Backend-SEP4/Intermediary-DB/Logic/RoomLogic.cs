@@ -66,7 +66,11 @@ public class RoomLogic : IRoomLogic
     {
         try
         {
-            await _repository.EditRoom(id,name,deviceId, preferedTemperature, preferedHumidity);
+            if (await _repository.CheckExistingRoom(deviceId, "0"))
+            {
+                await _repository.EditRoom(id,name,deviceId, preferedTemperature, preferedHumidity);
+            }
+            
         }
         catch (Exception e)
         {
