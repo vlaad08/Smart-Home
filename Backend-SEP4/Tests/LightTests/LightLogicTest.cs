@@ -133,23 +133,26 @@ public class LightLogicTest
    }
 
    [Fact]
-   public async Task savLightReading_calls_for_repository()
+   public async Task SaveLightReading_calls_for_repository()
    {
        await StartServer();
        try
        {
            var mock = new Mock<ILigthRepository>();
            TcpClient c = new TcpClient(ServerIp, ServerPort);
-           var logic = new LightLogic(mock.Object,c);
-           
-           await logic.SaveLightReading("1", 3);
-           
-           mock.Verify(m=>m.SaveLightReading("1",3,It.IsAny<DateTime>()));
+           var logic = new LightLogic(mock.Object, c);
+        
+           double value = 3;
+           double scaleValue = (1000 - value) / 10;
+           await logic.SaveLightReading("1", value);
+        
+           mock.Verify(m => m.SaveLightReading("1", scaleValue, It.IsAny<DateTime>()), Times.Once);
        }
        finally
        {
            await StopServer();
        }
    }
+
 //   
 }

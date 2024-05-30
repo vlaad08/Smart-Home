@@ -5,6 +5,7 @@ using DBComm.Repository;
 using DBComm.Shared;
 using ECC;
 using ECC.Interface;
+using WebAPI.DTOs;
 
 namespace DBComm.Logic;
 
@@ -14,6 +15,8 @@ public class TemperatureLogic : ITemperatureLogic
     private NetworkStream stream;
     private ITemperatureRepository _repository;
     private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
+    private IRoomRepository _roomRepository;
+    private INotificationRepository _notificationRepository;
     public bool writeAsyncCalled { get; set; }
 
     public TemperatureLogic(ITemperatureRepository repository, TcpClient? c = null)
@@ -27,6 +30,8 @@ public class TemperatureLogic : ITemperatureLogic
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
         this._repository = repository;
+        this._roomRepository = new RoomRepository(new Context());
+        this._notificationRepository = new NotificationRepository(new Context());
     }
     public async Task<TemperatureReading> GetLatestTemperature(string hardwareId)
     {
@@ -57,10 +62,40 @@ public class TemperatureLogic : ITemperatureLogic
         await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
         writeAsyncCalled = true;
     }
-    
-    public async Task SaveTempReading(string deviceId,double value)
+
+    public async Task SaveTempReading(string deviceId, double value)
     {
-        DateTime dateTime = DateTime.UtcNow;
-        await _repository.SaveTemperatureReading(deviceId,value, dateTime);
+        RoomDataDTO dto = await _roomRepository.GetRoomData(null, deviceId);
+        if (dto == null)
+        {
+            throw new InvalidOperationException("Room data is null.");
+        }
+
+        if (dto.Home == null)
+        {
+            throw new InvalidOperationException("Home data is null.");
+        }
+
+        if ((double)dto.PreferedTemperature < value)
+        {
+            List<Notification> notifications = await _notificationRepository.GetNotifications(dto.Home.Id);
+
+            if (notifications == null || notifications.Count == 0)
+            {
+                await _notificationRepository.AddNotification(dto.Home.Id,
+                    "The temperature in " + dto.Name + " is higher than preferred and it is " + value + " degrees");
+            }
+            else
+            {
+                bool exists = notifications.Any(n =>
+                    n.Message.StartsWith("The temperature in " + dto.Name + " is higher than preferred"));
+                Console.WriteLine(exists);
+                if (!exists)
+                {
+                    await _notificationRepository.AddNotification(dto.Home.Id,
+                        "The temperature in " + dto.Name + " is higher than preferred and it is " + value + " degrees");
+                }
+            }
+        }
     }
 }

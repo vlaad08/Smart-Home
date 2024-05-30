@@ -29,7 +29,6 @@ public class LightLogic : ILightLogic
         stream.Write(messageBytes, 0, messageBytes.Length);
         
         this._repository = repository;
-        // _communicator = Communicator.Instance;
     }
     public async Task<LightReading> GetLatestLight(string hardwareId)
     {
@@ -58,7 +57,8 @@ public class LightLogic : ILightLogic
     
     public async Task SaveLightReading(string deviceId,double value)
     {
+        double scaleValue = (1000 - value) / 10;
         DateTime readAt = DateTime.UtcNow;
-        await _repository.SaveLightReading(deviceId, value, readAt);
+        await _repository.SaveLightReading(deviceId, scaleValue, readAt);
     }
 }

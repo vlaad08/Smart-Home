@@ -14,6 +14,8 @@ public class DoorLogic : IDoorLogic
     private TcpClient client;
     private NetworkStream stream;
     private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
+    private INotificationRepository _notificationRepository;
+
     public bool writeAsyncCalled { get; set; }
     public DoorLogic(IDoorRepository repository, TcpClient? c = null)
     {
@@ -26,9 +28,9 @@ public class DoorLogic : IDoorLogic
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
         this._repository = repository;
+        _notificationRepository = new NotificationRepository(new Context());
     }
 
-    private INotificationRepository _notificationRepository;
     public DoorLogic(IDoorRepository repository, INotificationRepository notificationRepository, TcpClient? c = null)
     {
         _repository = repository;

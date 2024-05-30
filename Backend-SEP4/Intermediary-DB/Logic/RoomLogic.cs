@@ -16,7 +16,6 @@ public class RoomLogic : IRoomLogic
     private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
 
     public bool writeAsyncCalled { get; set; }
-    // private ICommunicator _communicator;
 
     public RoomLogic(IRoomRepository repository,TcpClient? c=null)
     {
@@ -32,8 +31,26 @@ public class RoomLogic : IRoomLogic
 
     public async Task AddRoom(string name, string deviceId, string homeId, int preferedTemperature, int preferedHumidity)
     {
+        
         try
         {
+            if (preferedTemperature < 0 || preferedTemperature > 35)
+            {
+                throw new Exception("Temperature must be between 0 and 35 degrees.");
+            }
+            if (preferedHumidity < 0 || preferedHumidity > 100)
+            {
+                throw new Exception("Humidity must be between 0 and 100%.");
+            } 
+            if (string.IsNullOrEmpty(deviceId))
+            {
+                throw new Exception("Device id can not be empty.");
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new Exception("Name can not be empty.");
+            }
             if (await _repository.CheckExistingRoom(deviceId, homeId))
             {
                 await _repository.AddRoom(name, deviceId, homeId, preferedTemperature, preferedHumidity);
@@ -66,11 +83,28 @@ public class RoomLogic : IRoomLogic
     {
         try
         {
+            if (preferedTemperature < 0 || preferedTemperature > 35)
+            {
+                throw new Exception("Temperature must be between 0 and 35 degrees.");
+            }
+            if (preferedHumidity < 0 || preferedHumidity > 100)
+            {
+                throw new Exception("Humidity must be between 0 and 100%.");
+            } 
+            if (string.IsNullOrEmpty(deviceId))
+            {
+                throw new Exception("Device id can not be empty.");
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new Exception("Name can not be empty.");
+            }
+
             if (await _repository.CheckExistingRoom(deviceId, "0"))
             {
                 await _repository.EditRoom(id,name,deviceId, preferedTemperature, preferedHumidity);
             }
-            
         }
         catch (Exception e)
         {
