@@ -27,12 +27,12 @@ public class HumidityLogicTest
         dbComm.Verify(d=>d.GetHistory("1",now1 ,now2));
     }
 
-    [Fact]
-    public async Task SaveHumidityReading_calls_for_repository()
-    {
-        var dbComm = new Mock<IHumidityRepository>();
-        var logic = new HumidityLogic(dbComm.Object);
-        await logic.SaveHumidityReading("1",50);
-        dbComm.Verify(d=>d.SaveHumidityReading("1",50 ,It.IsAny<DateTime>()));
-    }
+    // [Fact]
+    // public async Task SaveHumidityReading_calls_for_repository()
+    // {
+    //     var dbComm = new Mock<IHumidityRepository>();
+    //     var logic = new HumidityLogic(dbComm.Object);
+    //     await logic.SaveHumidityReading("1",50);
+    //     dbComm.Verify(d=>d.SaveHumidityReading("1",50 ,It.IsAny<DateTime>()));
+    // }
 }

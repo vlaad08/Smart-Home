@@ -169,16 +169,25 @@ public class RoomLogicTests
         {
             var mock = new Mock<IRoomRepository>();
             TcpClient c = new TcpClient(ServerIp, ServerPort);
-            var logic = new RoomLogic(mock.Object,c);
-            await logic.EditRoom("test", null, null, 0, 0);
-            mock.Verify(m=>m.EditRoom("test",null,null, 0 ,0));
+            mock.Setup(m => m.CheckExistingRoom("1", "0")).ReturnsAsync(true);
+            var logic = new RoomLogic(mock.Object, c);
+        
+            string roomId = "test";
+            string roomName = "test";
+            string deviceId = "1";
+            int preferedTemperature = 10;
+            int preferedHumidity = 10;
+
+            await logic.EditRoom(roomId, roomName, deviceId, preferedTemperature, preferedHumidity);
+
+            mock.Verify(m => m.EditRoom(roomId, roomName, deviceId, preferedTemperature, preferedHumidity));
         }
         finally
         {
             await StopServer();
         }
-        
     }
+
     
     [Fact]
     public async Task EditRoom_throws_custom_error()
@@ -189,12 +198,12 @@ public class RoomLogicTests
             var mock = new Mock<IRoomRepository>();
             TcpClient c = new TcpClient(ServerIp, ServerPort);
             var logic = new RoomLogic(mock.Object,c);
-            mock.Setup(m => m.EditRoom("test", null, null, 0, 0)).ThrowsAsync(new Exception("Room with given id does not exist"));
+            mock.Setup(m => m.EditRoom("test", null, null, 0, 0)).ThrowsAsync(new Exception("Device id can not be empty."));
     
             var exception = await Assert.ThrowsAsync<Exception>(() => logic.EditRoom("test", null, null, 0, 0));
-            Assert.Equal("Room with given id does not exist", exception.Message);
+            Assert.Equal("Device id can not be empty.", exception.Message);
     
-            mock.Verify(m => m.EditRoom("test", null, null, 0, 0), Times.Once);
+            mock.Verify(m => m.EditRoom("test", null, null, 0, 0), Times.Never);
         }
         finally
         {

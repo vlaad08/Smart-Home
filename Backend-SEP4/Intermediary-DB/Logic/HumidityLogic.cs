@@ -7,14 +7,16 @@ namespace DBComm.Logic;
 
 public class HumidityLogic : IHumidityLogic
 {
+
+
     private IHumidityRepository _repository;
     private IRoomRepository _roomRepository;
     private INotificationRepository _notificationRepository;
-    public HumidityLogic(IHumidityRepository repository, IRoomRepository roomRepository, INotificationRepository notificationRepository)
+    public HumidityLogic(IHumidityRepository repository)
     {
-        _repository = repository;
-        _roomRepository = roomRepository;
-        _notificationRepository = notificationRepository;
+        this._repository = repository;
+        this._notificationRepository = new NotificationRepository(new Context());
+        this._roomRepository = new RoomRepository(new Context());
     }
     
     public async Task<HumidityReading> GetLatestHumidity(string hardwareId)

@@ -42,6 +42,7 @@ public class AccountLogic : IAccountLogic
         {
             throw new ValidationException("Password needs to be at least 8 characters.");
         }
+
         try
         {
             if (await _repository.CheckExistingUser(username))
@@ -101,6 +102,10 @@ public class AccountLogic : IAccountLogic
         }
         try
         {
+            if (newPassword.Length < 8)
+            {
+                throw new Exception("Password needs to be at least 8 characters");
+            }
             string hash = await _hashPassword(oldPassword);
             if (await _repository.CheckNonExistingUser(username,hash))
             {

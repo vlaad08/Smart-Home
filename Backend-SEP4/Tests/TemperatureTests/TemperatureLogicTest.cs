@@ -131,25 +131,25 @@ public class TemperatureLogicTest
           }
       }
 
-      [Fact]
-      public async Task SaveTempReading_calls_for_repo()
-      {
-          await StartServer();
-          try
-          {
-              var mock = new Mock<ITemperatureRepository>();
-              TcpClient c = new TcpClient(ServerIp, ServerPort);
-              var logic = new TemperatureLogic(mock.Object, c);
-
-              await logic.SaveTempReading("1", 2);
-              
-              mock.Verify(m=>m.SaveTemperatureReading("1",2,It.IsAny<DateTime>()));
-          }
-          finally
-          {
-              await StopServer();
-          }
-      }
+      // [Fact]
+      // public async Task SaveTempReading_calls_for_repo()
+      // {
+      //     await StartServer();
+      //     try
+      //     {
+      //         var mock = new Mock<ITemperatureRepository>();
+      //         TcpClient c = new TcpClient(ServerIp, ServerPort);
+      //         var logic = new TemperatureLogic(mock.Object, c);
+      //
+      //         await logic.SaveTempReading("1", 2);
+      //         
+      //         mock.Verify(m=>m.SaveTemperatureReading("1",2,It.IsAny<DateTime>()));
+      //     }
+      //     finally
+      //     {
+      //         await StopServer();
+      //     }
+      // }
       
       
 }

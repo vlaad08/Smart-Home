@@ -147,7 +147,8 @@ public class RoomRepository : IRoomRepository
         bool humi = false, bool light = false)
     {
         RoomDataDTO dto = new RoomDataDTO();
-        Room? room = await _context.room.Include(r => r.Home).FirstOrDefaultAsync(r => r.DeviceId == deviceId);
+
+        Room? room = await _context.room.Include(r=>r.Home).FirstOrDefaultAsync(r => r.DeviceId == deviceId);
         if (room != null)
         {
             string roomId = room.Id;
