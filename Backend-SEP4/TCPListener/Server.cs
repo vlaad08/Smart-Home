@@ -143,7 +143,6 @@ public class Server
                             await SaveLightAsync(deviceId, lightValue);
                         }
                     }
-                } 
                 break;
 
                 case var message when message.Contains("HEllO"):
