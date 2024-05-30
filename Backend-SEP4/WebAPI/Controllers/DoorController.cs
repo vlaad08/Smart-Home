@@ -11,7 +11,7 @@ namespace WebAPI.Controllers;
 [Authorize]
 public class DoorController : ControllerBase
 {
-    private IDoorLogic _logic;
+    private readonly IDoorLogic _logic;
 
     public DoorController(IDoorLogic logic)
     {

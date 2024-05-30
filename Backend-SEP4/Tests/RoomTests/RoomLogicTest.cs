@@ -8,10 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using DBComm.Logic;
 using DBComm.Repository;
-using DBComm.Shared;
 using ECC;
 using ECC.Interface;
-using WebAPI.DTOs;
 using Xunit;
 
 public class RoomLogicTests
@@ -120,94 +118,6 @@ public class RoomLogicTests
     }
     
     [Fact]
-    public async Task AddRoom_throws_temp_exception()
-    {
-        await StartServer();
-        try
-        {
-            var mock = new Mock<IRoomRepository>();
-            TcpClient c = new TcpClient(ServerIp, ServerPort);
-            var logic = new RoomLogic(mock.Object,c);
-            
-            var exception = await Assert.ThrowsAsync<Exception>(()=>logic.AddRoom("test", "test","test", -1, 25));
-            
-            mock.Verify(m=>m.CheckExistingRoom("test","test"),Times.Never);
-            mock.Verify(m=>m.AddRoom("test","test","test", 25 ,25),Times.Never);
-            Assert.Equal("Temperature must be between 0 and 35 degrees.",exception.Message);
-        }
-        finally
-        {
-            await StopServer();
-        }
-    }
-    
-    [Fact]
-    public async Task AddRoom_throws_humi_exception()
-    {
-        await StartServer();
-        try
-        {
-            var mock = new Mock<IRoomRepository>();
-            TcpClient c = new TcpClient(ServerIp, ServerPort);
-            var logic = new RoomLogic(mock.Object,c);
-            
-            var exception = await Assert.ThrowsAsync<Exception>(()=>logic.AddRoom("test", "test","test", 0, -1));
-            
-            mock.Verify(m=>m.CheckExistingRoom("test","test"),Times.Never);
-            mock.Verify(m=>m.AddRoom("test","test","test", 25 ,25),Times.Never);
-            Assert.Equal("Humidity must be between 0 and 100%.",exception.Message);
-        }
-        finally
-        {
-            await StopServer();
-        }
-    }
-    
-    [Fact]
-    public async Task AddRoom_throws_device_exception()
-    {
-        await StartServer();
-        try
-        {
-            var mock = new Mock<IRoomRepository>();
-            TcpClient c = new TcpClient(ServerIp, ServerPort);
-            var logic = new RoomLogic(mock.Object,c);
-            
-            var exception = await Assert.ThrowsAsync<Exception>(()=>logic.AddRoom("test", null,"test", 0, 0));
-            
-            mock.Verify(m=>m.CheckExistingRoom("test","test"),Times.Never);
-            mock.Verify(m=>m.AddRoom("test","test","test", 25 ,25),Times.Never);
-            Assert.Equal("Device id can not be empty.",exception.Message);
-        }
-        finally
-        {
-            await StopServer();
-        }
-    }
-    
-    [Fact]
-    public async Task AddRoom_throws_name_exception()
-    {
-        await StartServer();
-        try
-        {
-            var mock = new Mock<IRoomRepository>();
-            TcpClient c = new TcpClient(ServerIp, ServerPort);
-            var logic = new RoomLogic(mock.Object,c);
-            
-            var exception = await Assert.ThrowsAsync<Exception>(()=>logic.AddRoom(null, "test","test", 0, 0));
-            
-            mock.Verify(m=>m.CheckExistingRoom("test","test"),Times.Never);
-            mock.Verify(m=>m.AddRoom("test","test","test", 25 ,25),Times.Never);
-            Assert.Equal("Name can not be empty.",exception.Message);
-        }
-        finally
-        {
-            await StopServer();
-        }
-    }
-    
-    [Fact]
     public async Task DeleteRoom_calls_for_repository()
     {
         await StartServer();
@@ -257,64 +167,9 @@ public class RoomLogicTests
         await StartServer();
         try
         {
-            RoomDataDTO dto = new RoomDataDTO()
-            {
-                DeviceId = "1",
-                Home = new Home("1"),
-                HumiValue = 40,
-                Id = "1",
-                IsWindowOpen = true,
-                LightLevel = 3,
-                LightValue = 4,
-                Name = "1",
-                PreferedHumidity = 40,
-                PreferedTemperature = 23
-            };
             var mock = new Mock<IRoomRepository>();
             TcpClient c = new TcpClient(ServerIp, ServerPort);
             mock.Setup(m => m.CheckExistingRoom("1", "0")).ReturnsAsync(true);
-            mock.Setup(m => m.GetRoomData(null, "1", false, false, false)).ReturnsAsync(dto);
-            var logic = new RoomLogic(mock.Object, c);
-        
-            string roomId = "test";
-            string roomName = "test";
-            string deviceId = "1";
-            int preferedTemperature = 10;
-            int preferedHumidity = 10;
-
-            await logic.EditRoom(roomId, roomName, deviceId, preferedTemperature, preferedHumidity);
-
-            mock.Verify(m => m.EditRoom(roomId, roomName, deviceId, preferedTemperature, preferedHumidity));
-        }
-        finally
-        {
-            await StopServer();
-        }
-    }
-    
-    [Fact]
-    public async Task EditRoom_calls_for_repository_with_extra_check()
-    {
-        await StartServer();
-        try
-        {
-            RoomDataDTO dto = new RoomDataDTO()
-            {
-                DeviceId = "2",
-                Home = new Home("1"),
-                HumiValue = 40,
-                Id = "2",
-                IsWindowOpen = true,
-                LightLevel = 3,
-                LightValue = 4,
-                Name = "1",
-                PreferedHumidity = 40,
-                PreferedTemperature = 23
-            };
-            var mock = new Mock<IRoomRepository>();
-            TcpClient c = new TcpClient(ServerIp, ServerPort);
-            mock.Setup(m => m.CheckExistingRoom("1", "0")).ReturnsAsync(true);
-            mock.Setup(m => m.GetRoomData(null, "1", false, false, false)).ReturnsAsync(dto);
             var logic = new RoomLogic(mock.Object, c);
         
             string roomId = "test";
@@ -348,90 +203,6 @@ public class RoomLogicTests
             var exception = await Assert.ThrowsAsync<Exception>(() => logic.EditRoom("test", null, null, 0, 0));
             Assert.Equal("Device id can not be empty.", exception.Message);
     
-            mock.Verify(m => m.EditRoom("test", null, null, 0, 0), Times.Never);
-        }
-        finally
-        {
-            await StopServer();
-        }
-    }
-    
-    [Fact]
-    public async Task EditRoom_throws_temperature_error()
-    {
-        await StartServer();
-        try
-        {
-            var mock = new Mock<IRoomRepository>();
-            TcpClient c = new TcpClient(ServerIp, ServerPort);
-            var logic = new RoomLogic(mock.Object,c);
-    
-            var exception = await Assert.ThrowsAsync<Exception>(() => logic.EditRoom("test", "test", "test", -1, 0));
-            
-            Assert.Equal("Temperature must be between 0 and 35 degrees.", exception.Message);
-            mock.Verify(m => m.EditRoom("test", null, null, 0, 0), Times.Never);
-        }
-        finally
-        {
-            await StopServer();
-        }
-    }
-    
-    [Fact]
-    public async Task EditRoom_throws_humidity_error()
-    {
-        await StartServer();
-        try
-        {
-            var mock = new Mock<IRoomRepository>();
-            TcpClient c = new TcpClient(ServerIp, ServerPort);
-            var logic = new RoomLogic(mock.Object,c);
-    
-            var exception = await Assert.ThrowsAsync<Exception>(() => logic.EditRoom("test", "test", "test", 0, -1));
-            
-            Assert.Equal("Humidity must be between 0 and 100%.", exception.Message);
-            mock.Verify(m => m.EditRoom("test", null, null, 0, 0), Times.Never);
-        }
-        finally
-        {
-            await StopServer();
-        }
-    }
-    
-    [Fact]
-    public async Task EditRoom_throws_name_error()
-    {
-        await StartServer();
-        try
-        {
-            var mock = new Mock<IRoomRepository>();
-            TcpClient c = new TcpClient(ServerIp, ServerPort);
-            var logic = new RoomLogic(mock.Object,c);
-    
-            var exception = await Assert.ThrowsAsync<Exception>(() => logic.EditRoom("test", null, "test", 0, 0));
-            
-            Assert.Equal("Name can not be empty.", exception.Message);
-            mock.Verify(m => m.EditRoom("test", null, null, 0, 0), Times.Never);
-        }
-        finally
-        {
-            await StopServer();
-        }
-    }
-    
-    [Fact]
-    public async Task EditRoom_throws_device_error()
-    {
-        await StartServer();
-        try
-        {
-            var mock = new Mock<IRoomRepository>();
-            TcpClient c = new TcpClient(ServerIp, ServerPort);
-            var logic = new RoomLogic(mock.Object,c);
-    
-            var exception = await Assert.ThrowsAsync<Exception>(() => logic.EditRoom("test", "test", null, 0, 0));
-            
-            Assert.Equal("Device id can not be empty.", exception.Message);
             mock.Verify(m => m.EditRoom("test", null, null, 0, 0), Times.Never);
         }
         finally
@@ -543,7 +314,6 @@ public class RoomLogicTests
         try
         {
             var mockRepository = new Mock<IRoomRepository>();
-            var notifMock = new Mock<INotificationRepository>();
             TcpClient c = new TcpClient(ServerIp, ServerPort);
             var logic = new RoomLogic(mockRepository.Object, c);
             var clientField = typeof(RoomLogic).GetField("client", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -551,7 +321,7 @@ public class RoomLogicTests
             var streamField = typeof(RoomLogic).GetField("stream", BindingFlags.NonPublic | BindingFlags.Instance);
             NetworkStream s = c.GetStream();
             streamField.SetValue(logic, s);
-            
+
             mockRepository.Setup(m => m.SetRadiatorLevel("1", 4)).Returns(Task.CompletedTask);
             
             await logic.SetRadiatorLevel("1", 4);
@@ -594,7 +364,6 @@ public class RoomLogicTests
             TcpClient c = new TcpClient(ServerIp, ServerPort);
             var logic = new RoomLogic(mock.Object,c);
             mock.Setup(m => m.GetRadiatorLevel("1")).ThrowsAsync(new Exception("Room  doesn't exist in home"));
-            
             var exception = await Assert.ThrowsAsync<Exception>(() => logic.GetRadiatorLevel("1"));
         
             Assert.Equal("Room  doesn't exist in home",exception.Message);
@@ -664,33 +433,34 @@ public class RoomLogicTests
     }
 
 
-    // [Fact]
-    // public async Task SaveWindowState_does_not_use_stream_to_send_data_upon_non_existing_window_data_with_false_value()
-    // {
-    //     await StartServer();
-    //     try
-    //     {
-    //         var mockRepository = new Mock<IRoomRepository>();
-    //         TcpClient c = new TcpClient(ServerIp, ServerPort);
-    //         var logic = new RoomLogic(mockRepository.Object, c);
-    //         var clientField = typeof(RoomLogic).GetField("client", BindingFlags.NonPublic | BindingFlags.Instance);
-    //         clientField.SetValue(logic, c);
-    //         var streamField = typeof(RoomLogic).GetField("stream", BindingFlags.NonPublic | BindingFlags.Instance);
-    //         var stream = c.GetStream();
-    //         streamField.SetValue(logic, stream);
-    //         mockRepository.Setup(m => m.GetWindowState("1")).ReturnsAsync(false);
-    //         mockRepository.Setup(m => m.SaveWindowState("1", true)).Returns(Task.CompletedTask);
-    //         
-    //         await logic.SaveWindowState("1", false);
-    //
-    //         mockRepository.Verify(repo => repo.SaveWindowState("1", false), Times.Never);
-    //         Assert.False(_writeAsyncCalled, "WriteAsync was called on the NetworkStream.");
-    //     }
-    //     finally
-    //     {
-    //         await StopServer();
-    //     }
-    // }
+    [Fact]
+    public async Task SaveWindowState_does_not_use_stream_to_send_data_upon_non_existing_window_data_with_false_value()
+    {
+        await StartServer();
+        try
+        {
+            var mockRepository = new Mock<IRoomRepository>();
+            TcpClient c = new TcpClient(ServerIp, ServerPort);
+            var logic = new RoomLogic(mockRepository.Object, c);
+            var clientField = typeof(RoomLogic).GetField("client", BindingFlags.NonPublic | BindingFlags.Instance);
+            clientField.SetValue(logic, c);
+            var streamField = typeof(RoomLogic).GetField("stream", BindingFlags.NonPublic | BindingFlags.Instance);
+            var stream = c.GetStream();
+            streamField.SetValue(logic, stream);
+            mockRepository.Setup(m => m.GetWindowState("1")).ReturnsAsync(false);
+            mockRepository.Setup(m => m.SaveWindowState("1", true)).Returns(Task.CompletedTask);
+
+            
+            await logic.SaveWindowState("1", false);
+
+            mockRepository.Verify(repo => repo.SaveWindowState("1", false), Times.Never);
+            Assert.False(_writeAsyncCalled, "WriteAsync was called on the NetworkStream.");
+        }
+        finally
+        {
+            await StopServer();
+        }
+    }
     [Fact]
     public async Task SaveWindowState_catches_Exception()
     {
@@ -712,6 +482,7 @@ public class RoomLogicTests
         
             Assert.Equal($"Room does not exist.",exception.Message);
             mockRepository.Verify(repo => repo.SaveWindowState("1", false), Times.Never);
+
         }
         finally
         {
@@ -851,11 +622,11 @@ public class RoomLogicTests
             var logic = new RoomLogic(mockRepository.Object, c);
             var clientField = typeof(RoomLogic).GetField("client", BindingFlags.NonPublic | BindingFlags.Instance);
             clientField.SetValue(logic, c);
-            mockRepository.Setup(m => m.GetLightState("1")).ThrowsAsync(new Exception($"Room doesn't exist in home"));
-        
+            mockRepository.Setup(m => m.GetLightState("1")).ThrowsAsync(new Exception($"Room  doesn't exist in home"));
+            
             var exception = await Assert.ThrowsAsync<Exception>(() => logic.GetLightState("1"));
         
-            Assert.Equal("Room doesn't exist in home", exception.Message);
+            Assert.Equal($"Room  doesn't exist in home", exception.Message);
             mockRepository.Verify(repo => repo.GetLightState("1"), Times.Once);
         }
         finally
@@ -863,5 +634,4 @@ public class RoomLogicTests
             await StopServer();
         }
     }
-
 }

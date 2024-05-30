@@ -31,6 +31,11 @@ public class Context : DbContext
             DotNetEnv.Env.Load();
         }
 
+        SECRETSECTION_HOST = Environment.GetEnvironmentVariable("DATABASE_HOST");
+        SECRETSECTION_DB = Environment.GetEnvironmentVariable("DATABASE_NAME");
+        SECRETSECTION_USERNAME = Environment.GetEnvironmentVariable("DATABASE_USER");
+        SECRETSECTION_PASSWORD = Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
+
 
         if(SECRETSECTION_HOST == null || SECRETSECTION_DB == null || SECRETSECTION_USERNAME == null || SECRETSECTION_PASSWORD == null)
         {
