@@ -1,50 +1,30 @@
-networks:
-  sep4-network:
-    ipam:
-      config:
-        - subnet: 172.28.0.0/16
+version: '3.8'
 
 services:
-
-  website:
-    image: oliwierwijas/smart-home-frontend:latest
-    ports:
-      - "3000:3000"
-    networks:
-      sep4-network:
-        ipv4_address: 172.28.0.4
-
   tcp-listener:
     build: 
       context: .
       dockerfile: Dockerfile
       target: final-tcp
-      args:
-        DATABASE_HOST: smart-homel.postgres.database.azure.com
-        DATABASE_NAME: smart_home
-        DATABASE_USER: sep_user
-        DATABASE_PASSWORD: Semester4Password
-        SERVER_ADDRESS: 0.0.0.0
-        WEB_API_ADDRESS: 172.28.0.3
+    environment:
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      SERVER_ADDRESS: 127.0.0.1
     ports:
       - "6868:6868"
-    networks:
-      sep4-network:
-        ipv4_address: 172.28.0.2
 
   web-api:
     build: 
       context: .
       dockerfile: Dockerfile
       target: final-web
-      args:
-        DATABASE_HOST: smart-homel.postgres.database.azure.com
-        DATABASE_NAME: smart_home
-        DATABASE_USER: sep_user
-        DATABASE_PASSWORD: Semester4Password
-        SERVER_ADDRESS: 172.28.0.2
+    environment:
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      SERVER_ADDRESS: 127.0.0.1
     ports:
-      - "8080:80"
-    networks:
-      sep4-network:
-        ipv4_address: 172.28.0.3
+      - "80:80"
