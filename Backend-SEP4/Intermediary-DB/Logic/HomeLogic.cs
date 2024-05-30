@@ -26,7 +26,7 @@ public class HomeLogic : IHomeLogic
         }
         else
         {
-            throw new Exception("No user w that username");
+            throw new Exception("No user with that username");
         }
     }
 

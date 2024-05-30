@@ -14,14 +14,16 @@ public class DoorLogic : IDoorLogic
     private TcpClient client;
     private NetworkStream stream;
     private IEncryptionService enc = new EncryptionService("S3cor3P45Sw0rD@f"u8.ToArray(),null);
-
     private INotificationRepository _notificationRepository;
-    public DoorLogic(IDoorRepository repository )
+
+    public bool writeAsyncCalled { get; set; }
+    public DoorLogic(IDoorRepository repository, TcpClient? c = null)
     {
         DotNetEnv.Env.Load();
-        string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "192.168.137.209";
+        string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "127.0.0.1";
 
-        this.client = new TcpClient(ServerAddress, 6868);
+        this.client = c ?? new TcpClient(ServerAddress, 6868);
+
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
@@ -29,46 +31,68 @@ public class DoorLogic : IDoorLogic
         _notificationRepository = new NotificationRepository(new Context());
     }
 
+    public DoorLogic(IDoorRepository repository, INotificationRepository notificationRepository, TcpClient? c = null)
+    {
+        _repository = repository;
+        _notificationRepository = notificationRepository;
+        this.client = c ?? new TcpClient("192.168.137.209", 6868);
+        stream = client.GetStream();
+        byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
+        stream.Write(messageBytes, 0, messageBytes.Length);
+        this._repository = repository;
+    }
+
     public async Task SwitchDoor(string houseId, string password, bool state)
     {
-        byte[] inputBytes = Encoding.UTF8.GetBytes(password);
-        string hashedString;
-        using (SHA256 sha256 = SHA256.Create())
+        try
         {
-            byte[] hashBytes = sha256.ComputeHash(inputBytes);
-            hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
-        }
-       if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) && _repository.CheckDoorState(houseId).Result != state)
-       {
-            string deviceId = await _repository.GetFirstDeviceInHouse(houseId);
-            // await _communicator.SwitchDoor();
-            await _repository.SaveDoorState(houseId, state);
-            int openClose = -1;
-            if (state)
+            byte[] inputBytes = Encoding.UTF8.GetBytes(password);
+            string hashedString;
+            using (SHA256 sha256 = SHA256.Create())
             {
-                openClose = 1;
+                byte[] hashBytes = sha256.ComputeHash(inputBytes);
+                hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
             }
-            if (!state)
+            if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) && _repository.CheckDoorState(houseId).Result != state)
             {
-                openClose = 0;
-            }
-            string message = $"LOGIC: {deviceId}30{openClose}            ";
-            int blockSize = 16;
-            int extraBytes = message.Length % blockSize;
-            if (extraBytes != 0)
-            {
-                message = message.PadRight(message.Length + blockSize - extraBytes, ' ');
-            }
+                string deviceId = await _repository.GetFirstDeviceInHouse(houseId);
+                // await _communicator.SwitchDoor();
+                await _repository.SaveDoorState(houseId, state);
+                int openClose = -1;
+                if (state)
+                {
+                    openClose = 1;
+                }
+                if (!state)
+                {
+                    openClose = 0;
+                }
+                string message = $"LOGIC: {deviceId}30{openClose}            ";
+                int blockSize = 16;
+                int extraBytes = message.Length % blockSize;
+                if (extraBytes != 0)
+                {
+                    message = message.PadRight(message.Length + blockSize - extraBytes, ' ');
+                }
 
-            byte[] messageBytes = enc.Encrypt(message);
-            await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
+                byte[] messageBytes = enc.Encrypt(message);
+                writeAsyncCalled = false;
+                await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
+                writeAsyncCalled = true;
 
+            }
+            else
+            {
+                await _notificationRepository.AddNotification(houseId, "Someone entered wrong password to your door!");
+                throw new Exception("Password mismatch");
+            }
         }
-        else
+        catch (Exception e)
         {
-            await _notificationRepository.AddNotification(houseId, "Someone entered wrong password to your door!");
-            throw new Exception("Password mismatch");
+            Console.WriteLine(e);
+            throw;
         }
+        
     }
 
 
@@ -78,12 +102,22 @@ public class DoorLogic : IDoorLogic
         {
             throw new Exception("House Id can not be empty");
         }
+
+        if (string.IsNullOrEmpty(password))
+        {
+            throw new Exception("Password cannot be null");
+        }
         byte[] inputBytes = Encoding.UTF8.GetBytes(password);
         string hashedString;
         using (SHA256 sha256 = SHA256.Create())
         {
             byte[] hashBytes = sha256.ComputeHash(inputBytes);
             hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
+        }
+
+        if (password.Length == 0)
+        {
+            throw new Exception("Password can not be empty");
         }
         try
         {

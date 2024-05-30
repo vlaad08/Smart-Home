@@ -1,18 +1,22 @@
 using DBComm.Logic.Interfaces;
 using DBComm.Repository;
 using DBComm.Shared;
+using WebAPI.DTOs;
 
 namespace DBComm.Logic;
 
 public class HumidityLogic : IHumidityLogic
 {
-    // private ICommunicator communicator;
+
 
     private IHumidityRepository _repository;
+    private IRoomRepository _roomRepository;
+    private INotificationRepository _notificationRepository;
     public HumidityLogic(IHumidityRepository repository)
     {
-        // communicator = Communicator.Instance;
         this._repository = repository;
+        this._notificationRepository = new NotificationRepository(new Context());
+        this._roomRepository = new RoomRepository(new Context());
     }
     
     public async Task<HumidityReading> GetLatestHumidity(string hardwareId)
@@ -26,7 +30,37 @@ public class HumidityLogic : IHumidityLogic
 
     public async Task SaveHumidityReading(string deviceId, double value)
     {
-        DateTime dateTime = DateTime.UtcNow;
+        RoomDataDTO dto = await _roomRepository.GetRoomData(null, deviceId);
+        if (dto == null)
+        {
+            throw new InvalidOperationException("Room data is null.");
+        }
+        if (dto.Home == null)
+        {
+            throw new InvalidOperationException("Home data is null.");
+        }
+        if ((double)dto.PreferedHumidity < value)
+        {
+            List<Notification> notifications = await _notificationRepository.GetNotifications(dto.Home.Id);
+
+            if (notifications == null || notifications.Count == 0)
+            {
+                await _notificationRepository.AddNotification(dto.Home.Id,
+                    "The humidity in " + dto.Name + " is higher than preferred and it is " + value + "%");
+            }
+            else
+            {
+                bool exists = notifications.Any(n => n.Message.StartsWith("The humidity in " + dto.Name + " is higher than preferred"));
+                Console.WriteLine(exists);
+                if (!exists)
+                {
+                    await _notificationRepository.AddNotification(dto.Home.Id,
+                        "The humidity in " + dto.Name + " is higher than preferred and it is " + value + "%");
+                }
+            }
+        }
+
+        DateTime dateTime = DateTime.UtcNow.AddHours(2);
         await _repository.SaveHumidityReading(deviceId, value, dateTime);
     }
 }
