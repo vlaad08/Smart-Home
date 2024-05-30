@@ -53,6 +53,19 @@ public class DoorLogic : IDoorLogic
                 byte[] hashBytes = sha256.ComputeHash(inputBytes);
                 hashedString = BitConverter.ToString(hashBytes).Replace("-", "");
             }
+            
+            if (await _repository.CheckDoorState(houseId) == state)
+            {
+                if (state)
+                {
+                    throw new Exception("Can not open the already opened door.");
+                }
+                if (!state)
+                {
+                    throw new Exception("Can not close the already closed door.");
+                }
+            }
+            
             if (hashedString.Equals(await _repository.CheckPassword(houseId, password)) && _repository.CheckDoorState(houseId).Result != state)
             {
                 string deviceId = await _repository.GetFirstDeviceInHouse(houseId);
@@ -92,7 +105,6 @@ public class DoorLogic : IDoorLogic
             Console.WriteLine(e);
             throw;
         }
-        
     }
 
 

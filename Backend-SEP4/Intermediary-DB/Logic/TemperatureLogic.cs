@@ -97,5 +97,8 @@ public class TemperatureLogic : ITemperatureLogic
                 }
             }
         }
+        
+        DateTime dateTime = DateTime.UtcNow.AddHours(2);
+        await _repository.SaveTemperatureReading(deviceId, value, dateTime);
     }
 }

@@ -6,11 +6,11 @@ using ECC.Interface;
 
 public class KeyGenerator
 {
+    //This is a test method to make sure the keys align between IOT and Backend
     public static void Main()
     {
         string encodedString = "RaT‰ëòçÇRQqBèºQ|{ŽnÎA";
 
-        // Attempt to handle it as Base64, although the string does not look like standard Base64
         try
         {
             byte[] data = Convert.FromBase64String(encodedString);
