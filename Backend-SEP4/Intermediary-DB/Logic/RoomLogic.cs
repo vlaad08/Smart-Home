@@ -26,12 +26,8 @@ public class RoomLogic : IRoomLogic
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
-        }
-        catch(Exception e)
-        {
-               throw new Exception(e.Message);
-        }
     }
+    
 
     public async Task AddRoom(string name, string deviceId, string homeId, int preferedTemperature, int preferedHumidity)
     {
