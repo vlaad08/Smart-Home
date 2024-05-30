@@ -20,9 +20,9 @@ public class RoomLogic : IRoomLogic
     public RoomLogic(IRoomRepository repository,TcpClient? c=null)
     {
         DotNetEnv.Env.Load();
-        string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "127.0.0.1";
+        string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "0.0.0.0";
         this.client = c ?? new TcpClient(ServerAddress, 6868);
-
+        _repository = repository;
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
@@ -83,6 +83,7 @@ public class RoomLogic : IRoomLogic
     {
         try
         {
+            RoomDataDTO dataDTO = await _repository.GetRoomData(null, deviceId);
             if (preferedTemperature < 0 || preferedTemperature > 35)
             {
                 throw new Exception("Temperature must be between 0 and 35 degrees.");
@@ -100,8 +101,10 @@ public class RoomLogic : IRoomLogic
             {
                 throw new Exception("Name can not be empty.");
             }
-
-            if (await _repository.CheckExistingRoom(deviceId, "0"))
+            if(dataDTO.DeviceId == deviceId){
+                await _repository.EditRoom(id,name,deviceId, preferedTemperature, preferedHumidity);
+            }
+            else if (await _repository.CheckExistingRoom(deviceId, "0"))
             {
                 await _repository.EditRoom(id,name,deviceId, preferedTemperature, preferedHumidity);
             }
@@ -141,7 +144,7 @@ public class RoomLogic : IRoomLogic
         {
             await _repository.SetRadiatorLevel(deviceId, level);
 
-            string message = $"LOGIC {deviceId}10{level}            ";
+            string message = $"LOGIC: {deviceId}10{level}            ";
             int blockSize = 16;
             int extraBytes = message.Length % blockSize;
             if (extraBytes != 0)

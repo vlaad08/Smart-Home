@@ -57,7 +57,7 @@ public class NotificationRepository : INotificationRepository
     {
         try
         {
-            string houseId = _context.room.FirstOrDefaultAsync(r => r.DeviceId == deviceId).Result.Home.Id;
+            string houseId = _context.room.Include(r=>r.Home).FirstOrDefaultAsync(r => r.DeviceId == deviceId).Result.Home.Id;
             Home? home = await _context.home.FindAsync(houseId);
             if (home == null)
             {

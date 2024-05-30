@@ -28,13 +28,13 @@ public class Server
         DotNetEnv.Env.TraversePath().Load();
 
         SERVER_ADDRESS = Environment.GetEnvironmentVariable("SERVER_ADDRESS");
-        WEB_API_ADDRESS = Environment.GetEnvironmentVariable("WEB_API_ADDRESS") ?? "localhost";
+        WEB_API_ADDRESS = Environment.GetEnvironmentVariable("WEB_API_ADDRESS") ?? "0.0.0.0";
         if (SERVER_ADDRESS == null)
         {
             DotNetEnv.Env.Load();
         }
 
-        SERVER_ADDRESS = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "127.0.0.1";
+        SERVER_ADDRESS = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "0.0.0.0";
         WEB_API_ADDRESS = Environment.GetEnvironmentVariable("WEB_API_ADDRESS") ?? "localhost";
 
         IPAddress localAddr = IPAddress.Parse(SERVER_ADDRESS);
@@ -145,7 +145,7 @@ public class Server
                 } 
                 break;
 
-                case var message when message.Contains("HEllO"):
+                case var message when message.Contains("Hello"):
                 {
                     string deviceId = message.Substring(0, 1);
                     await SendBurglarNotification(deviceId);
@@ -283,19 +283,19 @@ public class Server
     {
         try
         {
-            HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:5084/notifications/burglar/{deviceId}", null);
+            HttpResponseMessage response = await httpClient.PostAsync($"http://{WEB_API_ADDRESS}:80/notifications/burglar/{deviceId}", null);
 
             if (response.IsSuccessStatusCode)
             {
             }
             else
             {
-                Console.WriteLine("Failed to save light level.");
+                Console.WriteLine("Failed to save notification.");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception occurred while saving light level: {ex.Message}");
+            Console.WriteLine($"Exception occurred while saving notification: {ex.Message}");
         }
     }
 
