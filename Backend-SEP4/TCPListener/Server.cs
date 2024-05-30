@@ -126,8 +126,6 @@ public class Server
 
                             if (double.TryParse(tempString, out double tempValue) && double.TryParse(humString, out double humValue))
                             {
-                                System.Console.WriteLine("temp value " + tempValue);
-                                System.Console.WriteLine("hum value " + humValue);
                                 await SaveTemperatureAsync(deviceId, tempValue);
                                 await SaveHumidityAsync(deviceId, humValue);
                             }
