@@ -96,6 +96,11 @@ public class TemperatureLogic : ITemperatureLogic
                         "The temperature in " + dto.Name + " is higher than preferred and it is " + value + " degrees");
                 }
             }
+            
         }
+
+
+        DateTime dateTime = DateTime.UtcNow.AddHours(2);
+        await _repository.SaveTemperatureReading(deviceId, value, dateTime);
     }
 }
