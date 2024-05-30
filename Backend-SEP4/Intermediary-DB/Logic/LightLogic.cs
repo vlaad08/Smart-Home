@@ -29,6 +29,7 @@ public class LightLogic : ILightLogic
         stream.Write(messageBytes, 0, messageBytes.Length);
         
         this._repository = repository;
+
     }
     public async Task<LightReading> GetLatestLight(string hardwareId)
     {
