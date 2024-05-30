@@ -283,7 +283,7 @@ public class Server
     {
         try
         {
-            HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:5084/notifications/burglar/{deviceId}", null);
+            HttpResponseMessage response = await httpClient.PostAsync($"http://{WEB_API_ADDRESS}:80/notifications/burglar/{deviceId}", null);
 
             if (response.IsSuccessStatusCode)
             {
