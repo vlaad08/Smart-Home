@@ -29,6 +29,7 @@ public class NotificationLogic : INotificationLogic
     {
         try
         {
+            System.Console.WriteLine("BURGLAR IN HOUSE");
             await repository.AddBurglarNotification(deviceId,"BURGLAR IN HOUSE");
         }
         catch (Exception e)

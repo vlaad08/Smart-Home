@@ -19,12 +19,7 @@ public class DoorLogic : IDoorLogic
     public bool writeAsyncCalled { get; set; }
     public DoorLogic(IDoorRepository repository, TcpClient? c = null)
     {
-        DotNetEnv.Env.Load();
-        string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "192.168.137.209";
-
-        this.client = c ?? new TcpClient(ServerAddress, 6868);
-
-        stream = client.GetStream();
+         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
         this._repository = repository;
@@ -33,9 +28,15 @@ public class DoorLogic : IDoorLogic
 
     public DoorLogic(IDoorRepository repository, INotificationRepository notificationRepository, TcpClient? c = null)
     {
+        
+        DotNetEnv.Env.Load();
+        string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "0.0.0.0";
+
         _repository = repository;
         _notificationRepository = notificationRepository;
-        this.client = c ?? new TcpClient("192.168.137.209", 6868);
+        
+
+        this.client = c ?? new TcpClient(ServerAddress, 6868);
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);

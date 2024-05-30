@@ -25,10 +25,10 @@ void test_openDoorWithoutApproval(void) {
     hc_sr04_takeMeasurement_fake.return_val = 40;
 
     bool isApproved = false;
-    char* alarm_message = alarm(isApproved);
+    char* alarm_message = Alarm(isApproved);
 
     TEST_ASSERT_NOT_NULL(alarm_message);
-    TEST_ASSERT_EQUAL_STRING("Hello, Thief! :)", alarm_message);
+    TEST_ASSERT_EQUAL_STRING("1-Hello, Thief! ", alarm_message);
 
     free(alarm_message);
 }
@@ -36,7 +36,7 @@ void test_openDoorWithApproval(void) {
     hc_sr04_takeMeasurement_fake.return_val = 40;
     
     bool isApproved = true;
-    char* alarm_message = alarm(isApproved);
+    char* alarm_message = Alarm(isApproved);
 
     TEST_ASSERT_NOT_NULL(alarm_message);
     TEST_ASSERT_EQUAL_STRING("Approved doors! ", alarm_message);

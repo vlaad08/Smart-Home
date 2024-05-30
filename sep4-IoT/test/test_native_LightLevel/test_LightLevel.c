@@ -15,7 +15,7 @@ void setUp(void) {}
 void tearDown(void) {}
 
 void test_lightLevel_0(void){
-    char * result = AdjustLight((uint8_t)0);
+    char * result = AdjustLight((uint8_t)0,1);
     
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("0,4,0,0", result);
@@ -24,7 +24,7 @@ void test_lightLevel_0(void){
 }
 
 void test_lightLevel_1(void){
-    char * result = AdjustLight((uint8_t)1);
+    char * result = AdjustLight((uint8_t)1,1);
     
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("0,4,0,1", result);
@@ -33,7 +33,7 @@ void test_lightLevel_1(void){
 }
 
 void test_lightLevel_2(void){
-    char * result = AdjustLight((uint8_t)2);
+    char * result = AdjustLight((uint8_t)2,1);
     
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("0,4,0,2", result);
@@ -42,7 +42,7 @@ void test_lightLevel_2(void){
 }
 
 void test_lightLevel_3(void){
-    char * result = AdjustLight((uint8_t)3);
+    char * result = AdjustLight((uint8_t)3,1);
     
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("0,4,0,3", result);
@@ -51,7 +51,7 @@ void test_lightLevel_3(void){
 }
 
 void test_lightLevel_4(void){
-    char * result = AdjustLight((uint8_t)4);
+    char * result = AdjustLight((uint8_t)4,1);
     
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_STRING("0,4,0,4", result);
