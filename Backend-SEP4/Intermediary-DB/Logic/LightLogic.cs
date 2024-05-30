@@ -30,6 +30,7 @@ public class LightLogic : ILightLogic
         
         this._repository = repository;
     }
+    
     public async Task<LightReading> GetLatestLight(string hardwareId)
     {
         return await _repository.GetLatestLight(hardwareId);

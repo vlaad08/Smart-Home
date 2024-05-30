@@ -32,6 +32,7 @@ public class TemperatureLogic : ITemperatureLogic
         this._repository = repository;
         this._roomRepository = new RoomRepository(new Context());
         this._notificationRepository = new NotificationRepository(new Context());
+
     }
     public async Task<TemperatureReading> GetLatestTemperature(string hardwareId)
     {

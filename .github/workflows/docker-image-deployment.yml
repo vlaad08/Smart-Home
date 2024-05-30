@@ -1,10 +1,8 @@
-name: Docker build and push
+name: Create deployable docker images
 
 on:
-  pull_request:
-    branches: [ "BACKEND", "main" ]
   push:
-    branches: [ "BACKEND", "main" ]
+    branches: [ "deploy" ]
 
 jobs:
   build:
@@ -30,13 +28,14 @@ jobs:
           file: ./Backend-SEP4/Dockerfile
           target: final-tcp
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/smart-home-server:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/smart-home-server:v1
           build-args: |
             DATABASE_HOST=${{ secrets.DATABASE_HOST }}
             DATABASE_NAME=${{ secrets.DATABASE_NAME }}
             DATABASE_USER=${{ secrets.DATABASE_USER }}
             DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
-            SERVER_ADDRESS= 127.0.0.1
+            SERVER_ADDRESS=0.0.0.0
+            WEB_API_ADDRESS=${{ secrets.WEB_API_ADDRESS }}
       -
         name: Build and push WebAPI
         uses: docker/build-push-action@v5
@@ -45,10 +44,10 @@ jobs:
           file: ./Backend-SEP4/Dockerfile
           target: final-web
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/smart-home:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/smart-home:v1
           build-args: |
             DATABASE_HOST=${{ secrets.DATABASE_HOST }}
             DATABASE_NAME=${{ secrets.DATABASE_NAME }}
             DATABASE_USER=${{ secrets.DATABASE_USER }}
             DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
-            SERVER_ADDRESS= 127.0.0.1
+            SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}
