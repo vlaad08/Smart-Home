@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{6DE8DC31-6A48-42DF-9F41-6309344C30FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPListenerDemo", "TCPListenerDemo\TCPListenerDemo.csproj", "{E8B5978B-F32D-4A84-9E79-F6D81C59D82D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intermediary-DB", "Intermediary-DB\Intermediary-DB.csproj", "{460B720F-FB64-42B9-856E-27CD19C06EDE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPListener", "TCPListener\TCPListener.csproj", "{4C1AAC5E-DB66-4945-8692-0DCF4DCB7B11}"
