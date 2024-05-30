@@ -22,7 +22,7 @@ public class RoomLogic : IRoomLogic
         DotNetEnv.Env.Load();
         string ServerAddress = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "127.0.0.1";
         this.client = c ?? new TcpClient(ServerAddress, 6868);
-
+        _repository = repository;
         stream = client.GetStream();
         byte[] messageBytes = enc.Encrypt("LOGIC CONNECTED:");
         stream.Write(messageBytes, 0, messageBytes.Length);
