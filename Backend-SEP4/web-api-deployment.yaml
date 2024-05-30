@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web-api
+  namespace: sep4
 spec:
   replicas: 1
   selector:
@@ -14,6 +15,6 @@ spec:
     spec:
       containers:
       - name: web-api
-        image: web-api:latest
+        image: vlaad08/smart-home:latest
         ports:
         - containerPort: 80

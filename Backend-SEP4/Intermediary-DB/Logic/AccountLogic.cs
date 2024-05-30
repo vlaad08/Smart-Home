@@ -76,7 +76,6 @@ public class AccountLogic : IAccountLogic
     }
     public async Task EditUsername(string oldUsername, string newUsername,string password)
     {
-        
         try
         {
             string hash = await _hashPassword(password);
@@ -102,10 +101,6 @@ public class AccountLogic : IAccountLogic
         }
         try
         {
-            if (newPassword.Length < 8)
-            {
-                throw new Exception("Password needs to be at least 8 characters");
-            }
             string hash = await _hashPassword(oldPassword);
             if (await _repository.CheckNonExistingUser(username,hash))
             {
