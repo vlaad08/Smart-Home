@@ -1,6 +1,7 @@
 using DBComm.Logic.Interfaces;
 using DBComm.Shared;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -27,8 +28,21 @@ public class NotificationController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPost,Route("burglar/{deviceId}")]
+    public async Task<ActionResult> SetBurglarNotification([FromRoute] string deviceId)
+    {
+        try
+        {
+            await _logic.SetBurglarNotification(deviceId);
+            return Ok("Notification set");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
         }
     }
 }

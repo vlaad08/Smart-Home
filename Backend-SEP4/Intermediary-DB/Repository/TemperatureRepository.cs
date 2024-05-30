@@ -35,13 +35,13 @@ public class TemperatureRepository : ITemperatureRepository
         {
             var query = _context.temperature_reading
                 .Where(lr => lr.ReadAt >= dateFrom && lr.ReadAt <= dateTo && lr.Room.DeviceId == deviceId)
-                .GroupBy(lr => lr.ReadAt.Date) // Group by date
+                .GroupBy(lr => lr.ReadAt.Date) 
                 .Select(group => new TemperatureReading()
                 {
                     ReadAt = group.Key,
-                    Value = group.Average(lr => lr.Value) // Calculate average light level for each group
+                    Value = group.Average(lr => lr.Value) 
                 })
-                .OrderBy(result => result.ReadAt); // Optional: Order by date
+                .OrderBy(result => result.ReadAt); 
 
             var averageTemperatureLevels = await query.ToListAsync();
             return averageTemperatureLevels;
