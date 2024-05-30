@@ -158,14 +158,39 @@ public class DoorLogicTest
              var mock = new Mock<IDoorRepository>();
              TcpClient c = new TcpClient(ServerIp, ServerPort);
              var logic = new DoorLogic(mock.Object, c);
+             mock.Setup(m => m.CheckDoorState("1")).ReturnsAsync(false);
              mock.Setup(m => m.CheckIfDoorExist("1")).ThrowsAsync(new Exception($"Door does not exist."));
              string h = await hash("12345678");
              mock.Setup(m => m.CheckPassword("1", "12345678")).ReturnsAsync(h);
              mock.Setup(m => m.GetFirstDeviceInHouse("1")).ReturnsAsync("1");
-
-             logic.SwitchDoor("1", "12345678", true);
+     
+             await logic.SwitchDoor("1", "12345678", true);
              
              mock.Verify(m=>m.SaveDoorState("1",true));
+         }
+         finally
+         {
+             await StopServer();
+         }
+     }
+     [Fact]
+     public async Task SwitchDoor_calls_for_repo_other_state()
+     {
+         await StartServer();
+         try
+         {
+             var mock = new Mock<IDoorRepository>();
+             TcpClient c = new TcpClient(ServerIp, ServerPort);
+             var logic = new DoorLogic(mock.Object, c);
+             mock.Setup(m => m.CheckIfDoorExist("1")).ThrowsAsync(new Exception($"Door does not exist."));
+             mock.Setup(m => m.CheckDoorState("1")).ReturnsAsync(true);
+             string h = await hash("12345678");
+             mock.Setup(m => m.CheckPassword("1", "12345678")).ReturnsAsync(h);
+             mock.Setup(m => m.GetFirstDeviceInHouse("1")).ReturnsAsync("1");
+     
+             await logic.SwitchDoor("1", "12345678", false);
+             
+             mock.Verify(m=>m.SaveDoorState("1",false));
          }
          finally
          {
@@ -182,26 +207,23 @@ public class DoorLogicTest
              var mock = new Mock<IDoorRepository>();
              TcpClient c = new TcpClient(ServerIp, ServerPort);
              var logic = new DoorLogic(mock.Object, c);
-             var clientField = typeof(DoorLogic).GetField("client", BindingFlags.NonPublic | BindingFlags.Instance);
-             clientField.SetValue(logic, c);
-             var streamField = typeof(DoorLogic).GetField("stream", BindingFlags.NonPublic | BindingFlags.Instance);
-             NetworkStream s = c.GetStream();
-             streamField.SetValue(logic, s);
+             mock.Setup(m => m.CheckDoorState("1")).ReturnsAsync(false);
              mock.Setup(m => m.CheckIfDoorExist("1")).ThrowsAsync(new Exception($"Door does not exist."));
              string h = await hash("12345678");
              mock.Setup(m => m.CheckPassword("1", "12345678")).ReturnsAsync(h);
              mock.Setup(m => m.GetFirstDeviceInHouse("1")).ReturnsAsync("1");
-
+     
              await logic.SwitchDoor("1", "12345678", true);
              
-             Assert.True(logic.writeAsyncCalled,"Write on stream hasn't been called");
+             mock.Verify(m=>m.SaveDoorState("1",true));
+             Assert.True(logic.writeAsyncCalled, "Stream has not been called");
          }
          finally
          {
              await StopServer();
          }
      }
-
+     
      [Fact]
      public async Task SwitchDoor_throws_errors_up()
      {
@@ -211,11 +233,13 @@ public class DoorLogicTest
              var mock = new Mock<IDoorRepository>();
              TcpClient c = new TcpClient(ServerIp, ServerPort);
              var logic = new DoorLogic(mock.Object, c);
+             mock.Setup(m => m.CheckDoorState("1")).ReturnsAsync(false);
+             mock.Setup(m => m.CheckIfDoorExist("1")).ThrowsAsync(new Exception($"Door does not exist."));
              string h = await hash("12345678");
              mock.Setup(m => m.CheckPassword("1", "12345678")).ReturnsAsync(h);
              mock.Setup(m => m.GetFirstDeviceInHouse("1"))
                  .ThrowsAsync(new Exception($"No devices found in the house with ID 1."));
-
+     
              var exception = await Assert.ThrowsAsync<Exception>(() => logic.SwitchDoor("1", "12345678", true));
          
              mock.Verify(m=>m.SaveDoorState("1",true),Times.Never);
@@ -242,7 +266,7 @@ public class DoorLogicTest
              string h = await hash("12345678");
              mock.Setup(m => m.CheckPassword("1", "12345678")).ReturnsAsync("random string that will never be the hash of the password");
              mock.Setup(m => m.GetFirstDeviceInHouse("1")).ReturnsAsync("1");
-
+     
              await Assert.ThrowsAsync<Exception>(()=>logic.SwitchDoor("1","12345678",true));
              
              mock.Verify(m=>m.SaveDoorState("1",true),Times.Never);
